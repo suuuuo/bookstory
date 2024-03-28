@@ -1,6 +1,7 @@
 package com.elice.bookstore.cart.domain;
 
 import com.elice.bookstore.config.audit.BaseEntity;
+import com.elice.bookstore.config.audit.BaseTimeEntity;
 import com.elice.bookstore.user.domain.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cart extends BaseEntity {
+public class Cart extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
