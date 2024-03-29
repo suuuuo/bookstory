@@ -23,21 +23,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderBook extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "order_id")
-  private Order order;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-  @ManyToOne
-  @JoinColumn(name = "book_id")
-  private Book book;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-  @Column
-  private int count;
+    @Column
+    private int count;
 
-  @Column
-  private int price;
+    @Column
+    private int price;
 }

@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 /**
  * order domain.
@@ -27,29 +29,32 @@ import lombok.NoArgsConstructor;
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-  @Column
-  private LocalDate orderDate;
+    @Column
+    @CreationTimestamp // sysdate
+    private LocalDate orderDate;
 
-  @Column
-  private String orderNumber;
+//    @Column //자동생성
+//    private String orderNumber;
 
-  @Enumerated(EnumType.STRING)
-  private OrderStatus orderStatus;
+    @Enumerated(EnumType.STRING) // 알아보자
+    private OrderStatus orderStatus;
 
-  @Column
-  private LocalDate paymentDate;
+    @Column
+    @CreationTimestamp //sysdate
+    private LocalDate paymentDate;
 
-  @Column
-  private int totalPrice;
+    @Column
+    private int totalPrice;
 
-  @Column
-  private Boolean isExist;
+    @ColumnDefault("0")
+    private Boolean isExist;
 }
+
