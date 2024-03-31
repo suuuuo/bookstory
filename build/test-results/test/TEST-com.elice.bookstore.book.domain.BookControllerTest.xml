@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.elice.bookstore.book.domain.BookControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-03-31T14:38:55" hostname="bagjongmin-ui-MacBookPro.local" time="0.423">
+<testsuite name="com.elice.bookstore.book.domain.BookControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-03-31T14:45:04" hostname="bagjongmin-ui-MacBookPro.local" time="0.422">
   <properties/>
-  <testcase name="특정 책 조회 성공" classname="com.elice.bookstore.book.domain.BookControllerTest" time="0.423"/>
-  <system-out><![CDATA[23:38:53.511 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.elice.bookstore.book.domain.BookControllerTest]: BookControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-23:38:53.560 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.elice.bookstore.BookStoreApplication for test class com.elice.bookstore.book.domain.BookControllerTest
+  <testcase name="책 삭제 성공" classname="com.elice.bookstore.book.domain.BookControllerTest" time="0.422"/>
+  <system-out><![CDATA[23:45:02.347 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.elice.bookstore.book.domain.BookControllerTest]: BookControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:45:02.398 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.elice.bookstore.BookStoreApplication for test class com.elice.bookstore.book.domain.BookControllerTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -13,28 +13,28 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.4)
 
-2024-03-31T23:38:53.716+09:00  INFO 37152 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Starting BookControllerTest using Java 21.0.1 with PID 37152 (started by codejomo99 in /Users/codejomo99/Downloads/bookstory)
-2024-03-31T23:38:53.716+09:00  INFO 37152 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : No active profile set, falling back to 1 default profile: "default"
-2024-03-31T23:38:53.982+09:00  INFO 37152 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-03-31T23:38:54.004+09:00  INFO 37152 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 1 JPA repository interface.
-2024-03-31T23:38:54.174+09:00  INFO 37152 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-03-31T23:38:54.193+09:00  INFO 37152 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
-2024-03-31T23:38:54.207+09:00  INFO 37152 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2024-03-31T23:38:54.295+09:00  INFO 37152 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-03-31T23:38:54.305+09:00  INFO 37152 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2024-03-31T23:38:54.481+09:00  INFO 37152 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@283e1759
-2024-03-31T23:38:54.484+09:00  INFO 37152 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2024-03-31T23:38:54.969+09:00  INFO 37152 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-03-31T23:38:55.092+09:00  INFO 37152 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-03-31T23:38:55.306+09:00  WARN 37152 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-03-31T23:38:55.432+09:00  WARN 37152 --- [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
-2024-03-31T23:38:55.500+09:00  INFO 37152 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-03-31T23:38:55.500+09:00  INFO 37152 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-03-31T23:38:55.501+09:00  INFO 37152 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
-2024-03-31T23:38:55.516+09:00  INFO 37152 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Started BookControllerTest in 1.899 seconds (process running for 2.369)
-2024-03-31T23:38:55.803+09:00  INFO 37152 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-03-31T23:38:55.803+09:00  INFO 37152 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-03-31T23:38:55.803+09:00  INFO 37152 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2024-03-31T23:45:02.552+09:00  INFO 39577 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Starting BookControllerTest using Java 21.0.1 with PID 39577 (started by codejomo99 in /Users/codejomo99/Downloads/bookstory)
+2024-03-31T23:45:02.552+09:00  INFO 39577 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : No active profile set, falling back to 1 default profile: "default"
+2024-03-31T23:45:02.822+09:00  INFO 39577 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-31T23:45:02.845+09:00  INFO 39577 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 1 JPA repository interface.
+2024-03-31T23:45:03.018+09:00  INFO 39577 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-31T23:45:03.038+09:00  INFO 39577 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-03-31T23:45:03.049+09:00  INFO 39577 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-03-31T23:45:03.132+09:00  INFO 39577 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-03-31T23:45:03.143+09:00  INFO 39577 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-03-31T23:45:03.340+09:00  INFO 39577 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5477d90e
+2024-03-31T23:45:03.341+09:00  INFO 39577 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-03-31T23:45:03.794+09:00  INFO 39577 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-03-31T23:45:03.911+09:00  INFO 39577 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-31T23:45:04.107+09:00  WARN 39577 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-31T23:45:04.233+09:00  WARN 39577 --- [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-03-31T23:45:04.294+09:00  INFO 39577 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-03-31T23:45:04.294+09:00  INFO 39577 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-03-31T23:45:04.295+09:00  INFO 39577 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2024-03-31T23:45:04.314+09:00  INFO 39577 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Started BookControllerTest in 1.861 seconds (process running for 2.359)
+2024-03-31T23:45:04.598+09:00  INFO 39577 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-03-31T23:45:04.598+09:00  INFO 39577 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-03-31T23:45:04.598+09:00  INFO 39577 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
 Hibernate: 
     select
         b1_0.id,
@@ -110,6 +110,32 @@ Hibernate:
             on p1_0.id=c1_0.parent_id 
     where
         b1_0.id=?
+Hibernate: 
+    delete 
+    from
+        book 
+    where
+        id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.author,
+        b1_0.category_id,
+        b1_0.created_at,
+        b1_0.created_by,
+        b1_0.description,
+        b1_0.img_path,
+        b1_0.isbn,
+        b1_0.item_name,
+        b1_0.modified_by,
+        b1_0.price,
+        b1_0.publisher,
+        b1_0.sell_count,
+        b1_0.sell_status,
+        b1_0.stock,
+        b1_0.updated_at 
+    from
+        book b1_0
 ]]></system-out>
   <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/Users/codejomo99/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.12/be4984cb6fd1ef1d11f218a648889dfda44b8a15/byte-buddy-agent-1.14.12.jar)
 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning

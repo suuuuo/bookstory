@@ -4,6 +4,7 @@ package com.elice.bookstore.book.domain;
 import com.elice.bookstore.book.domain.dto.BookResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,5 +43,11 @@ public class BookController {
                 .body(new BookResponse(book));
     }
 
+    // 삭제
+    @DeleteMapping("/api/books/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id){
+        bookService.deleteBook(id);
 
+        return ResponseEntity.ok().build();
+    }
 }
