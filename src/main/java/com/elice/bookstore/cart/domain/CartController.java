@@ -3,7 +3,6 @@ package com.elice.bookstore.cart.domain;
 import com.elice.bookstore.book.domain.Book;
 //import com.elice.bookstore.book.domain.BookService;
 import com.elice.bookstore.cartbook.domain.CartBook;
-import com.elice.bookstore.cartbook.domain.CartBookRepository;
 import com.elice.bookstore.user.domain.Role;
 import com.elice.bookstore.user.domain.User;
 //import com.elice.bookstore.user.domain.UserService;
@@ -21,19 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/cart")
 public class CartController {
-
-  private final CartRepository cartRepository;
-  private final CartBookRepository cartBookRepository;
   private final CartService cartService;
   //private final UserService userService;
   //private final BookService bookService;
 
   //user, book 관련 코드들 작성되면 수정해야
 
-  public CartController(CartRepository cartRepository, CartBookRepository cartBookRepository,
-      CartService cartService){  //, UserService userService, BookService bookService) {
-    this.cartRepository = cartRepository;
-    this.cartBookRepository = cartBookRepository;
+  public CartController(CartService cartService){  //, UserService userService, BookService bookService) {
     this.cartService = cartService;
     //this.userService = userService;
     //this.bookService = bookService;
