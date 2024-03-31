@@ -1,6 +1,7 @@
-package com.elice.bookstore.book.domain;
+package com.elice.bookstore.book.domain.dto;
 
 
+import com.elice.bookstore.book.domain.Book;
 import lombok.Getter;
 
 @Getter
