@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.elice.bookstore.book.domain.BookControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-03-31T14:27:52" hostname="bagjongmin-ui-MacBookPro.local" time="0.414">
+  <properties/>
+  <testcase name="Book 블로그 글 조회 성공" classname="com.elice.bookstore.book.domain.BookControllerTest" time="0.414"/>
+  <system-out><![CDATA[23:27:50.911 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.elice.bookstore.book.domain.BookControllerTest]: BookControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:27:50.960 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.elice.bookstore.BookStoreApplication for test class com.elice.bookstore.book.domain.BookControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.4)
+
+2024-03-31T23:27:51.107+09:00  INFO 33075 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Starting BookControllerTest using Java 21.0.1 with PID 33075 (started by codejomo99 in /Users/codejomo99/Downloads/bookstory)
+2024-03-31T23:27:51.108+09:00  INFO 33075 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : No active profile set, falling back to 1 default profile: "default"
+2024-03-31T23:27:51.374+09:00  INFO 33075 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-03-31T23:27:51.395+09:00  INFO 33075 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 1 JPA repository interface.
+2024-03-31T23:27:51.568+09:00  INFO 33075 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-03-31T23:27:51.586+09:00  INFO 33075 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-03-31T23:27:51.596+09:00  INFO 33075 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-03-31T23:27:51.683+09:00  INFO 33075 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-03-31T23:27:51.693+09:00  INFO 33075 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-03-31T23:27:51.866+09:00  INFO 33075 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@75e4fe3c
+2024-03-31T23:27:51.867+09:00  INFO 33075 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-03-31T23:27:52.318+09:00  INFO 33075 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-03-31T23:27:52.419+09:00  INFO 33075 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-03-31T23:27:52.611+09:00  WARN 33075 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-03-31T23:27:52.737+09:00  WARN 33075 --- [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-03-31T23:27:52.794+09:00  INFO 33075 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-03-31T23:27:52.794+09:00  INFO 33075 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-03-31T23:27:52.795+09:00  INFO 33075 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2024-03-31T23:27:52.816+09:00  INFO 33075 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Started BookControllerTest in 1.801 seconds (process running for 2.281)
+2024-03-31T23:27:53.100+09:00  INFO 33075 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-03-31T23:27:53.100+09:00  INFO 33075 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-03-31T23:27:53.100+09:00  INFO 33075 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.author,
+        b1_0.category_id,
+        b1_0.created_at,
+        b1_0.created_by,
+        b1_0.description,
+        b1_0.img_path,
+        b1_0.isbn,
+        b1_0.item_name,
+        b1_0.modified_by,
+        b1_0.price,
+        b1_0.publisher,
+        b1_0.sell_count,
+        b1_0.sell_status,
+        b1_0.stock,
+        b1_0.updated_at 
+    from
+        book b1_0
+Hibernate: 
+    insert 
+    into
+        book
+        (author, category_id, created_at, created_by, description, img_path, isbn, item_name, modified_by, price, publisher, sell_count, sell_status, stock, updated_at) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.author,
+        b1_0.category_id,
+        b1_0.created_at,
+        b1_0.created_by,
+        b1_0.description,
+        b1_0.img_path,
+        b1_0.isbn,
+        b1_0.item_name,
+        b1_0.modified_by,
+        b1_0.price,
+        b1_0.publisher,
+        b1_0.sell_count,
+        b1_0.sell_status,
+        b1_0.stock,
+        b1_0.updated_at 
+    from
+        book b1_0
+]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/Users/codejomo99/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.12/be4984cb6fd1ef1d11f218a648889dfda44b8a15/byte-buddy-agent-1.14.12.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
