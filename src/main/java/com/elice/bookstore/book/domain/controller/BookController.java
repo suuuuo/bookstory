@@ -1,5 +1,8 @@
-package com.elice.bookstore.book.domain;
+package com.elice.bookstore.book.domain.controller;
 
+import com.elice.bookstore.book.domain.Book;
+import com.elice.bookstore.book.domain.service.BookService;
+import com.elice.bookstore.book.domain.dto.BookDetailResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +22,13 @@ public class BookController {
     }
 
     @GetMapping("/best-sellers")
-    public Flux<BookDTO> getBestSellers() {
+    public Flux<BookDetailResponse> getBestSellers() {
         return bookService.fetchBestSellers();
     }
+
+    @GetMapping("/save-best-sellers")
+    public Flux<Book> fetchAndSave(){
+        return bookService.fetchAndSaveBestSellers();
+    }
+
 }

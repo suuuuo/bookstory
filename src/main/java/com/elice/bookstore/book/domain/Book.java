@@ -1,19 +1,15 @@
 package com.elice.bookstore.book.domain;
 
+import com.elice.bookstore.book.domain.dto.BookDetailResponse;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.config.audit.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 /**
  * book domain.
@@ -22,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Book extends BaseEntity {
 
   @Id
@@ -36,7 +33,7 @@ public class Book extends BaseEntity {
   private String itemName;
 
   @Column
-  private Integer price;
+  private BigDecimal price;
 
   @Column
   private Integer stock;
@@ -60,5 +57,8 @@ public class Book extends BaseEntity {
   private String publisher;
 
   @Column
+  @Lob
   private String description;
+
+
 }

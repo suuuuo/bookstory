@@ -1,4 +1,4 @@
-package com.elice.bookstore;
+package com.elice.bookstore.config.audit;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
