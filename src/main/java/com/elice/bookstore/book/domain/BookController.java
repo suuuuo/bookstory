@@ -1,14 +1,12 @@
 package com.elice.bookstore.book.domain;
 
 
+import com.elice.bookstore.book.domain.dto.BookRequest;
 import com.elice.bookstore.book.domain.dto.BookResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,7 +16,14 @@ public class BookController {
 
 
     // 생성을 어떻게 할 것인가 .. ?
-    // @PostMapping("/api/books")
+    // @PostMapping("/api/
+    @PostMapping("/api/books")
+    public ResponseEntity<Book> addBook(@RequestBody BookRequest bookRequest){
+        Book saveBook = bookService.save(bookRequest);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveBook);
+    }
 
 
     // 전체 불러오기

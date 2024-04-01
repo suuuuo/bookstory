@@ -1,6 +1,7 @@
 package com.elice.bookstore.book.domain;
 
 
+import com.elice.bookstore.book.domain.dto.BookRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,10 @@ public class BookService {
     private final BookRepository bookRepository;
 
     //create 데이터를 직접 넣을건인가 ? 외부에서 가져 올 것인가?
+    public Book save(BookRequest bookRequest){
+        return bookRepository.save(bookRequest.toEntity());
+    }
+
 
     //read
     public List<Book> findAll(){
