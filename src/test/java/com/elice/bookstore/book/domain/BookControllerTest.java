@@ -55,7 +55,10 @@ class BookControllerTest {
         final String itemName = "itemName";
         final Integer price = 1000;
         final String author = "author";
-        final BookRequest bookRequest = new BookRequest(itemName,price,author);
+        final String description = "description";
+        final String publisher = "publisher";
+
+        final BookRequest bookRequest = new BookRequest(itemName,price,author,description,publisher);
 
         // 객체 직렬화
         final String requestBody = objectMapper.writeValueAsString(bookRequest);
@@ -73,6 +76,7 @@ class BookControllerTest {
         assertThat(books.get(0).getItemName()).isEqualTo(itemName);
         assertThat(books.get(0).getPrice()).isEqualTo(price);
         assertThat(books.get(0).getAuthor()).isEqualTo(author);
+        assertThat(books.get(0).getDescription()).isEqualTo(description);
     }
 
 
