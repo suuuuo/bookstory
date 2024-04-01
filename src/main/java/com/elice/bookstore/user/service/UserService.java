@@ -22,7 +22,7 @@ public class UserService {
 
   public ResponseRegisterUser signUp(RequestRegisterUser requestRegisterUser) {
 
-    if (userRepository.existsByUserIdAndIsExist(requestRegisterUser.userId())) {
+    if (userRepository.existsByUserIdAndIsExist(requestRegisterUser.userId(), true)) {
       throw new IllegalArgumentException("The userId already exists.");
     }
 

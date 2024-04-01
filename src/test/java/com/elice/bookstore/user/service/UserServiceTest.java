@@ -50,7 +50,7 @@ class UserServiceTest {
         registerForm.phoneNumber(),
         registerForm.address(),
         0L, Role.USER, true);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId())).thenReturn(false);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
     when(userRepository.save(any(User.class))).thenReturn(user);
 
     //when
@@ -59,6 +59,29 @@ class UserServiceTest {
     //then
     assertThat(responseRegisterUser).isNotNull();
     assertThat(responseRegisterUser.userName()).isEqualTo("user1");
+  }
+
+  @DisplayName("[실패] 유저 생성 시 이미 등록된 아이디(userID)라면 실패한다.")
+  @Test
+  void signup_failByExistUserId() {
+    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
+    User user = new User(
+        registerForm.userName(),
+        registerForm.userId(),
+        registerForm.password(),
+        registerForm.dateOfBirth(),
+        registerForm.email(),
+        registerForm.phoneNumber(),
+        registerForm.address(),
+        0L, Role.USER, true);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(true);
+
+    //when
+
+    //then
+    assertThatThrownBy(() -> userService.signUp(registerForm))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("The userId already exists.");
   }
 
   @DisplayName("[실패] 유저 생성 시 비밀번호 공백은 안된다.")
@@ -74,7 +97,7 @@ class UserServiceTest {
         registerForm.phoneNumber(),
         registerForm.address(),
         0L, Role.USER, true);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId())).thenReturn(false);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
 
     //when
 
@@ -97,7 +120,7 @@ class UserServiceTest {
         registerForm.phoneNumber(),
         registerForm.address(),
         0L, Role.USER, true);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId())).thenReturn(false);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
 
     //when
 
@@ -120,7 +143,7 @@ class UserServiceTest {
         registerForm.phoneNumber(),
         registerForm.address(),
         0L, Role.USER, true);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId())).thenReturn(false);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
 
     //when
 
