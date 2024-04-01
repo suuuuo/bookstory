@@ -1,6 +1,7 @@
 package com.elice.bookstore.book.domain;
 
 import com.elice.bookstore.book.domain.dto.BookRequest;
+import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -79,7 +80,51 @@ class BookControllerTest {
         assertThat(books.get(0).getDescription()).isEqualTo(description);
     }
 
+    @DisplayName("Book 책 수정 성공")
+    @Test
+    public void updateBook() throws Exception{
+        //given
+        final String url = "/api/books/{id}";
+        final String itemName = "itemName";
+        final Integer price = 1000;
+        final String author = "author";
+        final String publisher = "publisher";
+        final String description = "description";
 
+        Book saveBook = bookRepository.save(Book.builder()
+            .itemName(itemName)
+            .price(price)
+            .author(author)
+            .publisher(publisher)
+            .description(description)
+            .build());
+
+        final String newItemName = "new itemName";
+        final Integer newPrice = 1000;
+        final String newAuthor = "new author";
+        final String newPublisher = "new publisher";
+        final String newDescription = "new description";
+
+        UpdateBookRequest request = new UpdateBookRequest(newItemName,newPrice,newAuthor,newDescription,newPublisher);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(put(url,saveBook.getId())
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(objectMapper.writeValueAsString(request)));
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+        Book book = bookRepository.findById(saveBook.getId()).get();
+
+        assertThat(book.getItemName()).isEqualTo(newItemName);
+        assertThat(book.getPrice()).isEqualTo(newPrice);
+        assertThat(book.getAuthor()).isEqualTo(newAuthor);
+        assertThat(book.getPublisher()).isEqualTo(newPublisher);
+        assertThat(book.getDescription()).isEqualTo(newDescription);
+
+
+    }
 
     @DisplayName("Book 블로그 글 조회 성공")
     @Test

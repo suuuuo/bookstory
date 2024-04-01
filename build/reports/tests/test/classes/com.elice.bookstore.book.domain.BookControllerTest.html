@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.447s</div>
+<div class="counter">0.491s</div>
 <p>duration</p>
 </div>
 </td>
@@ -82,9 +82,9 @@
 </tr>
 </thead>
 <tr>
-<td class="success">Book 책 생성 성공</td>
-<td class="success">saveBook()</td>
-<td class="success">0.447s</td>
+<td class="success">Book 책 수정 성공</td>
+<td class="success">updateBook()</td>
+<td class="success">0.491s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -92,8 +92,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>15:38:35.500 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.elice.bookstore.book.domain.BookControllerTest]: BookControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-15:38:35.555 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.elice.bookstore.BookStoreApplication for test class com.elice.bookstore.book.domain.BookControllerTest
+<pre>16:39:54.439 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.elice.bookstore.book.domain.BookControllerTest]: BookControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:39:54.494 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.elice.bookstore.BookStoreApplication for test class com.elice.bookstore.book.domain.BookControllerTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -103,28 +103,28 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.4)
 
-2024-04-01T15:38:35.718+09:00  INFO 15775 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Starting BookControllerTest using Java 21.0.1 with PID 15775 (started by codejomo99 in /Users/codejomo99/Downloads/bookstory)
-2024-04-01T15:38:35.719+09:00  INFO 15775 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : No active profile set, falling back to 1 default profile: &quot;default&quot;
-2024-04-01T15:38:36.008+09:00  INFO 15775 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2024-04-01T15:38:36.031+09:00  INFO 15775 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 20 ms. Found 1 JPA repository interface.
-2024-04-01T15:38:36.222+09:00  INFO 15775 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2024-04-01T15:38:36.246+09:00  INFO 15775 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
-2024-04-01T15:38:36.259+09:00  INFO 15775 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2024-04-01T15:38:36.354+09:00  INFO 15775 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2024-04-01T15:38:36.366+09:00  INFO 15775 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2024-04-01T15:38:36.567+09:00  INFO 15775 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7a730479
-2024-04-01T15:38:36.568+09:00  INFO 15775 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2024-04-01T15:38:37.065+09:00  INFO 15775 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2024-04-01T15:38:37.169+09:00  INFO 15775 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2024-04-01T15:38:37.378+09:00  WARN 15775 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2024-04-01T15:38:37.508+09:00  WARN 15775 --- [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
-2024-04-01T15:38:37.575+09:00  INFO 15775 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-04-01T15:38:37.575+09:00  INFO 15775 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-04-01T15:38:37.576+09:00  INFO 15775 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
-2024-04-01T15:38:37.590+09:00  INFO 15775 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Started BookControllerTest in 1.98 seconds (process running for 2.469)
-2024-04-01T15:38:37.881+09:00  INFO 15775 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2024-04-01T15:38:37.881+09:00  INFO 15775 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2024-04-01T15:38:37.882+09:00  INFO 15775 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2024-04-01T16:39:54.655+09:00  INFO 38993 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Starting BookControllerTest using Java 21.0.1 with PID 38993 (started by codejomo99 in /Users/codejomo99/Downloads/bookstory)
+2024-04-01T16:39:54.655+09:00  INFO 38993 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2024-04-01T16:39:54.960+09:00  INFO 38993 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-01T16:39:54.982+09:00  INFO 38993 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 1 JPA repository interface.
+2024-04-01T16:39:55.174+09:00  INFO 38993 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-01T16:39:55.196+09:00  INFO 38993 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-01T16:39:55.212+09:00  INFO 38993 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-04-01T16:39:55.302+09:00  INFO 38993 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-01T16:39:55.313+09:00  INFO 38993 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-04-01T16:39:55.480+09:00  INFO 38993 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@32a4ea4e
+2024-04-01T16:39:55.481+09:00  INFO 38993 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-04-01T16:39:55.977+09:00  INFO 38993 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-01T16:39:56.090+09:00  INFO 38993 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-01T16:39:56.312+09:00  WARN 38993 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-01T16:39:56.449+09:00  WARN 38993 --- [    Test worker] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-04-01T16:39:56.508+09:00  INFO 38993 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-04-01T16:39:56.508+09:00  INFO 38993 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-04-01T16:39:56.509+09:00  INFO 38993 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2024-04-01T16:39:56.524+09:00  INFO 38993 --- [    Test worker] c.e.b.book.domain.BookControllerTest     : Started BookControllerTest in 1.971 seconds (process running for 2.467)
+2024-04-01T16:39:56.822+09:00  INFO 38993 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2024-04-01T16:39:56.822+09:00  INFO 38993 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2024-04-01T16:39:56.822+09:00  INFO 38993 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
 Hibernate: 
     select
         b1_0.id,
@@ -162,7 +162,21 @@ Hibernate:
     select
         b1_0.id,
         b1_0.author,
-        b1_0.category_id,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.created_by,
+        c1_0.level,
+        c1_0.modified_by,
+        c1_0.name,
+        p1_0.id,
+        p1_0.created_at,
+        p1_0.created_by,
+        p1_0.level,
+        p1_0.modified_by,
+        p1_0.name,
+        p1_0.parent_id,
+        p1_0.updated_at,
+        c1_0.updated_at,
         b1_0.created_at,
         b1_0.created_by,
         b1_0.description,
@@ -177,7 +191,76 @@ Hibernate:
         b1_0.stock,
         b1_0.updated_at 
     from
-        book b1_0
+        book b1_0 
+    left join
+        category c1_0 
+            on c1_0.id=b1_0.category_id 
+    left join
+        category p1_0 
+            on p1_0.id=c1_0.parent_id 
+    where
+        b1_0.id=?
+Hibernate: 
+    update
+        book 
+    set
+        author=?,
+        category_id=?,
+        description=?,
+        img_path=?,
+        isbn=?,
+        item_name=?,
+        modified_by=?,
+        price=?,
+        publisher=?,
+        sell_count=?,
+        sell_status=?,
+        stock=?,
+        updated_at=? 
+    where
+        id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.author,
+        c1_0.id,
+        c1_0.created_at,
+        c1_0.created_by,
+        c1_0.level,
+        c1_0.modified_by,
+        c1_0.name,
+        p1_0.id,
+        p1_0.created_at,
+        p1_0.created_by,
+        p1_0.level,
+        p1_0.modified_by,
+        p1_0.name,
+        p1_0.parent_id,
+        p1_0.updated_at,
+        c1_0.updated_at,
+        b1_0.created_at,
+        b1_0.created_by,
+        b1_0.description,
+        b1_0.img_path,
+        b1_0.isbn,
+        b1_0.item_name,
+        b1_0.modified_by,
+        b1_0.price,
+        b1_0.publisher,
+        b1_0.sell_count,
+        b1_0.sell_status,
+        b1_0.stock,
+        b1_0.updated_at 
+    from
+        book b1_0 
+    left join
+        category c1_0 
+            on c1_0.id=b1_0.category_id 
+    left join
+        category p1_0 
+            on p1_0.id=c1_0.parent_id 
+    where
+        b1_0.id=?
 </pre>
 </span>
 </div>
@@ -199,7 +282,7 @@ WARNING: Dynamic loading of agents will be disallowed by default in a future rel
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.6</a> at 2024. 4. 1. 오후 3:38:38</p>
+<a href="http://www.gradle.org">Gradle 8.6</a> at 2024. 4. 1. 오후 4:39:57</p>
 </div>
 </div>
 </body>
