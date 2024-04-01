@@ -3,6 +3,7 @@ package com.elice.bookstore.book.domain;
 
 import com.elice.bookstore.book.domain.dto.BookRequest;
 import com.elice.bookstore.book.domain.dto.BookResponse;
+import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,16 @@ public class BookController {
 
         return ResponseEntity.ok()
                 .body(new BookResponse(book));
+    }
+    /**
+     * Put
+     */
+    @PutMapping("/api/books/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody UpdateBookRequest updateBookRequest) {
+        Book updateBook = bookService.update(id, updateBookRequest);
+
+        return ResponseEntity.ok()
+                .body(updateBook);
     }
 
 }
