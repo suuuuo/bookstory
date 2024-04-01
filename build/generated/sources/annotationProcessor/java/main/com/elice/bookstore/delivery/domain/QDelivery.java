@@ -43,6 +43,8 @@ public class QDelivery extends EntityPathBase<Delivery> {
 
     public final StringPath receiverPhoneNumber = createString("receiverPhoneNumber");
 
+    public final StringPath request = createString("request");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 

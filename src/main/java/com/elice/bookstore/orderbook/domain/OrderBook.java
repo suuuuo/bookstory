@@ -1,7 +1,6 @@
 package com.elice.bookstore.orderbook.domain;
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.config.audit.BaseEntity;
 import com.elice.bookstore.order.domain.Order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderBook extends BaseEntity {
+public class OrderBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,4 +39,5 @@ public class OrderBook extends BaseEntity {
 
     @Column
     private int price;
+
 }

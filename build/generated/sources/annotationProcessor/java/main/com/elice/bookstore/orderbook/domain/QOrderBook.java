@@ -22,29 +22,15 @@ public class QOrderBook extends EntityPathBase<OrderBook> {
 
     public static final QOrderBook orderBook = new QOrderBook("orderBook");
 
-    public final com.elice.bookstore.config.audit.QBaseEntity _super = new com.elice.bookstore.config.audit.QBaseEntity(this);
-
     public final com.elice.bookstore.book.domain.QBook book;
 
     public final NumberPath<Integer> count = createNumber("count", Integer.class);
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
-
-    //inherited
-    public final StringPath createdBy = _super.createdBy;
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    //inherited
-    public final StringPath modifiedBy = _super.modifiedBy;
 
     public final com.elice.bookstore.order.domain.QOrder order;
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QOrderBook(String variable) {
         this(OrderBook.class, forVariable(variable), INITS);
