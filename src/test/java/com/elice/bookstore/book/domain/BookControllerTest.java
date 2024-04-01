@@ -1,5 +1,6 @@
 package com.elice.bookstore.book.domain;
 
+import com.elice.bookstore.book.domain.dto.BookRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,6 +47,35 @@ class BookControllerTest {
                 .build();
         bookRepository.deleteAll();
     }
+    @DisplayName("Book 책 생성 성공")
+    @Test
+    public void saveBook() throws Exception{
+        //given
+        final String url = "/api/books";
+        final String itemName = "itemName";
+        final Integer price = 1000;
+        final String author = "author";
+        final BookRequest bookRequest = new BookRequest(itemName,price,author);
+
+        // 객체 직렬화
+        final String requestBody = objectMapper.writeValueAsString(bookRequest);
+
+        //when
+        ResultActions result = mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+        //then
+        result.andExpect(status().isCreated());
+
+        List<Book> books = bookRepository.findAll();
+
+        assertThat(books.size()).isEqualTo(1);
+        assertThat(books.get(0).getItemName()).isEqualTo(itemName);
+        assertThat(books.get(0).getPrice()).isEqualTo(price);
+        assertThat(books.get(0).getAuthor()).isEqualTo(author);
+    }
+
+
 
     @DisplayName("Book 블로그 글 조회 성공")
     @Test
