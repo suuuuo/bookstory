@@ -49,6 +49,8 @@ public class QDelivery extends EntityPathBase<Delivery> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 
+    public final StringPath request = createString("request");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 

@@ -14,6 +14,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
            수정 - 관리자는 사용자의 주문 내역에서 배송 상태를 수정할 수 있다.
            삭제 - 관리자는 관리자 페이지에서 회원들의 주문 내역을 삭제할 수 있다.
  */
-public interface OrderRepository extends JpaRepository<Order, Long> {
+    public interface OrderRepository extends JpaRepository<Order, Long> {
 
-}
+    }

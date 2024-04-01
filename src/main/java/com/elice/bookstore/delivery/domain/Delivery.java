@@ -1,6 +1,7 @@
 package com.elice.bookstore.delivery.domain;
 
 import com.elice.bookstore.config.audit.BaseEntity;
+import com.elice.bookstore.config.audit.BaseTimeEntity;
 import com.elice.bookstore.order.domain.Order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Delivery extends BaseEntity {
+public class Delivery extends BaseTimeEntity {
 
   @Id
   @GeneratedValue

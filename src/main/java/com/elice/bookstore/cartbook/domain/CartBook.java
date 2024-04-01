@@ -36,8 +36,5 @@ public class CartBook extends BaseEntity {
   private Book book;
 
   @Column
-  private Boolean isSelected;
-
-  @Column
   private Integer count;
 }
