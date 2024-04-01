@@ -15,8 +15,7 @@ public class BookController {
     private final BookService bookService;
 
 
-    // 생성을 어떻게 할 것인가 .. ?
-    // @PostMapping("/api/
+
     @PostMapping("/api/books")
     public ResponseEntity<Book> addBook(@RequestBody BookRequest bookRequest){
         Book saveBook = bookService.save(bookRequest);
