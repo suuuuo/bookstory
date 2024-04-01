@@ -190,4 +190,34 @@ class BookControllerTest {
 
 
     }
+
+    // delete
+
+    @DisplayName("책 삭제 성공")
+    @Test
+    public void deleteBook() throws Exception{
+        //given
+
+        final String url = "/api/books/{id}";
+        final String itemName = "itemName";
+        final Integer price = 1000;
+        final String author = "author";
+        final String publisher = "publisher";
+
+        Book book = bookRepository.save(Book.builder()
+                .itemName(itemName)
+                .price(price)
+                .author(author)
+                .publisher(publisher)
+                .build());
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(delete(url, book.getId()))
+                .andExpect(status().isOk());
+        ;
+
+        //then
+        List<Book> books = bookRepository.findAll();
+        assertThat(books).isEmpty();
+    }
 }

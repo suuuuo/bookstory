@@ -60,4 +60,14 @@ public class BookController {
                 .body(updateBook);
     }
 
+    /**
+     * Delete
+     */
+    @DeleteMapping("/api/books/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+
+        return ResponseEntity.ok().build();
+    }
+
 }
