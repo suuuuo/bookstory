@@ -31,20 +31,18 @@ public class QCartBook extends EntityPathBase<CartBook> {
     public final NumberPath<Integer> count = createNumber("count", Integer.class);
 
     //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
+    //inherited
     public final StringPath createdBy = _super.createdBy;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final BooleanPath isSelected = createBoolean("isSelected");
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QCartBook(String variable) {
         this(CartBook.class, forVariable(variable), INITS);

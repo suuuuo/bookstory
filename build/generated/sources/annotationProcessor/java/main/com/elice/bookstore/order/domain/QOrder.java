@@ -25,6 +25,9 @@ public class QOrder extends EntityPathBase<Order> {
     public final com.elice.bookstore.config.audit.QBaseEntity _super = new com.elice.bookstore.config.audit.QBaseEntity(this);
 
     //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
+    //inherited
     public final StringPath createdBy = _super.createdBy;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -42,13 +45,10 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final DatePath<java.time.LocalDate> paymentDate = createDate("paymentDate", java.time.LocalDate.class);
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
-
     public final NumberPath<Integer> totalPrice = createNumber("totalPrice", Integer.class);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final com.elice.bookstore.user.domain.QUser user;
 

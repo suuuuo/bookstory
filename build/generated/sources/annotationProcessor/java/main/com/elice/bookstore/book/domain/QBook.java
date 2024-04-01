@@ -29,6 +29,9 @@ public class QBook extends EntityPathBase<Book> {
     public final com.elice.bookstore.category.domain.QCategory category;
 
     //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
+    //inherited
     public final StringPath createdBy = _super.createdBy;
 
     public final StringPath description = createString("description");
@@ -48,9 +51,6 @@ public class QBook extends EntityPathBase<Book> {
 
     public final StringPath publisher = createString("publisher");
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
-
     public final NumberPath<Integer> sellCount = createNumber("sellCount", Integer.class);
 
     public final EnumPath<BookSellStatus> sellStatus = createEnum("sellStatus", BookSellStatus.class);
@@ -58,7 +58,7 @@ public class QBook extends EntityPathBase<Book> {
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QBook(String variable) {
         this(Book.class, forVariable(variable), INITS);

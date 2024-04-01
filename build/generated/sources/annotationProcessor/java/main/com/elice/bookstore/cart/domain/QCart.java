@@ -22,21 +22,15 @@ public class QCart extends EntityPathBase<Cart> {
 
     public static final QCart cart = new QCart("cart");
 
-    public final com.elice.bookstore.config.audit.QBaseEntity _super = new com.elice.bookstore.config.audit.QBaseEntity(this);
+    public final com.elice.bookstore.config.audit.QBaseTimeEntity _super = new com.elice.bookstore.config.audit.QBaseTimeEntity(this);
 
     //inherited
-    public final StringPath createdBy = _super.createdBy;
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
-    public final StringPath modifiedBy = _super.modifiedBy;
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final com.elice.bookstore.user.domain.QUser user;
 

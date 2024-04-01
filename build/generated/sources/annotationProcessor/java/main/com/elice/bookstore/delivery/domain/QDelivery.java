@@ -22,12 +22,12 @@ public class QDelivery extends EntityPathBase<Delivery> {
 
     public static final QDelivery delivery = new QDelivery("delivery");
 
-    public final com.elice.bookstore.config.audit.QBaseEntity _super = new com.elice.bookstore.config.audit.QBaseEntity(this);
+    public final com.elice.bookstore.config.audit.QBaseTimeEntity _super = new com.elice.bookstore.config.audit.QBaseTimeEntity(this);
 
     public final StringPath address = createString("address");
 
     //inherited
-    public final StringPath createdBy = _super.createdBy;
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final DatePath<java.time.LocalDate> deliveredDate = createDate("deliveredDate", java.time.LocalDate.class);
 
@@ -37,9 +37,6 @@ public class QDelivery extends EntityPathBase<Delivery> {
 
     public final BooleanPath isExist = createBoolean("isExist");
 
-    //inherited
-    public final StringPath modifiedBy = _super.modifiedBy;
-
     public final com.elice.bookstore.order.domain.QOrder order;
 
     public final StringPath receiverName = createString("receiverName");
@@ -47,10 +44,7 @@ public class QDelivery extends EntityPathBase<Delivery> {
     public final StringPath receiverPhoneNumber = createString("receiverPhoneNumber");
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QDelivery(String variable) {
         this(Delivery.class, forVariable(variable), INITS);
