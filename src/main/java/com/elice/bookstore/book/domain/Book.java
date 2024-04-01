@@ -63,4 +63,13 @@ public class Book extends BaseEntity {
 
   @Column
   private String description;
+
+  public void update(String itemName, Integer price, String author, String description, String publisher) {
+    this.itemName = itemName;
+    this.price = price;
+    this.author = author;
+    this.description = description;
+    this.publisher = publisher;
+  }
+
 }

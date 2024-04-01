@@ -2,36 +2,60 @@ package com.elice.bookstore.book.domain;
 
 
 import com.elice.bookstore.book.domain.dto.BookRequest;
+import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * BookService.
+ */
+
 @Service
 @RequiredArgsConstructor
 public class BookService {
-    private final BookRepository bookRepository;
 
-    //create 데이터를 직접 넣을건인가 ? 외부에서 가져 올 것인가?
-    public Book save(BookRequest bookRequest){
-        return bookRepository.save(bookRequest.toEntity());
-    }
+  private final BookRepository bookRepository;
 
-
-    //read
-    public List<Book> findAll(){
-        return bookRepository.findAll();
-    }
-
-    public Book findById(Long id){
-        return bookRepository.findById(id).orElse(null);
-    }
-    //update
+  /**
+   * create
+   */
+  public Book save(BookRequest bookRequest) {
+    return bookRepository.save(bookRequest.toEntity());
+  }
 
 
+  /**
+   * read
+   */
+  public List<Book> findAll() {
+    return bookRepository.findAll();
+  }
 
-    //delete
-    public void deleteBook(Long id){
-        bookRepository.deleteById(id);
-    }
+  public Book findById(Long id) {
+    return bookRepository.findById(id).orElse(null);
+  }
+
+
+  /**
+   * update
+   */
+  @Transactional
+  public Book update(Long id, UpdateBookRequest updateBookRequest) {
+    Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found:" + id));
+
+    book.update(updateBookRequest.getItemName(), updateBookRequest.getPrice(),
+        updateBookRequest.getAuthor(), updateBookRequest.getDescription(), updateBookRequest.getPublisher());
+
+    return book;
+  }
+
+  /**
+   * update
+   */
+  public void deleteBook(Long id) {
+    bookRepository.deleteById(id);
+  }
 }
