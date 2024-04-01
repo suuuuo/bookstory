@@ -36,7 +36,7 @@ class UserServiceTest {
     ReflectionTestUtils.setField(userService, "userMapper", userMapper);
   }
 
-  @DisplayName("회원가입을 한다.")
+  @DisplayName("회원가입 한다.")
   @Test
   void signUp() {
     //given
@@ -65,15 +65,6 @@ class UserServiceTest {
   @Test
   void signup_failByExistUserId() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    User user = new User(
-        registerForm.userName(),
-        registerForm.userId(),
-        registerForm.password(),
-        registerForm.dateOfBirth(),
-        registerForm.email(),
-        registerForm.phoneNumber(),
-        registerForm.address(),
-        0L, Role.USER, true);
     when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(true);
 
     //when
@@ -88,15 +79,6 @@ class UserServiceTest {
   @Test
   void signUp_failByEmptyPassword() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "", "", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    User user = new User(
-        registerForm.userName(),
-        registerForm.userId(),
-        registerForm.password(),
-        registerForm.dateOfBirth(),
-        registerForm.email(),
-        registerForm.phoneNumber(),
-        registerForm.address(),
-        0L, Role.USER, true);
     when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
 
     //when
@@ -111,15 +93,6 @@ class UserServiceTest {
   @Test
   void signup_failByNotMatchPassword() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "1234", "7890", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    User user = new User(
-        registerForm.userName(),
-        registerForm.userId(),
-        registerForm.password(),
-        registerForm.dateOfBirth(),
-        registerForm.email(),
-        registerForm.phoneNumber(),
-        registerForm.address(),
-        0L, Role.USER, true);
     when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
 
     //when
@@ -134,15 +107,6 @@ class UserServiceTest {
   @Test
   void signup_failByAtLeast4Character() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    User user = new User(
-        registerForm.userName(),
-        registerForm.userId(),
-        registerForm.password(),
-        registerForm.dateOfBirth(),
-        registerForm.email(),
-        registerForm.phoneNumber(),
-        registerForm.address(),
-        0L, Role.USER, true);
     when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
 
     //when
