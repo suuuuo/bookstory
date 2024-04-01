@@ -79,4 +79,66 @@ class BookControllerTest {
         assertThat(books.get(0).getAuthor()).isEqualTo(author);
         assertThat(books.get(0).getDescription()).isEqualTo(description);
     }
+
+    // Read
+    @DisplayName("Book 블로그 글 조회 성공")
+    @Test
+    public void findAllBook() throws Exception{
+        //given
+        final String url = "/api/books";
+        final String itemName = "itemName";
+        final Integer price = 1000;
+        final String author = "author";
+        final String publisher = "publisher";
+
+        bookRepository.save(Book.builder()
+                .itemName(itemName)
+                .price(price)
+                .author(author)
+                .publisher(publisher)
+                .build());
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(get(url)
+                .accept(MediaType.APPLICATION_JSON));
+
+        //then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].itemName").value(itemName))
+                .andExpect(jsonPath("$[0].price").value(price))
+                .andExpect(jsonPath("$[0].author").value(author))
+                .andExpect(jsonPath("$[0].publisher").value(publisher));
+
+    }
+
+
+    @DisplayName("특정 책 조회 성공")
+    @Test
+    public void findByIdBooks() throws Exception{
+        //given
+        final String url = "/api/books/{id}";
+        final String itemName = "itemName";
+        final Integer price = 1000;
+        final String author = "author";
+        final String publisher = "publisher";
+
+        Book book = bookRepository.save(Book.builder()
+                .itemName(itemName)
+                .price(price)
+                .author(author)
+                .publisher(publisher)
+                .build());
+
+        //when
+        final ResultActions resultActions = mockMvc.perform(get(url, book.getId()));
+
+        //then
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.itemName").value(itemName))
+                .andExpect(jsonPath("$.price").value(price))
+                .andExpect(jsonPath("$.author").value(author))
+                .andExpect(jsonPath("$.publisher").value(publisher));
+    }
 }
