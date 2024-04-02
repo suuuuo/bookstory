@@ -26,7 +26,7 @@ public class CartBookService {
   /**
    * 조회
    */
-  public List<CartBook> findAllCartBook(long userId){ //장바구니에 담긴 상품 리스트 조회 controller - get
+  public List<CartBook> findAllCartBook(long userId){ //장바구니 상품 리스트 조회
     Cart cart = cartService.findCart(userId);
 
     List<CartBook> allCartBooks = cartBookRepository.findCartBookByCartId(cart.getId());
@@ -37,7 +37,7 @@ public class CartBookService {
   /**
    * 장바구니 상품 담기/개수변경
    */
-  public CartBook addCartBook(long userId, Book book, int count){ //장바구니에 상품 추가
+  public CartBook addCartBook(long userId, Book book, int count){
     Cart cart = cartService.findCart(userId);
     CartBook cartBook = cartBookRepository.findByCartIdAndBookId(cart.getId(), book.getId());
 

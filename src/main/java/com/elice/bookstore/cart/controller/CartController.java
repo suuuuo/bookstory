@@ -59,7 +59,7 @@ public class CartController {
 
 
   /**
-   * 장바구니에 책 담기 ; 이미 있는 상품 담으면 count만 증가
+   * 장바구니에 책 담기 ; 이미 있는 상품은 count만 증가
    */
   @PostMapping("/{book_id}")
   public CartBookDto CartAddTest(
