@@ -31,11 +31,11 @@ public class CartBookService {
     return allCartBooks;
   }
 
+
   /**
    * 장바구니 상품 담기/개수변경
    */
-
-  public Cart addCartBook(long userId, Book book, int count){ //장바구니에 상품 추가
+  public CartBook addCartBook(long userId, Book book, int count){ //장바구니에 상품 추가
     Cart cart = cartService.findCart(userId);
     CartBook cartBook = cartBookRepository.findByCartIdAndBookId(cart.getId(), book.getId());
 
@@ -43,26 +43,25 @@ public class CartBookService {
       cartBook = new CartBook(book, cart, count);
       cartBookRepository.save(cartBook);
     }
-    else{ //fetch
+    else{
       cartBook.setCount(cartBook.getCount() + count);
     }
 
-    return cart;
+    return cartBook;
   }
 
-  public CartBook patchCartBook(long userId, long bookId,int count){
-    CartBook fetchCartBook = cartBookRepository.findByCartIdAndBookId(cartService.findCart(userId).getId(), bookId);
-    fetchCartBook.setCount(count);
+  public CartBook patchCartBook(long cartBookId, int count){
+    CartBook patchCartBook = cartBookRepository.findById(cartBookId);
+    patchCartBook.setCount(count);
 
-    return cartBookRepository.save(fetchCartBook);
+    return cartBookRepository.save(patchCartBook);
   }
-
 
   /**
    * 삭제
    */
-  public void deleteCartBook(long cartId, long bookId){
-    CartBook cartBook = cartBookRepository.findByCartIdAndBookId(cartId, bookId);
+  public void deleteCartBook(long cartBookId){
+    CartBook cartBook = cartBookRepository.findById(cartBookId);
     cartBookRepository.deleteById(cartBook.getId());
   }
 }
