@@ -1,6 +1,8 @@
-package com.elice.bookstore.cartbook.domain;
+package com.elice.bookstore.cartbook.mapper;
 
 
+import com.elice.bookstore.cartbook.domain.CartBook;
+import com.elice.bookstore.cartbook.dto.CartBookDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

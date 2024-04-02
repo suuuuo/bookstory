@@ -1,6 +1,7 @@
-package com.elice.bookstore.cartbook.domain;
+package com.elice.bookstore.cartbook.Repository;
 
 import com.elice.bookstore.cart.domain.Cart;
+import com.elice.bookstore.cartbook.domain.CartBook;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

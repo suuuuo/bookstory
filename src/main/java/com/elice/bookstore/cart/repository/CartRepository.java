@@ -1,5 +1,6 @@
-package com.elice.bookstore.cart.domain;
+package com.elice.bookstore.cart.repository;
 
+import com.elice.bookstore.cart.domain.Cart;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.elice.bookstore.cartbook.domain;
+package com.elice.bookstore.cartbook.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

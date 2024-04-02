@@ -1,8 +1,10 @@
-package com.elice.bookstore.cartbook.domain;
+package com.elice.bookstore.cartbook.application;
 
 import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.cart.domain.Cart;
-import com.elice.bookstore.cart.domain.CartService;
+import com.elice.bookstore.cart.application.CartService;
+import com.elice.bookstore.cartbook.domain.CartBook;
+import com.elice.bookstore.cartbook.Repository.CartBookRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Service;

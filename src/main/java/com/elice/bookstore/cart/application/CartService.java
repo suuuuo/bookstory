@@ -1,5 +1,7 @@
-package com.elice.bookstore.cart.domain;
+package com.elice.bookstore.cart.application;
 
+import com.elice.bookstore.cart.domain.Cart;
+import com.elice.bookstore.cart.repository.CartRepository;
 import com.elice.bookstore.user.domain.User;
 import com.elice.bookstore.user.domain.UserService;
 import jakarta.transaction.Transactional;
