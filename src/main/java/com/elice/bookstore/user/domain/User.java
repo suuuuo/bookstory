@@ -83,4 +83,15 @@ public class User extends BaseEntity {
     this.role = role;
     this.isExist = isExist;
   }
+
+  /**
+   * for SecurityContextHolder.
+
+   * @param email .
+   * @param role .
+   */
+  public User(String email, Role role) {
+    this.email = email;
+    this.role = role;
+  }
 }
