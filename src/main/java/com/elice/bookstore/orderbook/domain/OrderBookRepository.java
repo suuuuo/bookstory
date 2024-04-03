@@ -1,8 +1,10 @@
 package com.elice.bookstore.orderbook.domain;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 /*
   OrderBookRepository
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Repository;
            관리자 CRUD
            조회 - 관리자는 관리자 페이지에서 모든 회원들의 주문 내역을 조회할 수 있다. (OrderBook)
  */
-
 @Repository
 public interface OrderBookRepository extends JpaRepository<OrderBook, Long> {
 

@@ -21,7 +21,6 @@ import org.hibernate.annotations.CreationTimestamp;
  */
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Delivery extends BaseTimeEntity {
 

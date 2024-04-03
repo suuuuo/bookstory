@@ -1,8 +1,6 @@
 package com.elice.bookstore.order.domain;
 
 import com.elice.bookstore.cart.domain.Cart;
-import com.elice.bookstore.config.audit.BaseEntity;
-import com.elice.bookstore.delivery.domain.Delivery;
 import com.elice.bookstore.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
  */
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
 @Table(name = "orders")
 public class Order {

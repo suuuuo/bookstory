@@ -1,6 +1,6 @@
 package com.elice.bookstore.order.domain;
 
-import com.elice.bookstore.cart.domain.Cart;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

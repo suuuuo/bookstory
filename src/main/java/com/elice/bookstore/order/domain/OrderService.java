@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderService {
 
+  @Autowired
   private final OrderRepository orderRepository;
 
   public Order save(Order order) {

@@ -15,13 +15,14 @@ import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * orderBook domain. (주문내역 확인)
  */
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
 public class OrderBook extends BaseTimeEntity {
 
@@ -43,6 +44,7 @@ public class OrderBook extends BaseTimeEntity {
 
     @Column
     private int count;
+
 
 //    @Column
 //    private int price;
