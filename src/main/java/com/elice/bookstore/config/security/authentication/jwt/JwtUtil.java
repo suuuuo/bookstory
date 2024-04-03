@@ -63,7 +63,7 @@ public class JwtUtil {
   public Boolean isValid(String token) {
     try {
       Jwts.parser().verifyWith(secretKey).build()
-          .parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+          .parseSignedClaims(token);
     } catch (Exception e) {
 
       log.error("token is invalid: {}", e.getMessage());
