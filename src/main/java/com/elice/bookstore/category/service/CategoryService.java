@@ -58,14 +58,10 @@ public class CategoryService {
   public List<String> bringHighRankCategoryAll(Category category){
     List<String> categoryAll = new ArrayList<>();
       categoryAll.add(category.getName());
-
       while(true) {
       try {
-        System.out.println("category = " + category);
         categoryAll.add(0, category.getParent().getName());
-        System.out.println("category = " + category);
         category = categoryRepository.findById(category.getParent().getId()).get();
-        System.out.println("category = " + category);
       } catch (NullPointerException e) {
         break;
       }
