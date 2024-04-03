@@ -96,16 +96,24 @@ class CategoryServiceTest {
     category3.setParent(category2);
 
 
+    Category category5 = new Category();
+    category5.setName("추리소설");
+    categoryService.create(category5);
+    category5.setLevel(4);
+    category5.setParent(category3);
+
+
+
     Category category4 = new Category();
     category4.setName("비문학");
     categoryService.create(category4);
-    category3.setLevel(2);
-    category3.setParent(category1);
+    category4.setLevel(2);
+    category4.setParent(category1);
 
     //when
     List<String> categories = categoryService.bringHighRankCategoryAll(category3);
-    System.out.println(categories);
-    //then 문제발생
+
+    //then
 
     Assertions.assertThat(categories).contains(category1.getName());
     Assertions.assertThat(categories).contains(category2.getName());

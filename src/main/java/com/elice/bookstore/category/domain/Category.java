@@ -31,7 +31,7 @@ public class Category extends BaseEntity {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "bookCategory_id")
+  @JoinColumn(name = "book_category_id")
   private BookCategory bookCategory;
 
   @Column
