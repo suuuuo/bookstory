@@ -36,8 +36,8 @@ public class Delivery extends BaseTimeEntity {
   @Column
   private String address;
 
-  @Column
-  private String deliveryStatus;
+//  @Column
+//  private String deliveryStatus;
 
   @Column
   private String receiverName;
@@ -49,7 +49,7 @@ public class Delivery extends BaseTimeEntity {
   private String request;
 
   @Column
-  @CreationTimestamp
+//  @CreationTimestamp
   private LocalDate deliveredDate;
 
   @ColumnDefault("0")

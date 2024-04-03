@@ -11,21 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final OrderRepository orderRepository;
+  private final OrderRepository orderRepository;
 
-    public Order save(Order order) {
-      return orderRepository.save(order);
-    }
+  public Order save(Order order) {
+    return orderRepository.save(order);
+  }
 
-    public void updateOrderStatusById(Long id) {
-      orderRepository.updateOrderStatusById(id);
-    }
-    public void adminUpdateOrderStatueById(OrderStatus orderStatus, Long id) {
-      orderRepository.updateOrderStatusById(orderStatus, id);
-    }
+  public void updateOrderStatusById(Long id) {
+    orderRepository.updateOrderStatusById(id);
+  }
 
-    public void deleteById(Long id) {
-      orderRepository.deleteById(id);
-    }
+  public void adminUpdateOrderStatueById(OrderStatus orderStatus, Long id) {
+    orderRepository.updateOrderStatusById(orderStatus, id);
+  }
+
+  public void deleteById(Long id) {
+    orderRepository.deleteById(id);
+  }
 
 }

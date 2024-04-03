@@ -10,17 +10,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OrderBookService {
-    private final OrderBookRepository orderBookRepository;
 
-    /* **** 회원 CRUD *****/
-    /* 나의 주문 내역 조회 */
-    public Page<OrderBook> findAllByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable) {
-        return orderBookRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable);
-    }
+  private final OrderBookRepository orderBookRepository;
 
-    /* **** 관리자 CRUD *****/
-    /* 전체 주문 내역 조회 */
-    public Page<OrderBook> findAllByOrderByCreatedAtDesc(Pageable pageable) {
-      return orderBookRepository.findAllByOrderByCreatedAtDesc(pageable);
-    }
+  /* **** 회원 CRUD *****/
+  /* 나의 주문 내역 조회 */
+  public Page<OrderBook> findAllByUserIdOrderByCreatedAtDesc(Long userId, Pageable pageable) {
+    return orderBookRepository.findAllByUserIdOrderByCreatedAtDesc(userId, pageable);
+  }
+
+  /* **** 관리자 CRUD *****/
+  /* 전체 주문 내역 조회 */
+  public Page<OrderBook> findAllByOrderByCreatedAtDesc(Pageable pageable) {
+    return orderBookRepository.findAllByOrderByCreatedAtDesc(pageable);
+  }
 }
