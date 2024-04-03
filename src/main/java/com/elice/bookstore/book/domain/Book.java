@@ -58,20 +58,6 @@ public class Book extends BaseEntity {
   @Column
   private String description;
 
-//  @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-//  private List<Question> questions = new ArrayList<>();
-//
-//  public void addQuestion(Question question){
-//    questions.add(question);
-//    question.setBook(this);
-//  }
-//
-//  public void removeQuestion(Question question) {
-//    questions.remove(question);
-//    question.setBook(null);
-//  }
-
-
 
   public void update(String itemName, Integer price, String author, String description, String publisher) {
     this.itemName = itemName;

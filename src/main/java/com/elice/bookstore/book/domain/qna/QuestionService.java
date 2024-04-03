@@ -36,5 +36,11 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
+    /**
+     *  Question 삭제하기
+     */
+    public void deleteQuestion(Long id){
+        questionRepository.deleteById(id);
+    }
 
 }

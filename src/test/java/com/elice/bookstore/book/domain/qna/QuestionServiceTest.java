@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class QuestionServiceTest {
@@ -88,4 +88,28 @@ class QuestionServiceTest {
         assertThat(result).hasSize(2); // 결과 리스트의 사이즈 검증
         assertThat(result).extracting(Question::getContent).containsExactlyInAnyOrder("Test question content", "Test question content2");
     }
+
+    @Test
+    void deleteQuestion_ValidId_RemovesQuestionFromBook() {
+        // Given
+        Long questionId = 1L;
+        Long bookId = 1L;
+        Book book = new Book();
+        book.setId(bookId);
+
+        Question question = new Question();
+        question.setId(questionId);
+        question.setBook(book);
+
+
+        when(questionRepository.findById(questionId)).thenReturn(Optional.of(question));
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
+
+        // When
+        questionService.deleteQuestion(questionId);
+
+        // Then
+        assertThat(book.getQuestions()).isEmpty();
+    }
+
 }
