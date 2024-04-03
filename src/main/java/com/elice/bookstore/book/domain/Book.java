@@ -1,20 +1,16 @@
 package com.elice.bookstore.book.domain;
 
+import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.config.audit.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * book domain.
@@ -63,6 +59,21 @@ public class Book extends BaseEntity {
 
   @Column
   private String description;
+
+//  @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+//  private List<Question> questions = new ArrayList<>();
+//
+//  public void addQuestion(Question question){
+//    questions.add(question);
+//    question.setBook(this);
+//  }
+//
+//  public void removeQuestion(Question question) {
+//    questions.remove(question);
+//    question.setBook(null);
+//  }
+
+
 
   public void update(String itemName, Integer price, String author, String description, String publisher) {
     this.itemName = itemName;
