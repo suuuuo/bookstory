@@ -2,6 +2,7 @@ package com.elice.bookstore.book.domain.qna;
 
 
 import com.elice.bookstore.book.domain.qna.dto.QuestionRequest;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class QuestionController {
     private final QuestionService questionService;
 
     /**
-     * Question Post;
+     * Question : Post;
      */
 
     @PostMapping
@@ -25,11 +26,12 @@ public class QuestionController {
     }
 
     /**
-     * Question Get;
+     * Question : Get;
      */
     @GetMapping
     public ResponseEntity<List<Question>> findALlQuestion(){
         List<Question> questions = questionService.findAllQuestion();
+
         return ResponseEntity.ok(questions);
     }
 

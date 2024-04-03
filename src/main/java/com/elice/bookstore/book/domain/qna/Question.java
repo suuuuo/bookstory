@@ -25,6 +25,7 @@ public class Question {
     private String createdBy;
     private LocalDateTime createdAt;
 
+
     @Builder
     public Question(Book book, QuestionStatus status, String content, String createdBy) {
         this.book = book;

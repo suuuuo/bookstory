@@ -29,7 +29,6 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-
     /**
      * Question 불러오기
      */
