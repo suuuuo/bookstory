@@ -15,8 +15,13 @@ public class Answer {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    @Column(nullable = false)
     private String content;
+
+    // 유저
     private String createdBy;
     private LocalDateTime localDateTime;
+
+
 
 }
