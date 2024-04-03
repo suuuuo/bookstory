@@ -1,5 +1,6 @@
 package com.elice.bookstore.book.domain;
 
+import com.elice.bookstore.category.domain.BookCategory;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.config.audit.BaseEntity;
 import jakarta.persistence.Column;
@@ -14,12 +15,14 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * book domain.
  */
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book extends BaseEntity {
@@ -29,8 +32,8 @@ public class Book extends BaseEntity {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "category_id")
-  private Category category;
+  @JoinColumn(name = "bookCategory_id")
+  private BookCategory bookCategory;
 
   @Column
   private String itemName;
