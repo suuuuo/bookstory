@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public enum OrderStatus {
     NEW,
     PENDING,
+    CANCELLED
+
 //    PAID,
 //    PREPARING,
 //    SHIPPED,
@@ -16,5 +18,5 @@ public enum OrderStatus {
 //    EXCHANGE_REQUEST,
 //    REFUND_COMPLETED,
 //    EXCHANGE_COMPLETED
-//    CANCELLED
+
 }

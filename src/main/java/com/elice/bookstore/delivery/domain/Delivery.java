@@ -45,7 +45,7 @@ public class Delivery extends BaseTimeEntity {
   @Column
   private String receiverPhoneNumber;
 
-
+  @Column
   private String request;
 
   @Column

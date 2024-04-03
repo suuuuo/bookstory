@@ -2,23 +2,25 @@ package com.elice.bookstore.order.domain;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
-    @Autowired
+
     private final OrderRepository orderRepository;
 
-    public OrderService(OrderRepository orderRepository) {
-      this.orderRepository = orderRepository;
+    public Order save(Order order) {
+      return orderRepository.save(order);
     }
 
-    public List<Order> getAllOrder() {
-      return orderRepository.findAll();
+    public void updateOrderStatusById(Long id) {
+      orderRepository.updateOrderStatusById(id);
     }
-
-    public void updateOrderStateById(OrderStatus orderStatus, Long id) {
+    public void adminUpdateOrderStatueById(OrderStatus orderStatus, Long id) {
       orderRepository.updateOrderStatusById(orderStatus, id);
     }
 
@@ -26,8 +28,4 @@ public class OrderService {
       orderRepository.deleteById(id);
     }
 
-    public Order findById(Long id) {
-      Optional<Order> orderOptional = orderRepository.findById(id);
-      return orderOptional.orElse(null);
-    }
 }
