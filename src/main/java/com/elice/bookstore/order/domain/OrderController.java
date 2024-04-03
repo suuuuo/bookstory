@@ -1,19 +1,13 @@
 package com.elice.bookstore.order.domain;
 
-import com.elice.bookstore.cart.domain.Cart;
-import com.elice.bookstore.delivery.domain.Delivery;
 import com.elice.bookstore.delivery.domain.DeliveryService;
 import com.elice.bookstore.orderbook.domain.OrderBook;
-import com.elice.bookstore.orderbook.domain.OrderBookRepository;
 import com.elice.bookstore.orderbook.domain.OrderBookService;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.type.descriptor.sql.internal.NativeEnumDdlTypeImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,11 +28,12 @@ public class OrderController {
 
   /* **** 회원 CRUD *****/
   /* 회원 : 나의 주문 내역 조회 */
-  @GetMapping("/orders")
-  public ResponseEntity<Page<OrderBook>> getAllMyOrders(Long userId,
-      @PageableDefault(size = 15) Pageable pageable) {
-    Page<OrderBook> allMyOrders = orderBookService.findAllByUserIdOrderByCreatedAtDesc(userId,
-        pageable);
+  @GetMapping("/orders/{id}")
+  public ResponseEntity<Page<OrderBook>> getAllMyOrders(@PathVariable("id") Long userId,
+                                                        @RequestParam(value = "page", defaultValue = "0") int page,
+                                                        @RequestParam(value = "size", defaultValue = "15") int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<OrderBook> allMyOrders = orderBookService.findAllByUserIdOrderByCreatedAtDesc(userId, pageable);
     return ResponseEntity.ok().body(allMyOrders);
   }
 
@@ -49,19 +44,19 @@ public class OrderController {
     return ResponseEntity.status(HttpStatus.CREATED).body("Order saved.");
   }
 
-  /* 회원 : 배송 전까지 주문 정보 수정 (Delivery)*/
+  /* 회원 : 배송 전, 주문 정보 수정 */
   @PutMapping("/orders/{id}/update")
-  public ResponseEntity<String> updateOrder(@PathVariable("id") Long id,
+  public ResponseEntity<String> updateOrder(@PathVariable("id") Long orderId,
       @RequestBody Map<String, String> params) {
     try {
-      deliveryService.updateDeliveryDetailsById(params, id);
+      deliveryService.updateDeliveryDetailsById(params, orderId);
       return ResponseEntity.ok("하나둘셋 성공이닷!");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("실패 수정 고!");
     }
   }
 
-  /* 회원 : 배송 전 주문 취소 */
+  /* 회원 : 배송 전 주문취소 */
   @PutMapping("/orders/{id}/cancel")
   public ResponseEntity<String> cancelOrder(@PathVariable Long id) {
     orderService.updateOrderStatusById(id);
@@ -71,8 +66,9 @@ public class OrderController {
   /* **** 관리자 CRUD *****/
   /* 관리자 : 전체 주문 내역 조회 */
   @GetMapping("/admin/orders")
-  public ResponseEntity<Page<OrderBook>> getAllOrders(
-      @PageableDefault(size = 15) Pageable pageable) {
+  public ResponseEntity<Page<OrderBook>> adminGetAllOrders(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                      @RequestParam(value = "size", defaultValue = "15") int size) {
+    Pageable pageable = PageRequest.of(page, size);
     Page<OrderBook> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
     return ResponseEntity.ok().body(allOrders);
   }
@@ -87,7 +83,7 @@ public class OrderController {
 
   /* 관리자 : 주문 내역 삭제 (delete로 구현함) */
   @DeleteMapping("/admin/orders/{id}")
-  public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+  public ResponseEntity<Void> adminDeleteOrder(@PathVariable Long id) {
     orderService.deleteById(id);
     return ResponseEntity.ok().build();
   }

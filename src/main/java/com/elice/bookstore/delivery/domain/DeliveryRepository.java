@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
 
-  /* 회원 : 배송 전, 요청사항 수정 */
+  /* 회원 : 배송 전, 주문 정보 수정 */
   @Transactional
   @Modifying
   @Query("UPDATE Delivery d SET " +
@@ -26,7 +26,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
       "d.receiverName = COALESCE(:#{#params['receiverName']}, d.receiverName), " +
       "d.receiverPhoneNumber = COALESCE(:#{#params['receiverPhoneNumber']}, d.receiverPhoneNumber), " +
       "d.request = COALESCE(:#{#params['request']}, d.request) " +
-      "WHERE d.id = :id")
-  void updateDeliveryDetailsById(@Param("params") Map<String, String> params, @Param("id") Long id);
+      "WHERE d.id = :orderId")
+  void updateDeliveryDetailsById(@Param("params") Map<String, String> params, @Param("id") Long orderId);
 
 }

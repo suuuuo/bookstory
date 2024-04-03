@@ -10,8 +10,8 @@ public class DeliveryService {
 
   private final DeliveryRepository deliveryRepository;
 
-  public void updateDeliveryDetailsById(Map<String, String> params, Long id) {
-    deliveryRepository.updateDeliveryDetailsById(params, id);
+  public void updateDeliveryDetailsById(Map<String, String> params, Long orderId) {
+    deliveryRepository.updateDeliveryDetailsById(params, orderId);
   }
 
 
