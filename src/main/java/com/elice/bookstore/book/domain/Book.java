@@ -4,10 +4,7 @@ import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.config.audit.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +14,7 @@ import java.util.List;
  */
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

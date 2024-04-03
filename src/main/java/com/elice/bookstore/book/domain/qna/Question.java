@@ -3,17 +3,13 @@ package com.elice.bookstore.book.domain.qna;
 
 import com.elice.bookstore.book.domain.Book;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Question {
     @Id
@@ -29,5 +25,13 @@ public class Question {
     private String createdBy;
     private LocalDateTime createdAt;
 
+    @Builder
+    public Question(Book book, QuestionStatus status, String content, String createdBy) {
+        this.book = book;
+        this.status = status;
+        this.content = content;
+        this.createdBy = createdBy;
+        this.createdAt = LocalDateTime.now();
+    }
 
 }

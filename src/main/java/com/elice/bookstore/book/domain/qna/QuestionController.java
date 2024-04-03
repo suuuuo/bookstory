@@ -1,6 +1,7 @@
 package com.elice.bookstore.book.domain.qna;
 
 
+import com.elice.bookstore.book.domain.qna.dto.QuestionRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class QuestionController {
      */
 
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question){
+    public ResponseEntity<Question> createQuestion(@RequestBody QuestionRequest question){
         Question newQuestion = questionService.createQuestion(question);
         return ResponseEntity.ok(newQuestion);
     }
