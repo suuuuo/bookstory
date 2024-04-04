@@ -1,12 +1,13 @@
 package com.elice.bookstore.book.domain.qna;
 
 
+import com.elice.bookstore.config.audit.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class Answer {
+public class Answer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,11 +18,6 @@ public class Answer {
 
     @Column(nullable = false)
     private String content;
-
-    // 유저
-    private String createdBy;
-    private LocalDateTime localDateTime;
-
 
 
 }

@@ -5,6 +5,7 @@ import com.elice.bookstore.book.domain.dto.BookRequest;
 import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,9 @@ public class BookService {
      * create
      */
     public Book save(BookRequest bookRequest) {
-        return bookRepository.save(bookRequest.toEntity());
+
+        Book book = BookMapper.toEntity(bookRequest);
+        return bookRepository.save(book);
     }
 
     /**

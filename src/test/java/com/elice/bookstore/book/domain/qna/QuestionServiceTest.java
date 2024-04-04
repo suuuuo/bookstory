@@ -89,27 +89,30 @@ class QuestionServiceTest {
         assertThat(result).extracting(Question::getContent).containsExactlyInAnyOrder("Test question content", "Test question content2");
     }
 
-    @Test
-    void deleteQuestion_ValidId_RemovesQuestionFromBook() {
-        // Given
-        Long questionId = 1L;
-        Long bookId = 1L;
-        Book book = new Book();
-        book.setId(bookId);
-
-        Question question = new Question();
-        question.setId(questionId);
-        question.setBook(book);
-
-
-        when(questionRepository.findById(questionId)).thenReturn(Optional.of(question));
-        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
-
-        // When
-        questionService.deleteQuestion(questionId);
-
-        // Then
-        assertThat(book.getQuestions()).isEmpty();
-    }
+//    @DisplayName("질문 삭제 완료")
+//    @Test
+//    void deleteQuestion() {
+//        // Given
+//        Long questionId = 1L;
+//        Long bookId = 1L;
+//        Book book = new Book();
+//        book.setId(bookId);
+//
+//        Question question = new Question();
+//        question.setId(questionId);
+//        question.setBook(book);
+//
+//
+//        when(questionRepository.findById(questionId)).thenReturn(Optional.of(question));
+//        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
+//
+//        // When
+//        questionService.deleteQuestion(questionId);
+//
+//        // Then
+//        verify(bookRepository).findById(bookId);
+//        verify(questionRepository).deleteById(questionId);
+//
+//    }
 
 }

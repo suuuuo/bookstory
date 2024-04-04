@@ -20,15 +20,5 @@ public class BookRequest {
     private String publisher;
 
 
-    public Book toEntity() {
-        return Book.builder()
-                .itemName(itemName)
-                .price(price)
-                .author(author)
-                .description(description)
-                .publisher(publisher)
-                .build();
-    }
-
 }
 
