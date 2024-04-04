@@ -12,6 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class QuestionRequest {
+
+
     private Long bookId;
     private String content;
     private String createdBy;

@@ -1,10 +1,13 @@
 package com.elice.bookstore.book.domain.qna;
 
 import com.elice.bookstore.book.domain.Book;
+import com.elice.bookstore.book.domain.mapper.QuestionMapper;
 import com.elice.bookstore.book.domain.repository.BookRepository;
 import com.elice.bookstore.book.domain.dto.QuestionRequest;
 import com.elice.bookstore.book.domain.repository.QuestionRepository;
 import com.elice.bookstore.book.domain.service.QuestionService;
+import com.elice.bookstore.user.domain.Role;
+import com.elice.bookstore.user.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,18 +44,22 @@ class QuestionServiceTest {
         Book book = new Book();
         book.setId(bookId);
 
+        User user = new User(1L,"TestUser","testId", LocalDate.now(),"test@test","010-000","xxx",null, Role.USER, Boolean.TRUE);
+
+
         QuestionRequest request = new QuestionRequest();
         request.setBookId(bookId);
+        request.setCreatedBy(user.getUserName());
         request.setContent("Test question content");
-        request.setCreatedBy("Test user");
 
-        Question question = request.toEntity(book);
+
+        Question question = QuestionMapper.toEntity(request,book,user);
 
         when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
         when(questionRepository.save(any(Question.class))).thenReturn(question);
 
         // When
-        Question result = questionService.createQuestion(request);
+        Question result = questionService.createQuestion(request, user);
 
         // Then
         assertThat(result.getBook().getId()).isEqualTo(bookId);
