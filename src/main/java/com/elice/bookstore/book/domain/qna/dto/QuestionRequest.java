@@ -22,7 +22,7 @@ public class QuestionRequest {
                 .book(book)
                 .content(content)
                 .createdBy(createdBy)
-                .status(QuestionStatus.ANSWER_PENDING) // 질문의 기본 상태도 설정할 수 있습니다.
+                .status(QuestionStatus.ANSWER_PENDING)
                 .build();
     }
 }

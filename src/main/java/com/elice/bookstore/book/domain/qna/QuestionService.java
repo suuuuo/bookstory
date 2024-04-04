@@ -22,8 +22,9 @@ public class QuestionService {
         Book book = bookRepository.findById(request.getBookId())
                 .orElseThrow(()-> new IllegalArgumentException("Book not found" + request.getBookId()));
 
+
         // Question 객체 생성
-        Question question = request.toEntity(book);
+        Question question = QuestionMapper.toEntity(request, book);
 
         // Question 객체 저장 및 반환
         return questionRepository.save(question);
