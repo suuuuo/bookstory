@@ -4,30 +4,22 @@ import com.elice.bookstore.cart.domain.Cart;
 import com.elice.bookstore.cart.repository.CartRepository;
 import com.elice.bookstore.user.domain.User;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@Transactional
 public class CartService {
 
-  private final CartRepository cartRepository;
-  private final UserRepository userRepository;
+  @Autowired
+  private CartRepository cartRepository;
 
-  public CartService(CartRepository cartRepository, UserRepository userRepository) {
-    this.cartRepository = cartRepository;
-    this.userRepository = userRepository;
-  }
-
-  /*
-  public Page<CartBook> findCarBooksByCart(Cart cart, PageRequest pageRequest){
-    return cartBookRepository.findAllByCartOrderByCreatedAtDesc(cart, pageRequest);
-  }
-   */
-
+  @Autowired
+  private UserRepository userRepository;
 
   /**
    * 장바구니 조회
    */
+  @Transactional
   public Cart findCart(long userId){ //유저 정보로 장바구니 가져오기
     Cart cart = cartRepository.findByUserId(userId);
 
