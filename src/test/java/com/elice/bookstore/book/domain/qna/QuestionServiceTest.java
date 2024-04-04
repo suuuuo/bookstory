@@ -90,30 +90,26 @@ class QuestionServiceTest {
         assertThat(result).extracting(Question::getContent).containsExactlyInAnyOrder("Test question content", "Test question content2");
     }
 
-//    @DisplayName("질문 삭제 완료")
-//    @Test
-//    void deleteQuestion() {
-//        // Given
-//        Long questionId = 1L;
-//        Long bookId = 1L;
-//        Book book = new Book();
-//        book.setId(bookId);
-//
-//        Question question = new Question();
-//        question.setId(questionId);
-//        question.setBook(book);
-//
-//
-//        when(questionRepository.findById(questionId)).thenReturn(Optional.of(question));
-//        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
-//
-//        // When
-//        questionService.deleteQuestion(questionId);
-//
-//        // Then
-//        verify(bookRepository).findById(bookId);
-//        verify(questionRepository).deleteById(questionId);
-//
-//    }
+    @Test
+    @DisplayName("질문 삭제")
+    void deleteQuestion() {
+        // Given
+        Long questionId = 1L;
+
+        // findById() 메서드 호출 시 Optional.empty()를 반환하도록 설정하여,
+        // 실제로 삭제가 이루어졌음을 가정
+        doNothing().when(questionRepository).deleteById(questionId);
+        when(questionRepository.findById(questionId)).thenReturn(Optional.empty());
+
+        // When
+        questionService.deleteQuestion(questionId);
+
+        // Then
+        Optional<Question> deletedQuestion = questionRepository.findById(questionId);
+        assertThat(deletedQuestion).isEmpty();
+
+        // verify()를 사용하여 deleteById() 메서드가 정확히 한 번 호출되었는지 확인
+        verify(questionRepository, times(1)).deleteById(questionId);
+    }
 
 }
