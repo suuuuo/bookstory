@@ -1,6 +1,8 @@
-package com.elice.bookstore.book.domain.qna;
+package com.elice.bookstore.book.domain.service;
 
 
+import com.elice.bookstore.book.domain.qna.Answer;
+import com.elice.bookstore.book.domain.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

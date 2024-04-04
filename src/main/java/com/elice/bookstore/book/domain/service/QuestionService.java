@@ -1,12 +1,14 @@
-package com.elice.bookstore.book.domain.qna;
+package com.elice.bookstore.book.domain.service;
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.book.domain.BookRepository;
-import com.elice.bookstore.book.domain.qna.dto.QuestionRequest;
+import com.elice.bookstore.book.domain.qna.Question;
+import com.elice.bookstore.book.domain.mapper.QuestionMapper;
+import com.elice.bookstore.book.domain.repository.BookRepository;
+import com.elice.bookstore.book.domain.dto.QuestionRequest;
+import com.elice.bookstore.book.domain.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

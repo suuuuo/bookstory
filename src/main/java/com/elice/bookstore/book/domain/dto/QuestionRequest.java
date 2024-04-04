@@ -1,4 +1,4 @@
-package com.elice.bookstore.book.domain.qna.dto;
+package com.elice.bookstore.book.domain.dto;
 
 
 import com.elice.bookstore.book.domain.Book;

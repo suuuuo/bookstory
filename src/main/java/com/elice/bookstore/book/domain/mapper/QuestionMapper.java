@@ -1,7 +1,9 @@
-package com.elice.bookstore.book.domain.qna;
+package com.elice.bookstore.book.domain.mapper;
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.book.domain.qna.dto.QuestionRequest;
+import com.elice.bookstore.book.domain.qna.Question;
+import com.elice.bookstore.book.domain.qna.QuestionStatus;
+import com.elice.bookstore.book.domain.dto.QuestionRequest;
 
 public class QuestionMapper {
 

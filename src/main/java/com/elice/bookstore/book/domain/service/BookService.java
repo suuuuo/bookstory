@@ -1,11 +1,13 @@
-package com.elice.bookstore.book.domain;
+package com.elice.bookstore.book.domain.service;
 
 
+import com.elice.bookstore.book.domain.Book;
+import com.elice.bookstore.book.domain.mapper.BookMapper;
 import com.elice.bookstore.book.domain.dto.BookRequest;
 import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
+import com.elice.bookstore.book.domain.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

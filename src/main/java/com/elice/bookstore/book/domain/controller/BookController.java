@@ -1,14 +1,14 @@
-package com.elice.bookstore.book.domain;
+package com.elice.bookstore.book.domain.controller;
 
 
+import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.book.domain.dto.BookRequest;
 import com.elice.bookstore.book.domain.dto.BookResponse;
 import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
-import lombok.NoArgsConstructor;
+import com.elice.bookstore.book.domain.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,8 +1,10 @@
 package com.elice.bookstore.book.domain.qna;
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.book.domain.BookRepository;
-import com.elice.bookstore.book.domain.qna.dto.QuestionRequest;
+import com.elice.bookstore.book.domain.repository.BookRepository;
+import com.elice.bookstore.book.domain.dto.QuestionRequest;
+import com.elice.bookstore.book.domain.repository.QuestionRepository;
+import com.elice.bookstore.book.domain.service.QuestionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

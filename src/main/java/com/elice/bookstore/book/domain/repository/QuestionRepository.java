@@ -1,5 +1,6 @@
-package com.elice.bookstore.book.domain.qna;
+package com.elice.bookstore.book.domain.repository;
 
+import com.elice.bookstore.book.domain.qna.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

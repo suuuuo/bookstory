@@ -1,5 +1,6 @@
-package com.elice.bookstore.book.domain;
+package com.elice.bookstore.book.domain.mapper;
 
+import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.book.domain.dto.BookRequest;
 public class BookMapper {
 

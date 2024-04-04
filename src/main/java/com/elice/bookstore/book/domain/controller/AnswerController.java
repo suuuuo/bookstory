@@ -1,4 +1,6 @@
-package com.elice.bookstore.book.domain.qna;
+package com.elice.bookstore.book.domain.controller;
+import com.elice.bookstore.book.domain.qna.Answer;
+import com.elice.bookstore.book.domain.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -3,6 +3,7 @@ package com.elice.bookstore.book.domain;
 import com.elice.bookstore.book.domain.dto.BookRequest;
 
 import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
+import com.elice.bookstore.book.domain.repository.BookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,8 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-
-import javax.xml.transform.Result;
 
 import java.util.List;
 
