@@ -2,9 +2,9 @@ package com.elice.bookstore.book.domain.controller;
 
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.book.domain.dto.BookRequest;
-import com.elice.bookstore.book.domain.dto.BookResponse;
-import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
+import com.elice.bookstore.book.domain.dto.RequestBook;
+import com.elice.bookstore.book.domain.dto.ResponseBook;
+import com.elice.bookstore.book.domain.dto.RequestUpdateBook;
 import com.elice.bookstore.book.domain.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,20 +22,20 @@ public class BookController {
      * Post
      */
     @PostMapping("/api/books")
-    public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest) {
-        Book saveBook = bookService.save(bookRequest);
-        BookResponse bookResponse = new BookResponse(saveBook);
+    public ResponseEntity<ResponseBook> addBook(@RequestBody RequestBook requestBook) {
+        Book saveBook = bookService.save(requestBook);
+        ResponseBook responseBook = new ResponseBook(saveBook);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseBook);
     }
     /**
      * Get
      */
     @GetMapping("/api/books")
-    public ResponseEntity<List<BookResponse>> findAllBooks() {
-        List<BookResponse> books = bookService.findAll()
+    public ResponseEntity<List<ResponseBook>> findAllBooks() {
+        List<ResponseBook> books = bookService.findAll()
                 .stream()
-                .map(BookResponse::new)
+                .map(ResponseBook::new)
                 .toList();
 
         return ResponseEntity.ok()
@@ -43,22 +43,22 @@ public class BookController {
 
     }
     @GetMapping("/api/books/{id}")
-    public ResponseEntity<BookResponse> findByIdBooks(@PathVariable Long id) {
+    public ResponseEntity<ResponseBook> findByIdBooks(@PathVariable Long id) {
         Book book = bookService.findById(id);
 
         return ResponseEntity.ok()
-                .body(new BookResponse(book));
+                .body(new ResponseBook(book));
     }
     /**
      * Put
      */
     @PutMapping("/api/books/{id}")
-    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody UpdateBookRequest updateBookRequest) {
-        Book updatedBook = bookService.update(id, updateBookRequest);
-        BookResponse bookResponse = new BookResponse(updatedBook);
+    public ResponseEntity<ResponseBook> updateBook(@PathVariable Long id, @RequestBody RequestUpdateBook requestUpdateBook) {
+        Book updatedBook = bookService.update(id, requestUpdateBook);
+        ResponseBook responseBook = new ResponseBook(updatedBook);
 
         return ResponseEntity.ok()
-                .body(bookResponse);
+                .body(responseBook);
     }
 
     /**

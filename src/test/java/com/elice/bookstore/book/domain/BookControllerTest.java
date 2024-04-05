@@ -1,8 +1,8 @@
 package com.elice.bookstore.book.domain;
 
-import com.elice.bookstore.book.domain.dto.BookRequest;
+import com.elice.bookstore.book.domain.dto.RequestBook;
 
-import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
+import com.elice.bookstore.book.domain.dto.RequestUpdateBook;
 import com.elice.bookstore.book.domain.repository.BookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,10 +59,10 @@ class BookControllerTest {
         final String description = "description";
         final String publisher = "publisher";
 
-        final BookRequest bookRequest = new BookRequest(itemName,price,author,description,publisher);
+        final RequestBook requestBook = new RequestBook(itemName,price,author,description,publisher);
 
         // 객체 직렬화
-        final String requestBody = objectMapper.writeValueAsString(bookRequest);
+        final String requestBody = objectMapper.writeValueAsString(requestBook);
 
         //when
         ResultActions result = mockMvc.perform(post(url)
@@ -169,7 +169,7 @@ class BookControllerTest {
         final String newPublisher = "new publisher";
         final String newDescription = "new description";
 
-        UpdateBookRequest request = new UpdateBookRequest(newItemName,newPrice,newAuthor,newDescription,newPublisher);
+        RequestUpdateBook request = new RequestUpdateBook(newItemName,newPrice,newAuthor,newDescription,newPublisher);
 
         //when
         ResultActions resultActions = mockMvc.perform(put(url,saveBook.getId())

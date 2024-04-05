@@ -3,8 +3,8 @@ package com.elice.bookstore.book.domain.service;
 
 import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.book.domain.mapper.BookMapper;
-import com.elice.bookstore.book.domain.dto.BookRequest;
-import com.elice.bookstore.book.domain.dto.UpdateBookRequest;
+import com.elice.bookstore.book.domain.dto.RequestBook;
+import com.elice.bookstore.book.domain.dto.RequestUpdateBook;
 import com.elice.bookstore.book.domain.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +21,9 @@ public class BookService {
     /**
      * create
      */
-    public Book save(BookRequest bookRequest) {
+    public Book save(RequestBook requestBook) {
 
-        Book book = BookMapper.toEntity(bookRequest);
+        Book book = BookMapper.toEntity(requestBook);
         return bookRepository.save(book);
     }
 
@@ -42,11 +42,11 @@ public class BookService {
      * update
      */
     @Transactional
-    public Book update(Long id, UpdateBookRequest updateBookRequest) {
+    public Book update(Long id, RequestUpdateBook requestUpdateBook) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found:" + id));
 
-        book.update(updateBookRequest.getItemName(), updateBookRequest.getPrice(),
-                updateBookRequest.getAuthor(), updateBookRequest.getDescription(), updateBookRequest.getPublisher());
+        book.update(requestUpdateBook.getItemName(), requestUpdateBook.getPrice(),
+                requestUpdateBook.getAuthor(), requestUpdateBook.getDescription(), requestUpdateBook.getPublisher());
 
         return book;
     }

@@ -2,7 +2,7 @@ package com.elice.bookstore.book.domain.controller;
 
 
 import com.elice.bookstore.book.domain.qna.Question;
-import com.elice.bookstore.book.domain.dto.QuestionRequest;
+import com.elice.bookstore.book.domain.dto.RequestQuestion;
 
 import com.elice.bookstore.book.domain.service.QuestionService;
 import com.elice.bookstore.user.domain.User;
@@ -23,7 +23,7 @@ public class QuestionController {
      */
 
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody QuestionRequest question){
+    public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question){
 
         // 현재 인증된 사용자의 정보를 가져옵니다.
         //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

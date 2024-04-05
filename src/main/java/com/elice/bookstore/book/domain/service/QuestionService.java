@@ -4,7 +4,7 @@ import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.book.domain.mapper.QuestionMapper;
 import com.elice.bookstore.book.domain.repository.BookRepository;
-import com.elice.bookstore.book.domain.dto.QuestionRequest;
+import com.elice.bookstore.book.domain.dto.RequestQuestion;
 import com.elice.bookstore.book.domain.repository.QuestionRepository;
 import com.elice.bookstore.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class QuestionService {
     /**
      * Question 저장
      */
-    public Question createQuestion(QuestionRequest request, User user) {
+    public Question createQuestion(RequestQuestion request, User user) {
 
         if(user == null || Boolean.FALSE.equals(user.getIsExist())){
             throw new IllegalArgumentException("유저가 없거나 생성되지 않았습니다.");

@@ -1,10 +1,10 @@
 package com.elice.bookstore.book.domain.mapper;
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.book.domain.dto.BookRequest;
+import com.elice.bookstore.book.domain.dto.RequestBook;
 public class BookMapper {
 
-    public static Book toEntity(BookRequest request) {
+    public static Book toEntity(RequestBook request) {
         if ( request == null ) {
             return null;
         }
