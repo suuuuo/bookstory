@@ -5,6 +5,7 @@ import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.book.domain.mapper.BookMapper;
 import com.elice.bookstore.book.domain.dto.RequestBook;
 import com.elice.bookstore.book.domain.dto.RequestUpdateBook;
+import com.elice.bookstore.book.domain.mapper.BookMapper;
 import com.elice.bookstore.book.domain.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +18,14 @@ import java.util.List;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
     /**
      * create
      */
     public Book save(RequestBook requestBook) {
 
-        Book book = BookMapper.toEntity(requestBook);
+        Book book = bookMapper.toEntity(requestBook);
         return bookRepository.save(book);
     }
 
