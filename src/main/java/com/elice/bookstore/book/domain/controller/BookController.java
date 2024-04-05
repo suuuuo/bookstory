@@ -22,11 +22,11 @@ public class BookController {
      * Post
      */
     @PostMapping("/api/books")
-    public ResponseEntity<Book> addBook(@RequestBody BookRequest bookRequest) {
+    public ResponseEntity<BookResponse> addBook(@RequestBody BookRequest bookRequest) {
         Book saveBook = bookService.save(bookRequest);
+        BookResponse bookResponse = new BookResponse(saveBook);
 
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(saveBook);
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookResponse);
     }
     /**
      * Get
@@ -53,11 +53,12 @@ public class BookController {
      * Put
      */
     @PutMapping("/api/books/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody UpdateBookRequest updateBookRequest) {
-        Book updateBook = bookService.update(id, updateBookRequest);
+    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody UpdateBookRequest updateBookRequest) {
+        Book updatedBook = bookService.update(id, updateBookRequest);
+        BookResponse bookResponse = new BookResponse(updatedBook);
 
         return ResponseEntity.ok()
-                .body(updateBook);
+                .body(bookResponse);
     }
 
     /**
