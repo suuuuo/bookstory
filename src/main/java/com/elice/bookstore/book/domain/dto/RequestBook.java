@@ -1,6 +1,5 @@
 package com.elice.bookstore.book.domain.dto;
 
-import com.elice.bookstore.book.domain.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookRequest {
+public class RequestBook {
     private String itemName;
     private Integer price;
     private String author;

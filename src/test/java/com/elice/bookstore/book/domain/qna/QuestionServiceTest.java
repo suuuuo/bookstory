@@ -3,7 +3,7 @@ package com.elice.bookstore.book.domain.qna;
 import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.book.domain.mapper.QuestionMapper;
 import com.elice.bookstore.book.domain.repository.BookRepository;
-import com.elice.bookstore.book.domain.dto.QuestionRequest;
+import com.elice.bookstore.book.domain.dto.RequestQuestion;
 import com.elice.bookstore.book.domain.repository.QuestionRepository;
 import com.elice.bookstore.book.domain.service.QuestionService;
 import com.elice.bookstore.user.domain.Role;
@@ -47,7 +47,7 @@ class QuestionServiceTest {
         User user = new User(1L,"TestUser","testId", LocalDate.now(),"test@test","010-000","xxx",null, Role.USER, Boolean.TRUE);
 
 
-        QuestionRequest request = new QuestionRequest();
+        RequestQuestion request = new RequestQuestion();
         request.setBookId(bookId);
         request.setCreatedBy(user.getUserName());
         request.setContent("Test question content");
@@ -76,12 +76,12 @@ class QuestionServiceTest {
         Book book = new Book();
         book.setId(bookId);
 
-        QuestionRequest request = new QuestionRequest();
+        RequestQuestion request = new RequestQuestion();
         request.setBookId(bookId);
         request.setContent("Test question content");
         request.setCreatedBy("Test user");
 
-        QuestionRequest request2 = new QuestionRequest();
+        RequestQuestion request2 = new RequestQuestion();
         request2.setBookId(bookId);
         request2.setContent("Test question content2");
         request2.setCreatedBy("Test user2");
