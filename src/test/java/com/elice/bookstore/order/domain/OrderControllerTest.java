@@ -4,11 +4,12 @@ import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.cart.domain.Cart;
 import com.elice.bookstore.delivery.domain.Delivery;
 import com.elice.bookstore.delivery.domain.DeliveryService;
+import com.elice.bookstore.order.domain.dto.RequestOrder;
+import com.elice.bookstore.order.domain.dto.ResponseOrder;
 import com.elice.bookstore.orderbook.domain.OrderBook;
 import com.elice.bookstore.orderbook.domain.OrderBookService;
 import com.elice.bookstore.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,16 +17,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
@@ -37,7 +44,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(OrderController.class)
 @DisplayName("주문 관련 기능 테스트")
 public class OrderControllerTest {
@@ -49,6 +55,8 @@ public class OrderControllerTest {
   private OrderBookService orderBookService;
   @MockBean
   private DeliveryService deliveryService;
+  @MockBean
+  private OrderController orderController;
 
   private Order order;
   private User user;
@@ -93,7 +101,7 @@ public class OrderControllerTest {
                           .thenReturn(orderBookPage);
 
     // when
-    ResultActions result = mockMvc.perform(get("/orders/{id}", user.getId())
+    ResultActions result = mockMvc.perform(get("/api/v1/orders/{id}", user.getId())
                                   .param("page","0")
                                   .param("size", "15")
                                   .contentType(MediaType.APPLICATION_JSON));
@@ -106,21 +114,23 @@ public class OrderControllerTest {
   @Test
   @DisplayName("회원 : 주문하기")
   void saveOrderTest() throws Exception {
-    // given
     Order order = new Order();
-    order.setId(111L);
     order.setUser(user);
     order.setCart(cart);
-    order.setOrderDate(LocalDate.now());
-    order.setOrderStatus(OrderStatus.NEW);
-    order.setPaymentDate(LocalDate.now());
-    order.setTotalPrice(20000);
-    order.setIsExist(false);
+    // Given
+    RequestOrder requestOrder = new RequestOrder(order.getUser(), order.getCart(), OrderStatus.NEW, 10000);
+    ResponseOrder responseOrder = new ResponseOrder(order.getUser(), order.getCart(), OrderStatus.NEW, 10000);
 
-    // when
-    ResultActions result = mockMvc.perform(put("/orders/order"));
-    // then
-    result.andExpect(status().isCreated());
+    // Mocking the behavior of the orderService.save() method
+    when(orderService.save(requestOrder)).thenReturn(responseOrder);
+
+    // When
+    ResponseEntity<String> responseEntity = orderController.saveOrder(requestOrder);
+
+    // Then
+    assertNotNull(responseEntity);
+    assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    assertEquals("Order saved.", responseEntity.getBody());
   }
 
   @Test
@@ -134,7 +144,7 @@ public class OrderControllerTest {
     params.put("phoneNumber", "010-7777-8888");
 
     // when
-    ResultActions result = mockMvc.perform(put("/orders/{id}/update", order.getId())
+    ResultActions result = mockMvc.perform(put("/api/v1/orders/{id}/update", order.getId())
         .contentType(MediaType.APPLICATION_JSON)
         .content(new ObjectMapper().writeValueAsString(params)));
     // then
@@ -149,7 +159,7 @@ public class OrderControllerTest {
     Long id = 23414352624L;
 
     // when
-    ResultActions result = mockMvc.perform(put("/orders/{id}/cancel", id));
+    ResultActions result = mockMvc.perform(put("/api/v1/orders/{id}/cancel", id));
     // then
     result.andExpect(status().isOk());
   }
@@ -171,7 +181,7 @@ public class OrderControllerTest {
         .thenReturn(orderBookPage);
 
     // when
-    ResultActions result = mockMvc.perform(get("/admin/orders")
+    ResultActions result = mockMvc.perform(get("/api/v1/admin/orders")
         .param("page","0")
         .param("size", "15"));
     // then
@@ -187,7 +197,7 @@ public class OrderControllerTest {
     order.setId(12346127854L);
 
     // when
-    ResultActions result = mockMvc.perform(put("/admin/orders/{id}/{orderStatus}", order.getId(), order.getOrderStatus()));
+    ResultActions result = mockMvc.perform(put("/api/v1/admin/orders/{id}/{orderStatus}", order.getId(), order.getOrderStatus()));
     // then
     result.andExpect(status().isOk());
   }
@@ -201,21 +211,8 @@ public class OrderControllerTest {
 
     doNothing().when(orderService).deleteById(order.getId());
     // when & then
-    mockMvc.perform(delete("/admin/orders/{id}", order.getId()))
+    mockMvc.perform(delete("/api/v1/admin/orders/{id}", order.getId()))
             .andExpect(status().isOk());
   }
 
-//  @Test
-//  @DisplayName("필드누락 - 회원:주문하기")
-//  void saveOrderFailed() throws Exception {
-//    // given: 필수 필드 누락한 주문 정보
-//    Order order = new Order();
-//    order.setId(111L);
-//    // 필수 필드인 user, cart, orderDate, totalPrice 등이 누락되었다고 가정
-//
-//    // when: 주문 저장 엔드포인트 호출
-//    ResultActions result = mockMvc.perform(put("/orders/order"));
-//    // then: BadRequest(400) 예외가 발생해야 함
-//    result.andExpect(status().isBadRequest());
-//  }
 }

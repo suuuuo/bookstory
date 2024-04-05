@@ -15,6 +15,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +28,9 @@ import org.hibernate.annotations.CreationTimestamp;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "orders")
 public class Order {
 
@@ -60,5 +63,11 @@ public class Order {
     @ColumnDefault("0")
     private Boolean isExist;
 
+    public Order(User user, Cart cart, OrderStatus orderStatus, int totalPrice) {
+        this.user = user;
+        this.cart = cart;
+        this.orderStatus = orderStatus;
+        this.totalPrice = totalPrice;
+    }
 }
 

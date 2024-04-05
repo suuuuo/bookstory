@@ -1,5 +1,7 @@
 package com.elice.bookstore.order.domain;
 
+import com.elice.bookstore.order.domain.dto.RequestOrder;
+import com.elice.bookstore.order.domain.dto.ResponseOrder;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,20 @@ public class OrderService {
   @Autowired
   private final OrderRepository orderRepository;
 
-  public Order save(Order order) {
-    return orderRepository.save(order);
+  public ResponseOrder save(RequestOrder requestOrder) {
+    Order order = new Order(
+        requestOrder.user(),
+        requestOrder.cart(),
+        requestOrder.orderStatus(),
+        requestOrder.totalPrice()
+    );
+    Order savedOrder = orderRepository.save(order);
+    return new ResponseOrder(
+        savedOrder.getUser(),
+        savedOrder.getCart(),
+        savedOrder.getOrderStatus(),
+        savedOrder.getTotalPrice()
+    );
   }
 
   public void updateOrderStatusById(Long id) {

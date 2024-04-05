@@ -30,4 +30,5 @@ public class Cart extends BaseTimeEntity {
   @OneToOne
   @JoinColumn(name = "user_id")
   private User user;
+
 }

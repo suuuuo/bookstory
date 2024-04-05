@@ -27,6 +27,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
       "d.receiverPhoneNumber = COALESCE(:#{#params['receiverPhoneNumber']}, d.receiverPhoneNumber), " +
       "d.request = COALESCE(:#{#params['request']}, d.request) " +
       "WHERE d.id = :orderId")
-  void updateDeliveryDetailsById(@Param("params") Map<String, String> params, @Param("id") Long orderId);
+  void updateDeliveryDetailsById(@Param("params") Map<String, String> params, @Param("orderId") Long orderId);
 
 }
