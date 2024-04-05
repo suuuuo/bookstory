@@ -1,27 +1,23 @@
 package com.elice.bookstore.book.domain;
 
+import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.config.audit.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * book domain.
  */
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Book extends BaseEntity {
 
   @Id
@@ -61,4 +57,13 @@ public class Book extends BaseEntity {
 
   @Column
   private String description;
+
+
+  public void update(String itemName, Integer price, String author, String description, String publisher) {
+    this.itemName = itemName;
+    this.price = price;
+    this.author = author;
+    this.description = description;
+    this.publisher = publisher;
+  }
 }
