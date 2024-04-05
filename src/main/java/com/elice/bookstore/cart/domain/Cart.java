@@ -1,6 +1,5 @@
 package com.elice.bookstore.cart.domain;
 
-import com.elice.bookstore.config.audit.BaseEntity;
 import com.elice.bookstore.config.audit.BaseTimeEntity;
 import com.elice.bookstore.user.domain.User;
 import jakarta.persistence.Entity;
@@ -29,4 +28,8 @@ public class Cart extends BaseTimeEntity {
   @OneToOne
   @JoinColumn(name = "user_id")
   private User user;
+
+  public Cart(User user){
+    this.user = user;
+  }
 }
