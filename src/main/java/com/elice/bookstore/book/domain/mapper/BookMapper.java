@@ -1,20 +1,20 @@
 package com.elice.bookstore.book.domain.mapper;
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.book.domain.dto.BookRequest;
-public class BookMapper {
+import com.elice.bookstore.book.domain.dto.RequestBook;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-    public static Book toEntity(BookRequest request) {
-        if ( request == null ) {
-            return null;
-        }
+@Mapper(componentModel = "spring")
+public interface BookMapper {
 
-        return Book.builder()
-                .itemName(request.getItemName())
-                .price(request.getPrice())
-                .author(request.getAuthor())
-                .description(request.getDescription())
-                .publisher(request.getPublisher())
-                .build();
-    }
+    BookMapper INSTANCE = Mappers.getMapper(BookMapper.class);
+
+    @Mapping(target = "itemName", source = "itemName")
+    @Mapping(target = "price", source = "price")
+    @Mapping(target = "author", source = "author")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "publisher", source = "publisher")
+    Book toEntity(RequestBook request);
 }
