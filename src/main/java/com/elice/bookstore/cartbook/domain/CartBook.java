@@ -13,12 +13,14 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * cartBook domain.
  */
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartBook extends BaseEntity {
@@ -37,4 +39,10 @@ public class CartBook extends BaseEntity {
 
   @Column
   private Integer count;
+
+  public CartBook(Book book, Cart cart, Integer count){
+    this.book = book;
+    this.cart = cart;
+    this.count = count;
+  }
 }
