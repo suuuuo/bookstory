@@ -1,8 +1,9 @@
 package com.elice.bookstore.orderbook.domain;
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.config.audit.BaseEntity;
+import com.elice.bookstore.config.audit.BaseTimeEntity;
 import com.elice.bookstore.order.domain.Order;
+import com.elice.bookstore.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,34 +11,42 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * orderBook domain.
+ * orderBook domain. (주문내역 확인)
  */
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class OrderBook extends BaseEntity {
+public class OrderBook extends BaseTimeEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "order_id")
-  private Order order;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-  @ManyToOne
-  @JoinColumn(name = "book_id")
-  private Book book;
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-  @Column
-  private int count;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-  @Column
-  private int price;
+    @Column
+    private int count;
+
+
+//    @Column
+//    private int price;
+
 }
