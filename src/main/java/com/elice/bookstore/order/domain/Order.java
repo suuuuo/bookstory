@@ -1,6 +1,6 @@
 package com.elice.bookstore.order.domain;
 
-import com.elice.bookstore.config.audit.BaseEntity;
+import com.elice.bookstore.cart.domain.Cart;
 import com.elice.bookstore.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,45 +11,63 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 /**
- * order domain.
+ * order domain. (결제)
  */
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "orders")
-public class Order extends BaseEntity {
+public class Order {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-  @Column
-  private LocalDate orderDate;
+    @OneToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
-  @Column
-  private String orderNumber;
+    @Column
+    @CreationTimestamp
+    private LocalDate orderDate;
 
-  @Enumerated(EnumType.STRING)
-  private OrderStatus orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
-  @Column
-  private LocalDate paymentDate;
+    @Column
+    @CreationTimestamp
+    private LocalDate paymentDate;
 
-  @Column
-  private int totalPrice;
+    @Column
+    private int totalPrice;
 
-  @Column
-  private Boolean isExist;
+    @ColumnDefault("0")
+    private Boolean isExist;
+
+    public Order(User user, Cart cart, OrderStatus orderStatus, int totalPrice) {
+        this.user = user;
+        this.cart = cart;
+        this.orderStatus = orderStatus;
+        this.totalPrice = totalPrice;
+    }
 }
+

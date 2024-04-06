@@ -37,4 +37,14 @@ public class CartBook extends BaseEntity {
 
   @Column
   private Integer count;
+
+  public CartBook(Book book, Cart cart, Integer count){
+    this.book = book;
+    this.cart = cart;
+    this.count = count;
+  }
+
+  public void setCount(int count) {
+    this.count = count;
+  }
 }
