@@ -3,18 +3,18 @@ package com.elice.bookstore.user.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
-
 import java.time.LocalDate;
 
 /**
  * RegisterForm
- * default point(0), role(USER), isExist(true).
+ * default
+ *   - point(0), role(USER), isExist(true),
+ *   - userId = email
+ *   - social login userId = provider + providerId.
  */
 public record RequestRegisterUser(
     @NotNull(message = "UserName is required.")
     String userName,
-    @NotNull(message = "UserId is required.")
-    String userId,
 
     @NotNull(message = "Password is required.")
     String password,
