@@ -1,5 +1,6 @@
 package com.elice.bookstore.order.domain;
 
+import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.cart.domain.Cart;
 import com.elice.bookstore.delivery.domain.Delivery;
 import com.elice.bookstore.delivery.domain.DeliveryService;

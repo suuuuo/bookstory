@@ -13,13 +13,16 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 /**
  * delivery domain.
  */
 @Entity
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
 public class Delivery extends BaseTimeEntity {
 
@@ -34,8 +37,8 @@ public class Delivery extends BaseTimeEntity {
   @Column
   private String address;
 
-  @Column
-  private String deliveryStatus;
+//  @Column
+//  private String deliveryStatus;
 
   @Column
   private String receiverName;
@@ -44,8 +47,12 @@ public class Delivery extends BaseTimeEntity {
   private String receiverPhoneNumber;
 
   @Column
-  private LocalDate deliveredDate;
+  private String request;
 
   @Column
+//  @CreationTimestamp
+  private LocalDate deliveredDate;
+
+  @ColumnDefault("0")
   private Boolean isExist;
 }
