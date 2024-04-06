@@ -5,6 +5,8 @@ import com.elice.bookstore.user.dto.ResponseRegisterUser;
 import com.elice.bookstore.user.service.UserService;
 import java.util.Collection;
 import java.util.Iterator;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * UserController.
  */
 @RestController
+@Slf4j
 public class UserController {
 
   private final UserService userService;
@@ -33,7 +36,7 @@ public class UserController {
    *
    * @return responseRegisterUser.
    */
-  @PostMapping("/v1/signup")
+  @PostMapping("/api/v1/signup")
   public ResponseEntity<ResponseRegisterUser> signup(
       @RequestBody RequestRegisterUser requestRegisterUser) {
     ResponseRegisterUser responseRegisterUser = userService.signUp(requestRegisterUser);
@@ -46,7 +49,7 @@ public class UserController {
 
    * @return "test"
    */
-  @PostMapping("/v1/test")
+  @PostMapping("/api/v1/test")
   public String getTest() {
 
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -56,8 +59,9 @@ public class UserController {
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
     Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
     GrantedAuthority auth = iterator.next();
-    System.out.println("username = " + username);
-    System.out.println("auth.getAuthority() = " + auth.getAuthority());
+
+    log.info("username: {}", username);
+    log.info("auth.getAuthority: {}", auth.getAuthority());
 
     return "test";
   }
