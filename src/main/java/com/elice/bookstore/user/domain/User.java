@@ -33,13 +33,16 @@ public class User extends BaseEntity {
   @Column
   private String userName;
 
-  @Column
+  @Column(unique = true)
   private String userId;
+
+  @Column
+  private String password;
 
   @Column
   private LocalDate dateOfBirth;
 
-  @Column
+  @Column(unique = true)
   private String email;
 
   @Column
@@ -57,4 +60,42 @@ public class User extends BaseEntity {
   @Column
   private Boolean isExist;
 
+  /**
+   * user constructor except primary key(Long id).
+
+   * @param userName .
+   * @param userId user login id.
+   * @param password .
+   * @param dateOfBirth .
+   * @param email .
+   * @param phoneNumber .
+   * @param address .
+   * @param point can use points to buy books.
+   * @param role two types: ADMIN, USER
+   * @param isExist false if the user has been deleted.
+   */
+  public User(String userName, String userId, String password, LocalDate dateOfBirth, String email,
+              String phoneNumber, String address, Long point, Role role, Boolean isExist) {
+    this.userName = userName;
+    this.userId = userId;
+    this.password = password;
+    this.dateOfBirth = dateOfBirth;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+    this.address = address;
+    this.point = point;
+    this.role = role;
+    this.isExist = isExist;
+  }
+
+  /**
+   * for SecurityContextHolder.
+
+   * @param email .
+   * @param role .
+   */
+  public User(String email, Role role) {
+    this.email = email;
+    this.role = role;
+  }
 }

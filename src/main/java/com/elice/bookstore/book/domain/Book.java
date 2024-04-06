@@ -1,5 +1,6 @@
 package com.elice.bookstore.book.domain;
 
+import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.config.audit.BaseEntity;
 import jakarta.persistence.Column;
@@ -66,6 +67,7 @@ public class Book extends BaseEntity {
   @Column
   private String description;
 
+
   public void update(String itemName, Integer price, String author, String description, String publisher) {
     this.itemName = itemName;
     this.price = price;
@@ -73,5 +75,4 @@ public class Book extends BaseEntity {
     this.description = description;
     this.publisher = publisher;
   }
-
 }
