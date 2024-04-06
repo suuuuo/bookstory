@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDate;
 
@@ -28,6 +29,9 @@ class UserServiceTest {
 
   @Mock
   UserRepository userRepository;
+
+  @Mock
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
 
   private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
