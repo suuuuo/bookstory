@@ -1,5 +1,10 @@
 package com.elice.bookstore.user.service;
 
+import com.elice.bookstore.config.exception.domain.user.UserDuplicatedUserIdException;
+import com.elice.bookstore.config.exception.domain.user.UserEmptyPasswordException;
+import com.elice.bookstore.config.exception.domain.user.UserNotMatchPasswordException;
+import com.elice.bookstore.config.exception.domain.user.UserShortPasswordException;
+import com.elice.bookstore.config.exception.global.ErrorCode;
 import com.elice.bookstore.user.domain.Role;
 import com.elice.bookstore.user.domain.User;
 import com.elice.bookstore.user.dto.RequestRegisterUser;
@@ -42,24 +47,24 @@ public class UserService {
    */
   public ResponseRegisterUser signUp(RequestRegisterUser requestRegisterUser) {
 
-    if (userRepository.existsByUserIdAndIsExist(requestRegisterUser.userId(), true)) {
-      throw new IllegalArgumentException("The userId already exists.");
+    if (userRepository.existsByUserIdAndIsExist(requestRegisterUser.email(), true)) {
+      throw new UserDuplicatedUserIdException();
     }
 
     if (!requestRegisterUser.password().equals(requestRegisterUser.passwordCheck())) {
-      throw new IllegalArgumentException("The password does not match.");
+      throw new UserNotMatchPasswordException();
     }
 
     if (requestRegisterUser.password().isEmpty()) {
-      throw new IllegalArgumentException("The password does not empty.");
+      throw new UserEmptyPasswordException();
     }
 
     if (requestRegisterUser.password().length() < 4) {
-      throw new IllegalArgumentException("The password must be at least 4 characters.");
+      throw new UserShortPasswordException();
     }
 
     User user = new User(requestRegisterUser.userName(),
-        requestRegisterUser.userId(),
+        requestRegisterUser.email(),
         bcryptPasswordEncoder.encode(requestRegisterUser.password()),
         requestRegisterUser.dateOfBirth(),
         requestRegisterUser.email(),
