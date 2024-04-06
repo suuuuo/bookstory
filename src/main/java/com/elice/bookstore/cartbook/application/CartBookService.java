@@ -3,9 +3,12 @@ package com.elice.bookstore.cartbook.application;
 import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.cart.domain.Cart;
 import com.elice.bookstore.cart.application.CartService;
+import com.elice.bookstore.cartbook.Mapper.CartBookMapper;
 import com.elice.bookstore.cartbook.domain.CartBook;
 import com.elice.bookstore.cartbook.Repository.CartBookRepository;
+import com.elice.bookstore.cartbook.dto.ResponseCartBook;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,17 +22,24 @@ public class CartBookService {
   @Autowired
   private CartService cartService;
 
-  /** 조회 */
-  public List<CartBook> findAllCartBook(long userId) { // 장바구니에 담긴 상품 리스트 조회 controller - get
+  @Autowired private CartBookMapper cartBookMapper;
+
+  public List<ResponseCartBook> findAllCartBook(
+      long userId) { // 장바구니에 담긴 상품 리스트 조회 controller - get
     Cart cart = cartService.findCart(userId);
 
     List<CartBook> allCartBooks = cartBookRepository.findCartBookByCartId(cart.getId());
-    return allCartBooks;
+
+    List<ResponseCartBook> responseCartbooks = new ArrayList<>();
+    for (CartBook cartBook : allCartBooks) {
+      responseCartbooks.add(cartBookMapper.CartBookToResponseCartBook(cartBook));
+    }
+    return responseCartbooks;
   }
 
   /** 장바구니 상품 담기/개수변경 */
   @Transactional
-  public CartBook addCartBook(long userId, Book book, int count) { // 장바구니에 상품 추가
+  public ResponseCartBook AddCartBook(long userId, Book book, int count) { // 장바구니에 상품 추가
     Cart cart = cartService.findCart(userId);
     CartBook cartBook = cartBookRepository.findByCartIdAndBookId(cart.getId(), book.getId());
 
@@ -41,20 +51,22 @@ public class CartBookService {
       cartBook.setCount(cartBook.getCount() + count);
     }
 
-    return cartBook;
+    return cartBookMapper.CartBookToResponseCartBook(cartBook);
   }
 
   @Transactional
-  public CartBook patchCartBook(long cartBookId, int count) {
-    CartBook patchCartBook = cartBookRepository.findById(cartBookId);
-    patchCartBook.setCount(count);
-    return cartBookRepository.save(patchCartBook);
+  public ResponseCartBook PatchCartBook(long cartBookId, int count) {
+    CartBook cartBook = cartBookRepository.findById(cartBookId);
+    cartBook.setCount(count);
+
+    return cartBookMapper.CartBookToResponseCartBook(cartBook);
   }
 
   /** 삭제 */
   @Transactional
-  public void deleteCartBook(long cartBookId) {
+  public void DeleteCartBook(long cartBookId) {
     CartBook cartBook = cartBookRepository.findById(cartBookId);
     cartBookRepository.deleteById(cartBook.getId());
   }
+
 }
