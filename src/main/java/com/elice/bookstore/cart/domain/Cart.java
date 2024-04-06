@@ -31,4 +31,7 @@ public class Cart extends BaseTimeEntity {
   @JoinColumn(name = "user_id")
   private User user;
 
+  public Cart(User user){
+    this.user = user;
+  }
 }
