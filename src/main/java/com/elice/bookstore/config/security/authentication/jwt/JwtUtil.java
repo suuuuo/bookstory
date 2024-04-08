@@ -30,15 +30,15 @@ public class JwtUtil {
   }
 
   /**
-   * get userId from token.
+   * get id from token.
    *
    * @param token access, refresh token.
-   * @return userId.
+   * @return id.
    */
-  public String getUserId(String token) {
+  public String getId(String token) {
 
     return Jwts.parser().verifyWith(secretKey).build()
-        .parseSignedClaims(token).getPayload().get("userId", String.class);
+        .parseSignedClaims(token).getPayload().get("id", String.class);
   }
 
   /**
@@ -87,16 +87,16 @@ public class JwtUtil {
   /**
    * create jwt token.
 
-   * @param userId .
+   * @param id .
    * @param role .
    * @param expiredMs .
    * @return jwt access, refresh token.
    */
-  public String createJwt(String type, String userId, String role, Long expiredMs) {
+  public String createJwt(String type, String id, String role, Long expiredMs) {
 
     return Jwts.builder()
         .claim("type", type)
-        .claim("userId", userId)
+        .claim("id", id)
         .claim("role", role)
         .issuedAt(new Date(System.currentTimeMillis()))
         .expiration(new Date(System.currentTimeMillis() + expiredMs))

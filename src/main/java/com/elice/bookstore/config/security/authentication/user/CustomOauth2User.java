@@ -38,14 +38,14 @@ public class CustomOauth2User implements OAuth2User {
     return collection;
   }
 
+  public String getId() {
+
+    return responseOauth2User.id();
+  }
+
   @Override
   public String getName() {
 
     return responseOauth2User.name();
-  }
-
-  public String getUserId() {
-
-    return responseOauth2User.userId();
   }
 }

@@ -105,7 +105,7 @@ public class RefreshService {
 
   private ResponseCreateTokens issueNewTokens(JwtUtil jwtUtil, String refreshToken) {
 
-    String userId = jwtUtil.getUserId(refreshToken);
+    String userId = jwtUtil.getId(refreshToken);
     String role = jwtUtil.getRole(refreshToken);
 
     String newAccessToken = jwtUtil.createJwt("access", userId, role, 60 * 10 * 1000L);

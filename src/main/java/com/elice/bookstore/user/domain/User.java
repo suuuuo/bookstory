@@ -91,11 +91,11 @@ public class User extends BaseEntity {
   /**
    * for SecurityContextHolder.
 
-   * @param userId .
+   * @param id .
    * @param role .
    */
-  public User(String userId, Role role) {
-    this.userId = userId;
+  public User(String id, Role role) {
+    this.id = Long.parseLong(id);
     this.role = role;
   }
 }

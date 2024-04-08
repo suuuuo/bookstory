@@ -57,7 +57,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     RequestLogin requestLogin = readByJson(request);
 
     UsernamePasswordAuthenticationToken authToken =
-        new UsernamePasswordAuthenticationToken(requestLogin.userId(), requestLogin.password());
+        new UsernamePasswordAuthenticationToken(requestLogin.email(), requestLogin.password());
 
     return authenticationManager.authenticate(authToken);
   }
@@ -86,27 +86,27 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
 
-    String userId = customUserDetails.getUserId();
+    String id = customUserDetails.getId();
 
     String role = customUserDetails.getAuthorities().iterator().next().getAuthority();
 
-    log.info("userId: {}, role: {}", userId, role);
+    log.info("id: {}, role: {}", id, role);
 
-    ResponseCreateTokens tokens = createTokens(userId, role);
+    ResponseCreateTokens tokens = createTokens(id, role);
 
     response.setHeader("access", tokens.accessToken());
     response.addCookie(createCookie(tokens.refreshToken()));
     response.setStatus(HttpStatus.OK.value());
   }
 
-  private ResponseCreateTokens createTokens(String userId, String role) {
+  private ResponseCreateTokens createTokens(String id, String role) {
 
-    String accessToken = jwtUtil.createJwt("access", userId, role, 60 * 10 * 1000L);
+    String accessToken = jwtUtil.createJwt("access", id, role, 60 * 10 * 1000L);
 
-    String refreshToken = jwtUtil.createJwt("refresh", userId, role, 60 * 60 * 24 * 1000L);
+    String refreshToken = jwtUtil.createJwt("refresh", id, role, 60 * 60 * 24 * 1000L);
 
     Date date = new Date(System.currentTimeMillis() + (60 * 60 * 24 * 1000L));
-    Refresh refresh = new Refresh(userId, refreshToken, date.toString());
+    Refresh refresh = new Refresh(id, refreshToken, date.toString());
     refreshRepository.save(refresh);
 
     return new ResponseCreateTokens(accessToken, refreshToken);

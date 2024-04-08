@@ -52,11 +52,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
   private void setAuthenticationFromToken(JwtUtil jwtUtil, String accessToken) {
 
-    String userId = jwtUtil.getUserId(accessToken);
+    String id = jwtUtil.getId(accessToken);
     String role = jwtUtil.getRole(accessToken).replace("ROLE_", "");
 
-    log.info("setAuthenticationFromToken kiki, userId: {}", userId);
-    User user = new User(userId, Role.valueOf(role));
+    log.info("setAuthenticationFromToken kiki, id: {}", id);
+    User user = new User(id, Role.valueOf(role));
 
     CustomUserDetails customUserDetails = new CustomUserDetails(user);
 

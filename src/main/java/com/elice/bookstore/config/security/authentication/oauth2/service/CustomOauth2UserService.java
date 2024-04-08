@@ -9,7 +9,6 @@ import com.elice.bookstore.user.domain.Role;
 import com.elice.bookstore.user.domain.User;
 import com.elice.bookstore.user.repository.UserRepository;
 import java.util.Map;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -75,21 +74,20 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
     String userId = responseOauth.getProvider() + " " + responseOauth.getProviderId();
 
-    Optional<User> user = userRepository.findByUserIdAndIsExist(userId, true);
+    User user = userRepository.findByUserIdAndIsExist(userId, true).orElseGet(
+        () -> {
+          User newUser = new User(
+              responseOauth.getName(), userId, null, null, responseOauth.getEmail(),
+              null, null, 0L, Role.USER, true);
 
-    ResponseOauth2User responseOauth2User = new ResponseOauth2User(
-        userId, responseOauth.getEmail(), responseOauth.getName(), "ROLE_USER");
+          return userRepository.save(newUser);
+        }
+    );
 
-    if (user.isEmpty()) {
-      User newUser = new User(
-          responseOauth2User.name(), userId, null, null, responseOauth2User.email(),
-          null, null, 0L, Role.USER, true);
-
-      log.info("newUser: {}", newUser);
-      userRepository.save(newUser);
-    }
-
-    return responseOauth2User;
+    return new ResponseOauth2User(
+        String.valueOf(user.getId()),
+        responseOauth.getEmail(),
+        responseOauth.getName(),
+        "ROLE_USER");
   }
-
 }

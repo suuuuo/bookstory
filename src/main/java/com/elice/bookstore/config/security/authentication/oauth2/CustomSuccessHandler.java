@@ -37,13 +37,13 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
       Authentication authentication) throws IOException, ServletException {
 
     CustomOauth2User principal = (CustomOauth2User) authentication.getPrincipal();
-    String userId = principal.getUserId();
+    String id = principal.getId();
     String role = principal.getAuthorities().iterator().next().getAuthority();
 
-    log.info("userId:{}", userId);
+    log.info("id:{}", id);
     log.info("role:{}", role);
 
-    String refreshToken = createRefreshToken(userId, role);
+    String refreshToken = createRefreshToken(id, role);
 
     response.addCookie(createCookie(refreshToken));
     response.sendRedirect("http://localhost:5173/social_login_handler?social_login=success");
@@ -58,11 +58,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     return cookie;
   }
 
-  private String createRefreshToken(String userId, String role) {
-    String refreshToken = jwtUtil.createJwt("refresh", userId, role, 60 * 60 * 24 * 1000L);
+  private String createRefreshToken(String id, String role) {
+    String refreshToken = jwtUtil.createJwt("refresh", id, role, 60 * 60 * 24 * 1000L);
 
     Date date = new Date(System.currentTimeMillis() + (60 * 60 * 24 * 1000L));
-    Refresh refresh = new Refresh(userId, refreshToken, date.toString());
+    Refresh refresh = new Refresh(id, refreshToken, date.toString());
     refreshRepository.save(refresh);
 
     return refreshToken;

@@ -5,15 +5,15 @@ import jakarta.validation.constraints.NotNull;
 /**
  * store in a security context holder.
  *
- * @param userId general login: email, social login: provider + identity.
+ * @param id .
  * @param email .
  * @param name .
  * @param role .
  */
 public record ResponseOauth2User(
 
-    @NotNull(message = "userId is required.")
-    String userId,
+    @NotNull(message = "id is required.")
+    String id,
 
     @NotNull(message = "email is required.")
     String email,

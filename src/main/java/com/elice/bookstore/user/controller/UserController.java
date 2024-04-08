@@ -55,13 +55,13 @@ public class UserController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-    String userId = customUserDetails.getUserId();
+    String id = customUserDetails.getId();
 
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
     Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
     GrantedAuthority auth = iterator.next();
 
-    log.info("userId: {}", userId);
+    log.info("id: {}", id);
     log.info("auth.getAuthority: {}", auth.getAuthority());
 
     return "test!!!!!!!!!";
