@@ -1,11 +1,12 @@
-package com.elice.bookstore.config.security.authentication.refresh.service;
+package com.elice.bookstore.config.security.authentication.jwt.refresh.service;
 
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
-import com.elice.bookstore.config.security.authentication.refresh.domain.Refresh;
-import com.elice.bookstore.config.security.authentication.refresh.dto.ResponseCreateTokens;
-import com.elice.bookstore.config.security.authentication.refresh.repository.RefreshRepository;
+import com.elice.bookstore.config.security.authentication.jwt.refresh.domain.Refresh;
+import com.elice.bookstore.config.security.authentication.jwt.refresh.dto.ResponseCreateTokens;
+import com.elice.bookstore.config.security.authentication.jwt.refresh.repository.RefreshRepository;
 import jakarta.servlet.http.Cookie;
 import java.util.Date;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +43,28 @@ public class RefreshService {
     return issueNewTokens(jwtUtil, refreshToken);
   }
 
+  /**
+   * logout, server check & delete refresh token.
+
+   * @param cookies .
+   */
+  @Transactional
+  public void logout(Cookie[] cookies) {
+    String refreshToken = getRefreshToken(cookies);
+
+    validateRefreshToken(refreshToken); // 유효기간은 검증할 필요는 없음. 재사용 할 수 있게 분리해야함.
+
+    refreshRepository.deleteByRefresh(refreshToken);
+  }
+
   private String getRefreshToken(Cookie[] cookies) {
 
     String refreshToken = null;
+
+    if (Objects.isNull(cookies)) {
+
+      return null;
+    }
 
     for (var e : cookies) {
       if (e.getName().equals("refresh")) {
@@ -85,17 +105,17 @@ public class RefreshService {
 
   private ResponseCreateTokens issueNewTokens(JwtUtil jwtUtil, String refreshToken) {
 
-    String email = jwtUtil.getEmail(refreshToken);
+    String userId = jwtUtil.getUserId(refreshToken);
     String role = jwtUtil.getRole(refreshToken);
 
-    String newAccessToken = jwtUtil.createJwt("access", email, role, 60 * 10 * 1000L);
-    String newRefreshToken = jwtUtil.createJwt("refresh", email, role, 60 * 60 * 24 * 1000L);
+    String newAccessToken = jwtUtil.createJwt("access", userId, role, 60 * 10 * 1000L);
+    String newRefreshToken = jwtUtil.createJwt("refresh", userId, role, 60 * 60 * 24 * 1000L);
 
     refreshRepository.deleteByRefresh(refreshToken);
 
     Date date = new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000L);
 
-    Refresh newRefresh = new Refresh(email, newRefreshToken, date.toString());
+    Refresh newRefresh = new Refresh(userId, newRefreshToken, date.toString());
     refreshRepository.save(newRefresh);
     return new ResponseCreateTokens(newAccessToken, newRefreshToken);
   }
