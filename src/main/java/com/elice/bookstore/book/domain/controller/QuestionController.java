@@ -22,6 +22,7 @@ public class QuestionController {
      * Question : Post;
      */
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping
     public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question){
 
@@ -47,6 +48,13 @@ public class QuestionController {
     public ResponseEntity<List<Question>> findALlQuestion(){
         List<Question> questions = questionService.findAllQuestion();
 
+        return ResponseEntity.ok(questions);
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Question>> findQuestionsByBookId(@PathVariable Long id) {
+        List<Question> questions = questionService.findQuestionsByBookId(id);
         return ResponseEntity.ok(questions);
     }
 
