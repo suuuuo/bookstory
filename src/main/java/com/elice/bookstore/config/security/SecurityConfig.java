@@ -1,7 +1,10 @@
 package com.elice.bookstore.config.security;
 
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
-import com.elice.bookstore.config.security.authentication.refresh.repository.RefreshRepository;
+import com.elice.bookstore.config.security.authentication.jwt.refresh.repository.RefreshRepository;
+import com.elice.bookstore.config.security.authentication.oauth2.CustomSuccessHandler;
+import com.elice.bookstore.config.security.authentication.oauth2.config.CustomClientRegistrationRepository;
+import com.elice.bookstore.config.security.authentication.oauth2.service.CustomOauth2UserService;
 import com.elice.bookstore.config.security.filter.CustomLogoutFilter;
 import com.elice.bookstore.config.security.filter.JwtFilter;
 import com.elice.bookstore.config.security.filter.LoginFilter;
@@ -11,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +27,7 @@ import org.springframework.web.cors.CorsConfiguration;
  * Global Security Config.
  */
 @Configuration
+@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
   private final AuthenticationConfiguration authenticationConfiguration;
@@ -31,18 +36,32 @@ public class SecurityConfig {
 
   private final RefreshRepository refreshRepository;
 
+  private final CustomOauth2UserService customOauth2UserService;
+  private final CustomClientRegistrationRepository clientRegistrationRepository;
+
+  private final CustomSuccessHandler customSuccessHandler;
+
   /**
    * Security Config Dependency.
    *
-   * @param authenticationConfiguration .
-   * @param jwtUtil                     .
-   * @param refreshRepository           .
+   * @param authenticationConfiguration  .
+   * @param jwtUtil                      .
+   * @param refreshRepository            .
+   * @param customOauth2UserService      .
+   * @param clientRegistrationRepository .
+   * @param customSuccessHandler         .
    */
   public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,
-                        JwtUtil jwtUtil, RefreshRepository refreshRepository) {
+                        JwtUtil jwtUtil, RefreshRepository refreshRepository, 
+                        CustomOauth2UserService customOauth2UserService, 
+                        CustomClientRegistrationRepository clientRegistrationRepository,
+                        CustomSuccessHandler customSuccessHandler) {
     this.authenticationConfiguration = authenticationConfiguration;
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
+    this.customOauth2UserService = customOauth2UserService;
+    this.clientRegistrationRepository = clientRegistrationRepository;
+    this.customSuccessHandler = customSuccessHandler;
   }
 
   /**
@@ -61,12 +80,13 @@ public class SecurityConfig {
 
               CorsConfiguration config = new CorsConfiguration();
 
-              config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+              config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
               config.setAllowedMethods(Collections.singletonList("*"));
               config.setAllowCredentials(true);
               config.setAllowedHeaders(Collections.singletonList("*"));
+              config.setExposedHeaders(Collections.singletonList("Set-Cookie"));
               config.setMaxAge(60 * 60L);
-              config.setExposedHeaders(Collections.singletonList("Authorization"));
+              config.setExposedHeaders(Collections.singletonList("access"));
 
               return config;
             }));
@@ -78,9 +98,18 @@ public class SecurityConfig {
 
     http
         .authorizeHttpRequests((auth) -> auth
-            .requestMatchers("/v1/login", "/", "/v1/signup", "/v1/reissue").permitAll()
-            .requestMatchers("/v1/admin").hasRole("ADMIN")
+            .requestMatchers("/oauth2/**", "/login/**", "/",
+                "/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
+            .requestMatchers("/api/v1/admin").hasRole("ADMIN")
             .anyRequest().authenticated());
+
+    http
+        .oauth2Login((oauth2) -> oauth2
+            .clientRegistrationRepository(
+                clientRegistrationRepository.clientRegistrationRepository())
+            .userInfoEndpoint((userInfoEndpointConfig) ->
+                userInfoEndpointConfig.userService(customOauth2UserService))
+            .successHandler(customSuccessHandler));
 
     http
         .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
