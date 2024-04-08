@@ -1,4 +1,4 @@
-package com.elice.bookstore.config.security.authentication;
+package com.elice.bookstore.config.security.authentication.user;
 
 import com.elice.bookstore.user.domain.User;
 import java.util.ArrayList;
@@ -34,7 +34,11 @@ public class CustomUserDetails implements UserDetails {
 
   @Override
   public String getUsername() {
-    return user.getEmail();
+    return user.getUserName();
+  }
+
+  public String getUserId() {
+    return user.getUserId();
   }
 
   @Override

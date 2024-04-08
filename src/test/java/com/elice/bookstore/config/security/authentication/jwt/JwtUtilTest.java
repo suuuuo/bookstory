@@ -27,7 +27,7 @@ class JwtUtilTest {
 
     //when
     String type = jwtUtil.getType(jwt);
-    String email = jwtUtil.getEmail(jwt);
+    String email = jwtUtil.getUserId(jwt);
     String role = jwtUtil.getRole(jwt);
     Boolean isValid = jwtUtil.isValid(jwt);
 

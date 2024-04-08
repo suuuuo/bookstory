@@ -1,7 +1,7 @@
 package com.elice.bookstore.config.security.filter;
 
-import com.elice.bookstore.config.security.authentication.CustomUserDetails;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
+import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
 import com.elice.bookstore.user.domain.Role;
 import com.elice.bookstore.user.domain.User;
 import jakarta.servlet.FilterChain;
@@ -36,7 +36,6 @@ public class JwtFilter extends OncePerRequestFilter {
     String accessToken = request.getHeader("access");
 
     if (accessToken == null) {
-
       log.info("access token null");
       filterChain.doFilter(request, response);
       return;
@@ -53,10 +52,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
   private void setAuthenticationFromToken(JwtUtil jwtUtil, String accessToken) {
 
-    String email = jwtUtil.getEmail(accessToken);
-    String role = jwtUtil.getRole(accessToken);
+    String userId = jwtUtil.getUserId(accessToken);
+    String role = jwtUtil.getRole(accessToken).replace("ROLE_", "");
 
-    User user = new User(email, Role.valueOf(role));
+    log.info("setAuthenticationFromToken kiki, userId: {}", userId);
+    User user = new User(userId, Role.valueOf(role));
+
     CustomUserDetails customUserDetails = new CustomUserDetails(user);
 
     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

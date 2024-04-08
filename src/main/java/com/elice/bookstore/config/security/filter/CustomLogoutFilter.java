@@ -1,7 +1,7 @@
 package com.elice.bookstore.config.security.filter;
 
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
-import com.elice.bookstore.config.security.authentication.refresh.repository.RefreshRepository;
+import com.elice.bookstore.config.security.authentication.jwt.refresh.repository.RefreshRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -44,7 +45,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
     String requestUri = request.getRequestURI();
     String requestMethod = request.getMethod();
 
-    if (!requestUri.matches("^/logout$") && requestMethod.equals("POST")) {
+    if (!(requestUri.matches("^/logout$") && requestMethod.equals("POST"))) {
 
       log.info("CustomLogoutFilter, /logout [POST] not match.");
       chain.doFilter(request, response);
@@ -108,6 +109,11 @@ public class CustomLogoutFilter extends GenericFilterBean {
   private String getRefreshToken(Cookie[] cookies) {
 
     String refreshToken = null;
+
+    if (Objects.isNull(cookies)) {
+
+      return null;
+    }
 
     for (var e : cookies) {
       if (e.getName().equals("refresh")) {

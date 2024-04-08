@@ -1,11 +1,11 @@
 package com.elice.bookstore.user.controller;
 
+import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
 import com.elice.bookstore.user.dto.RequestRegisterUser;
 import com.elice.bookstore.user.dto.ResponseRegisterUser;
 import com.elice.bookstore.user.service.UserService;
 import java.util.Collection;
 import java.util.Iterator;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,19 +50,20 @@ public class UserController {
    * @return "test"
    */
   @PostMapping("/api/v1/test")
-  public String getTest() {
-
-    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+  public String postTest() {
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+    String userId = customUserDetails.getUserId();
 
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
     Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
     GrantedAuthority auth = iterator.next();
 
-    log.info("username: {}", username);
+    log.info("userId: {}", userId);
     log.info("auth.getAuthority: {}", auth.getAuthority());
 
-    return "test";
+    return "test!!!!!!!!!";
   }
 }
