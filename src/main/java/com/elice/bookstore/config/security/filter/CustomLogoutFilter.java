@@ -1,5 +1,6 @@
 package com.elice.bookstore.config.security.filter;
 
+import com.elice.bookstore.config.security.authentication.cookie.CookieUtil;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.repository.RefreshRepository;
 import jakarta.servlet.FilterChain;
@@ -11,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -26,9 +26,12 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
   private final RefreshRepository refreshRepository;
 
-  public CustomLogoutFilter(JwtUtil jwtUtil, RefreshRepository refreshRepository) {
+  private final CookieUtil cookieUtil;
+
+  public CustomLogoutFilter(JwtUtil jwtUtil, RefreshRepository refreshRepository, CookieUtil cookieUtil) {
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
+    this.cookieUtil = cookieUtil;
   }
 
   @Override
@@ -52,7 +55,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
       return;
     }
 
-    String refreshToken = getRefreshToken(request.getCookies());
+    String refreshToken = cookieUtil.getValue(request.getCookies(), "refresh");
 
     if (isInvalidRefreshToken(refreshToken, response)) {
       return;
@@ -60,7 +63,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     refreshRepository.deleteByRefresh(refreshToken);
 
-    response.addCookie(deleteCookie());
+    response.addCookie(cookieUtil.deleteCookie("refresh"));
     response.setStatus(HttpServletResponse.SC_OK);
   }
 
@@ -77,20 +80,11 @@ public class CustomLogoutFilter extends GenericFilterBean {
       return true;
     }
 
-    if (!jwtUtil.isValid(refreshToken)) {
+    if (!jwtUtil.isValid(refreshToken) || !"refresh".equals(jwtUtil.getType(refreshToken))) {
       log.error("logout filter, refreshToken is invalid");
 
       writer.print("refresh token is invalid.");
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      return true;
-    }
-
-    String type = jwtUtil.getType(refreshToken);
-    if (!"refresh".equals(type)) {
-      log.error("logout filter, refreshToken type is not refresh: {}", type);
-
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      writer.print("refresh token is invalid.");
       return true;
     }
 
@@ -104,30 +98,5 @@ public class CustomLogoutFilter extends GenericFilterBean {
     }
 
     return false;
-  }
-
-  private String getRefreshToken(Cookie[] cookies) {
-
-    String refreshToken = null;
-
-    if (Objects.isNull(cookies)) {
-
-      return null;
-    }
-
-    for (var e : cookies) {
-      if (e.getName().equals("refresh")) {
-        refreshToken = e.getValue();
-      }
-    }
-
-    return refreshToken;
-  }
-
-  private static Cookie deleteCookie() {
-    Cookie cookie = new Cookie("refresh", null);
-    cookie.setMaxAge(0);
-    cookie.setPath("/");
-    return cookie;
   }
 }

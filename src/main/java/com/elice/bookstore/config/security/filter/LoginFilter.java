@@ -1,5 +1,6 @@
 package com.elice.bookstore.config.security.filter;
 
+import com.elice.bookstore.config.security.authentication.cookie.CookieUtil;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.domain.Refresh;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.dto.RequestLogin;
@@ -9,7 +10,6 @@ import com.elice.bookstore.config.security.authentication.user.CustomUserDetails
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,18 +34,22 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
   private final RefreshRepository refreshRepository;
 
+  private final CookieUtil cookieUtil;
+
   /**
    * login filter.
-
+   *
    * @param authenticationManager .
-   * @param jwtUtil .
-   * @param refreshRepository .
+   * @param jwtUtil               .
+   * @param refreshRepository     .
+   * @param cookieUtil            .
    */
   public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
-                     RefreshRepository refreshRepository) {
+                     RefreshRepository refreshRepository, CookieUtil cookieUtil) {
     this.authenticationManager = authenticationManager;
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
+    this.cookieUtil = cookieUtil;
   }
 
   @Override
@@ -95,7 +99,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     ResponseCreateTokens tokens = createTokens(id, role);
 
     response.setHeader("access", tokens.accessToken());
-    response.addCookie(createCookie(tokens.refreshToken()));
+    response.addCookie(
+        cookieUtil.createCookie("refresh", tokens.refreshToken(),
+            CookieUtil.REFRESH_TOKEN_EXPIRATION_TIME));
     response.setStatus(HttpStatus.OK.value());
   }
 
@@ -110,14 +116,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     refreshRepository.save(refresh);
 
     return new ResponseCreateTokens(accessToken, refreshToken);
-  }
-
-  private Cookie createCookie(String value) {
-    Cookie cookie = new Cookie("refresh", value);
-    cookie.setMaxAge(60 * 60 * 24);
-    cookie.setHttpOnly(true);
-
-    return cookie;
   }
 
   @Override

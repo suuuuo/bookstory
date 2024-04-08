@@ -1,11 +1,11 @@
 package com.elice.bookstore.config.security.authentication.oauth2;
 
+import com.elice.bookstore.config.security.authentication.cookie.CookieUtil;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.domain.Refresh;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.repository.RefreshRepository;
 import com.elice.bookstore.config.security.authentication.user.CustomOauth2User;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,9 +26,20 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
   private final RefreshRepository refreshRepository;
 
-  public CustomSuccessHandler(JwtUtil jwtUtil, RefreshRepository refreshRepository) {
+  private final CookieUtil cookieUtil;
+
+  /**
+   * dependency.
+   *
+   * @param jwtUtil .
+   * @param refreshRepository .
+   * @param cookieUtil .
+   */
+  public CustomSuccessHandler(
+      JwtUtil jwtUtil, RefreshRepository refreshRepository, CookieUtil cookieUtil) {
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
+    this.cookieUtil = cookieUtil;
   }
 
   @Override
@@ -45,17 +56,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     String refreshToken = createRefreshToken(id, role);
 
-    response.addCookie(createCookie(refreshToken));
+    response.addCookie(
+        cookieUtil.createCookie("refresh", refreshToken, CookieUtil.REFRESH_TOKEN_EXPIRATION_TIME));
     response.sendRedirect("http://localhost:5173/social_login_handler?social_login=success");
-  }
-
-  private Cookie createCookie(String value) {
-    Cookie cookie = new Cookie("refresh", value);
-    cookie.setMaxAge(60 * 60 * 24);
-    cookie.setPath("/");
-    cookie.setHttpOnly(true);
-
-    return cookie;
   }
 
   private String createRefreshToken(String id, String role) {

@@ -1,12 +1,15 @@
 package com.elice.bookstore.config.security.authentication.jwt.refresh.service;
 
+import com.elice.bookstore.config.exception.domain.refresh.RefreshNotFoundCookieException;
+import com.elice.bookstore.config.exception.domain.refresh.RefreshNotFoundException;
+import com.elice.bookstore.config.exception.domain.refresh.RefreshTokenNotValidException;
+import com.elice.bookstore.config.security.authentication.cookie.CookieUtil;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.domain.Refresh;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.dto.ResponseCreateTokens;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.repository.RefreshRepository;
 import jakarta.servlet.http.Cookie;
 import java.util.Date;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +25,20 @@ public class RefreshService {
 
   private final RefreshRepository refreshRepository;
 
-  public RefreshService(JwtUtil jwtUtil, RefreshRepository refreshRepository) {
+  private final CookieUtil cookieUtil;
+
+  /**
+   * Refresh service dependency.
+
+   * @param jwtUtil .
+   * @param refreshRepository .
+   * @param cookieUtil .
+   */
+  public RefreshService(JwtUtil jwtUtil, RefreshRepository refreshRepository,
+                        CookieUtil cookieUtil) {
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
+    this.cookieUtil = cookieUtil;
   }
 
   /**
@@ -36,9 +50,13 @@ public class RefreshService {
   @Transactional
   public ResponseCreateTokens reissue(Cookie[] cookies) {
 
-    String refreshToken = getRefreshToken(cookies);
+    String refreshToken = cookieUtil.getValue(cookies, "refresh");
+
+    checkTokenInCookie(refreshToken);
 
     validateRefreshToken(refreshToken);
+
+    checkTokenInRepository(refreshToken);
 
     return issueNewTokens(jwtUtil, refreshToken);
   }
@@ -50,56 +68,34 @@ public class RefreshService {
    */
   @Transactional
   public void logout(Cookie[] cookies) {
-    String refreshToken = getRefreshToken(cookies);
+    String refreshToken = cookieUtil.getValue(cookies, "refresh");
 
-    validateRefreshToken(refreshToken); // 유효기간은 검증할 필요는 없음. 재사용 할 수 있게 분리해야함.
+    checkTokenInCookie(refreshToken);
+
+    checkTokenInRepository(refreshToken);
 
     refreshRepository.deleteByRefresh(refreshToken);
   }
 
-  private String getRefreshToken(Cookie[] cookies) {
+  private void checkTokenInRepository(String refreshToken) {
+    Boolean isExist = refreshRepository.existsByRefresh(refreshToken);
+    if (!isExist) {
 
-    String refreshToken = null;
-
-    if (Objects.isNull(cookies)) {
-
-      return null;
+      throw new RefreshNotFoundException();
     }
-
-    for (var e : cookies) {
-      if (e.getName().equals("refresh")) {
-        refreshToken = e.getValue();
-      }
-    }
-
-    return refreshToken;
   }
 
   private void validateRefreshToken(String refreshToken) {
+    if (!jwtUtil.isValid(refreshToken) || !"refresh".equals(jwtUtil.getType(refreshToken))) {
+
+      throw new RefreshTokenNotValidException();
+    }
+  }
+
+  private static void checkTokenInCookie(String refreshToken) {
     if (refreshToken == null) {
-      log.error("RefreshService, refreshToken null");
 
-      throw new IllegalArgumentException("refresh token not found.");
-    }
-
-    if (!jwtUtil.isValid(refreshToken)) {
-      log.error("RefreshService, refreshToken isExpired");
-
-      throw new IllegalArgumentException("refresh token is expired.");
-    }
-
-    String type = jwtUtil.getType(refreshToken);
-    if (!"refresh".equals(type)) {
-      log.error("RefreshService, refreshToken type is not refresh: {}", type);
-
-      throw new IllegalArgumentException("refresh token is not refresh.");
-    }
-
-    Boolean isExist = refreshRepository.existsByRefresh(refreshToken);
-    if (!isExist) {
-      log.error("RefreshService, invalid refresh token");
-
-      throw new IllegalArgumentException("invalid refresh token.");
+      throw new RefreshNotFoundCookieException();
     }
   }
 

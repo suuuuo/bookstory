@@ -1,5 +1,6 @@
 package com.elice.bookstore.config.security;
 
+import com.elice.bookstore.config.security.authentication.cookie.CookieUtil;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.config.security.authentication.jwt.refresh.repository.RefreshRepository;
 import com.elice.bookstore.config.security.authentication.oauth2.CustomSuccessHandler;
@@ -37,9 +38,12 @@ public class SecurityConfig {
   private final RefreshRepository refreshRepository;
 
   private final CustomOauth2UserService customOauth2UserService;
+
   private final CustomClientRegistrationRepository clientRegistrationRepository;
 
   private final CustomSuccessHandler customSuccessHandler;
+
+  private final CookieUtil cookieUtil;
 
   /**
    * Security Config Dependency.
@@ -50,18 +54,20 @@ public class SecurityConfig {
    * @param customOauth2UserService      .
    * @param clientRegistrationRepository .
    * @param customSuccessHandler         .
+   * @param cookieUtil                   .
    */
   public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,
-                        JwtUtil jwtUtil, RefreshRepository refreshRepository, 
-                        CustomOauth2UserService customOauth2UserService, 
+                        JwtUtil jwtUtil, RefreshRepository refreshRepository,
+                        CustomOauth2UserService customOauth2UserService,
                         CustomClientRegistrationRepository clientRegistrationRepository,
-                        CustomSuccessHandler customSuccessHandler) {
+                        CustomSuccessHandler customSuccessHandler, CookieUtil cookieUtil) {
     this.authenticationConfiguration = authenticationConfiguration;
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
     this.customOauth2UserService = customOauth2UserService;
     this.clientRegistrationRepository = clientRegistrationRepository;
     this.customSuccessHandler = customSuccessHandler;
+    this.cookieUtil = cookieUtil;
   }
 
   /**
@@ -117,11 +123,12 @@ public class SecurityConfig {
     http
         .addFilterAt(
             new LoginFilter(authenticationManager(authenticationConfiguration),
-                jwtUtil, refreshRepository),
+                jwtUtil, refreshRepository, cookieUtil),
             UsernamePasswordAuthenticationFilter.class);
 
     http
-        .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+        .addFilterBefore(
+            new CustomLogoutFilter(jwtUtil, refreshRepository, cookieUtil), LogoutFilter.class);
 
     http
         .sessionManagement((session) -> session
