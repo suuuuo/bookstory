@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface CategoryRepository extends JpaRepository<Category,Long> {
 
   Optional<Category> findById(Long id);
-  List<BookCategory> findByNameLike(String name);
   List<Category> findAllByLevel(Integer level);
 
 }
