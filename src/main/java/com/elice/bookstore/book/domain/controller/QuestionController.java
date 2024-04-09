@@ -61,6 +61,7 @@ public class QuestionController {
     /**
      * Question : Delete;
      */
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id){
         questionService.deleteQuestion(id);
