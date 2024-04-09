@@ -25,11 +25,11 @@ public class BookCategory {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToMany(mappedBy = "bookCategory")
+  @OneToMany(mappedBy = "book_category")
   List<Category> categoryList = new ArrayList<>();
 
 
-  @OneToMany(mappedBy = "bookCategory")
+  @OneToMany(mappedBy = "book_category")
   List<Book> books = new ArrayList<>();
 
 }
