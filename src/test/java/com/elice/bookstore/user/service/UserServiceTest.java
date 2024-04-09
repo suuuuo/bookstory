@@ -1,5 +1,7 @@
 package com.elice.bookstore.user.service;
 
+import com.elice.bookstore.config.exception.hierarchy.common.DuplicatedException;
+import com.elice.bookstore.config.exception.hierarchy.common.InvalidFormatException;
 import com.elice.bookstore.user.domain.Role;
 import com.elice.bookstore.user.domain.User;
 import com.elice.bookstore.user.dto.RequestRegisterUser;
@@ -14,6 +16,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDate;
 
@@ -29,6 +32,9 @@ class UserServiceTest {
   @Mock
   UserRepository userRepository;
 
+  @Mock
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
+
   private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
   @BeforeEach
@@ -40,17 +46,17 @@ class UserServiceTest {
   @Test
   void signUp() {
     //given
-    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "1234", "1234", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
+    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "1234", "1234", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
     User user = new User(
         registerForm.userName(),
-        registerForm.userId(),
+        registerForm.email(),
         registerForm.password(),
         registerForm.dateOfBirth(),
         registerForm.email(),
         registerForm.phoneNumber(),
         registerForm.address(),
         0L, Role.USER, true);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
     when(userRepository.save(any(User.class))).thenReturn(user);
 
     //when
@@ -64,56 +70,56 @@ class UserServiceTest {
   @DisplayName("[실패] 유저 생성 시 이미 등록된 아이디(userID)라면 실패한다.")
   @Test
   void signup_failByExistUserId() {
-    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(true);
+    RequestRegisterUser registerForm = new RequestRegisterUser("user", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(true);
 
     //when
 
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("The userId already exists.");
+        .isInstanceOf(DuplicatedException.class)
+        .hasMessageContaining("The user's id is duplicated.");
   }
 
   @DisplayName("[실패] 유저 생성 시 비밀번호 공백은 안된다.")
   @Test
   void signUp_failByEmptyPassword() {
-    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "", "", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
+    RequestRegisterUser registerForm = new RequestRegisterUser("user1","", "", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("The password does not empty.");
+        .isInstanceOf(InvalidFormatException.class)
+        .hasMessageContaining("The password is empty.");
   }
 
   @DisplayName("[실패] 유저 생성 시 패스워드는 일치해야 한다.")
   @Test
   void signup_failByNotMatchPassword() {
-    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "1234", "7890", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
+    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "1234", "7890", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("The password does not match.");
+        .isInstanceOf(InvalidFormatException.class)
+        .hasMessageContaining("The password is not match.");
   }
 
   @DisplayName("[실패] 유저 생성 시 패스워드는 최소 4글자 이상이어야 한다.")
   @Test
   void signup_failByAtLeast4Character() {
-    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "userId1", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.userId(), true)).thenReturn(false);
+    RequestRegisterUser registerForm = new RequestRegisterUser("user1", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
+    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
-        .isInstanceOf(IllegalArgumentException.class)
+        .isInstanceOf(InvalidFormatException.class)
         .hasMessageContaining("The password must be at least 4 characters.");
   }
 }

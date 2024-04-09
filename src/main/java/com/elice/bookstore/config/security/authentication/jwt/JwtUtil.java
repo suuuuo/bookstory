@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,15 +30,15 @@ public class JwtUtil {
   }
 
   /**
-   * get email from token.
+   * get id from token.
    *
    * @param token access, refresh token.
-   * @return email.
+   * @return id.
    */
-  public String getEmail(String token) {
+  public String getId(String token) {
 
     return Jwts.parser().verifyWith(secretKey).build()
-        .parseSignedClaims(token).getPayload().get("email", String.class);
+        .parseSignedClaims(token).getPayload().get("id", String.class);
   }
 
   /**
@@ -88,16 +87,16 @@ public class JwtUtil {
   /**
    * create jwt token.
 
-   * @param email .
+   * @param id .
    * @param role .
    * @param expiredMs .
    * @return jwt access, refresh token.
    */
-  public String createJwt(String type, String email, String role, Long expiredMs) {
+  public String createJwt(String type, String id, String role, Long expiredMs) {
 
     return Jwts.builder()
         .claim("type", type)
-        .claim("email", email)
+        .claim("id", id)
         .claim("role", role)
         .issuedAt(new Date(System.currentTimeMillis()))
         .expiration(new Date(System.currentTimeMillis() + expiredMs))

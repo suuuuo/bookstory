@@ -44,7 +44,7 @@ class QuestionServiceTest {
         Book book = new Book();
         book.setId(bookId);
 
-        User user = new User(1L,"TestUser","testId", LocalDate.now(),"test@test","010-000","xxx",null, Role.USER, Boolean.TRUE);
+        User user = new User("elice","TestUser","testId", LocalDate.now(),"test@test","010-000","xxx",null, Role.USER, Boolean.TRUE);
 
 
         RequestQuestion request = new RequestQuestion();
