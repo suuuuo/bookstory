@@ -78,7 +78,7 @@ class UserServiceTest {
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(DuplicatedException.class)
-        .hasMessageContaining("The user's id is duplicated. Please check your request.");
+        .hasMessageContaining("The user's id is duplicated.");
   }
 
   @DisplayName("[실패] 유저 생성 시 비밀번호 공백은 안된다.")
@@ -92,7 +92,7 @@ class UserServiceTest {
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(InvalidFormatException.class)
-        .hasMessageContaining("The password is empty. Please check your request.");
+        .hasMessageContaining("The password is empty.");
   }
 
   @DisplayName("[실패] 유저 생성 시 패스워드는 일치해야 한다.")
@@ -106,7 +106,7 @@ class UserServiceTest {
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(InvalidFormatException.class)
-        .hasMessageContaining("The password is not match. Please check your request.");
+        .hasMessageContaining("The password is not match.");
   }
 
   @DisplayName("[실패] 유저 생성 시 패스워드는 최소 4글자 이상이어야 한다.")
@@ -120,6 +120,6 @@ class UserServiceTest {
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(InvalidFormatException.class)
-        .hasMessageContaining("The password must be at least 4 characters. Please check your request.");
+        .hasMessageContaining("The password must be at least 4 characters.");
   }
 }
