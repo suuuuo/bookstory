@@ -52,8 +52,7 @@ public class QuestionController {
         return ResponseEntity.ok(questions);
     }
 
-
-    @GetMapping("/v1/{id}")
+    @GetMapping("/v1/question/{id}")
     public ResponseEntity<List<Question>> findQuestionsByBookId(@PathVariable Long id) {
         List<Question> questions = questionService.findQuestionsByBookId(id);
         return ResponseEntity.ok(questions);
@@ -63,7 +62,7 @@ public class QuestionController {
      * Question : Delete;
      */
 
-    @DeleteMapping("/v1/{id}")
+    @DeleteMapping("/v1/question/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
 
