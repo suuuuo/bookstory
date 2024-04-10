@@ -14,5 +14,5 @@ spring:
   jwt:
     secret: BookStory1234BookStory1234BookStory1234BookStory1234BookStory1234BookStory1234BookStory1234BookStory1234
 
-  file:
-    upload-dir: /Users/codejomo99/deskTop/uploadBook
+file:
+  upload-dir: ${HOME}/uploadBook
