@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Service
-@Setter
 public class FileUploadService {
 
     @Value("${file.upload-dir}")

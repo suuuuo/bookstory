@@ -23,17 +23,19 @@ public class QuestionController {
      */
 
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question){
+    public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question) {
 
-        // 현재 인증된 사용자의 정보를 가져옵니다.
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //String currentUserName = authentication.getName();
-
-        // 현재 사용자 객체를 얻기 위한 서비스 호출 (가정)
-        //User currentUser = userService.findByUsername(currentUserName);
-
-        // Question 생성 서비스를 호출하면서 현재 사용자 정보도 함께 전달합니다.
-        //Question newQuestion = questionService.createQuestion(question, currentUser);
+//        // 현재 인증된 사용자의 정보를 가져옵니다.
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String currentUserName = authentication.getName(); // 사용자 이름, 이메일 또는 아이디 등을 가져옵니다.
+//
+//        // 현재 사용자 객체를 얻기 위한 서비스 호출
+//        User currentUser = userService.findByUsername(currentUserName);
+//
+//        // Question 생성 서비스를 호출하면서 현재 사용자 정보도 함께 전달합니다.
+//        Question newQuestion = questionService.createQuestion(question, currentUser);
+//
+//        return ResponseEntity.ok(newQuestion);
 
         Question newQuestion = questionService.createQuestion(question, new User());
         return ResponseEntity.ok(newQuestion);
@@ -44,13 +46,13 @@ public class QuestionController {
      * Question : Get;
      */
     @GetMapping
-    public ResponseEntity<List<Question>> findALlQuestion(){
+    public ResponseEntity<List<Question>> findALlQuestion() {
         List<Question> questions = questionService.findAllQuestion();
 
         return ResponseEntity.ok(questions);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+
     @GetMapping("/{id}")
     public ResponseEntity<List<Question>> findQuestionsByBookId(@PathVariable Long id) {
         List<Question> questions = questionService.findQuestionsByBookId(id);
@@ -60,9 +62,9 @@ public class QuestionController {
     /**
      * Question : Delete;
      */
-    @CrossOrigin(origins = "http://localhost:5173")
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id){
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
 
         return ResponseEntity.ok().build();
