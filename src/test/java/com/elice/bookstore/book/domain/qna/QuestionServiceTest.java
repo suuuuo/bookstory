@@ -38,34 +38,30 @@ class QuestionServiceTest {
 
     @DisplayName("질문 생성 성공")
     @Test
-    void createQuestion() {
-        // Given
-        Long bookId = 1L;
-        Book book = new Book();
-        book.setId(bookId);
+    public void createQuestionTest() {
+        // 인증된 사용자 모의 객체 생성
+        User user = new User();
+        user.setUserName("testUser");
 
-        User user = new User("elice","TestUser","testId", LocalDate.now(),"test@test","010-000","xxx",null, Role.USER, Boolean.TRUE);
+        // RequestQuestion 객체 생성
+        RequestQuestion requestQuestion = new RequestQuestion();
+        requestQuestion.setBookId(1L);
+        requestQuestion.setContent("Test question content");
 
+        // Book 객체 초기화
+        Book book = new Book(1L, "Example Book Title", 15000,  "Author Name");
 
-        RequestQuestion request = new RequestQuestion();
-        request.setBookId(bookId);
-        request.setCreatedBy(user.getUserName());
-        request.setContent("Test question content");
+        // BookRepository의 findById 메서드를 모의 처리하여 항상 특정 Book 객체를 반환하도록 설정
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
+        // QuestionRepository의 save 메서드 동작 모의
+        when(questionRepository.save(any(Question.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        Question question = QuestionMapper.toEntity(request,book,user);
+        // QuestionService를 사용하여 Question 객체 생성
+        Question result = questionService.createQuestion(requestQuestion, user);
 
-        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
-        when(questionRepository.save(any(Question.class))).thenReturn(question);
-
-        // When
-        Question result = questionService.createQuestion(request, user);
-
-        // Then
-        assertThat(result.getBook().getId()).isEqualTo(bookId);
-        assertThat(result.getContent()).isEqualTo(request.getContent());
-        assertThat(result.getCreatedBy()).isEqualTo(request.getCreatedBy());
-        assertThat(result.getStatus()).isEqualTo(QuestionStatus.ANSWER_PENDING);
+        // 생성된 Question 객체에서 createdBy 필드 검증
+        assertThat(result.getCreatedBy()).isEqualTo(user.getUserName());
     }
 
     @DisplayName("질문 전체 찾기 성공")

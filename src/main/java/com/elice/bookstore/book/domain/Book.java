@@ -68,6 +68,14 @@ public class Book extends BaseEntity {
   private String description;
 
 
+  public Book(Long id, String itemName, Integer price, String author){
+    this.id = id;
+    this.itemName = itemName;
+    this.price = price;
+    this.author = author;
+  }
+
+
   public void update(String itemName, Integer price, String author, String description, String publisher) {
     this.itemName = itemName;
     this.price = price;

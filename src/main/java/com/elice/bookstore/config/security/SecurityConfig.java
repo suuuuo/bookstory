@@ -111,8 +111,8 @@ public class SecurityConfig {
             .requestMatchers("/oauth2/**", "/login/**", "/",
                 "/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/v1/question/**").permitAll()
-                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
+                .requestMatchers("/api/v1/question/**").permitAll()
+//                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
             .requestMatchers("/api/v1/admin").hasRole("ADMIN")
 
             .anyRequest().authenticated());

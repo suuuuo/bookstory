@@ -8,6 +8,7 @@ import com.elice.bookstore.book.domain.service.QuestionService;
 import com.elice.bookstore.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,21 +24,8 @@ public class QuestionController {
      */
 
     @PostMapping("/v1/question")
-    public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question) {
-
-//        // 현재 인증된 사용자의 정보를 가져옵니다.
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String currentUserName = authentication.getName(); // 사용자 이름, 이메일 또는 아이디 등을 가져옵니다.
-//
-//        // 현재 사용자 객체를 얻기 위한 서비스 호출
-//        User currentUser = userService.findByUsername(currentUserName);
-//
-//        // Question 생성 서비스를 호출하면서 현재 사용자 정보도 함께 전달합니다.
-//        Question newQuestion = questionService.createQuestion(question, currentUser);
-//
-//        return ResponseEntity.ok(newQuestion);
-
-        Question newQuestion = questionService.createQuestion(question, new User());
+    public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question, @AuthenticationPrincipal User currentUser) {
+        Question newQuestion = questionService.createQuestion(question, currentUser);
         return ResponseEntity.ok(newQuestion);
     }
 
