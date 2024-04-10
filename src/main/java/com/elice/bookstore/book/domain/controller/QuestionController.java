@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/questions")
+@RequestMapping("/api")
 public class QuestionController {
     private final QuestionService questionService;
 
@@ -22,7 +22,7 @@ public class QuestionController {
      * Question : Post;
      */
 
-    @PostMapping
+    @PostMapping("/v1/question")
     public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question) {
 
 //        // 현재 인증된 사용자의 정보를 가져옵니다.
@@ -45,7 +45,7 @@ public class QuestionController {
     /**
      * Question : Get;
      */
-    @GetMapping
+    @GetMapping("/v1/question")
     public ResponseEntity<List<Question>> findALlQuestion() {
         List<Question> questions = questionService.findAllQuestion();
 
@@ -53,7 +53,7 @@ public class QuestionController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/v1/{id}")
     public ResponseEntity<List<Question>> findQuestionsByBookId(@PathVariable Long id) {
         List<Question> questions = questionService.findQuestionsByBookId(id);
         return ResponseEntity.ok(questions);
@@ -63,7 +63,7 @@ public class QuestionController {
      * Question : Delete;
      */
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/v1/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
 
