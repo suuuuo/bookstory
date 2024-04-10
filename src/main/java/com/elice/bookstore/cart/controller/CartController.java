@@ -27,16 +27,16 @@ public class CartController {
   @Autowired private BookService bookService;
   @Autowired private JwtUtil jwtUtil;
 
-  /** 장바구니 화면 : 담긴 상품들 조회 -> user email로? loadUserByUsername */
+  /** 장바구니 화면 : 담긴 상품들 조회 -> user id? loadUserByUsername */
   @GetMapping("/v1/cart")
   public ResponseEntity<List<ResponseCartBook>> CartPageTest(
       @RequestHeader("Authorization") String authorizationHeader /*토큰으로 조회.. 추후 수정*/) {
 
-    String email = jwtUtil.getEmail(authorizationHeader);
+    Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
     Boolean isValid = jwtUtil.isValid(authorizationHeader);
 
-    if (isValid && email != null) {
-      List<ResponseCartBook> cartBooks = cartBookService.findAllCartBook(email);
+    if (isValid && id != null) {
+      List<ResponseCartBook> cartBooks = cartBookService.findAllCartBook(id);
       return ResponseEntity.ok(cartBooks);
     }
     return null; // 유효하지 않으면? -> 로그인 창으로?
@@ -48,12 +48,12 @@ public class CartController {
       @RequestHeader("Authorization") String authorizationHeader,
       @RequestBody RequestCartBook requestCartBook) {
 
-    String email = jwtUtil.getEmail(authorizationHeader);
+    Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
     Boolean isValid = jwtUtil.isValid(authorizationHeader);
 
-    if (isValid && email != null) {
+    if (isValid && id != null) {
     Book book = bookService.findById(requestCartBook.bookId()); // 책 아이디로 책 받아옴
-      ResponseCartBook c = cartBookService.AddCartBook(email, book, requestCartBook.count());
+      ResponseCartBook c = cartBookService.AddCartBook(id, book, requestCartBook.count());
     return ResponseEntity.ok(c);
     }
     return null;
@@ -65,10 +65,10 @@ public class CartController {
       @RequestHeader("Authorization") String authorizationHeader,
       @RequestBody RequestCartBook requestCartBook) {
 
-    String email = jwtUtil.getEmail(authorizationHeader);
+    Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
     Boolean isValid = jwtUtil.isValid(authorizationHeader);
 
-    if (isValid && email != null) {
+    if (isValid && id != null) {
     ResponseCartBook c =
         cartBookService.PatchCartBook(requestCartBook.id(), requestCartBook.count());
       return ResponseEntity.ok(c);
@@ -84,9 +84,9 @@ public class CartController {
       @RequestHeader("Authorization") String authorizationHeader,
       @RequestBody RequestCartBook requestCartBook) {
     // 프론트엔드에서 체크박스 상태 확인해서 체크된 것들만 요청
-    String email = jwtUtil.getEmail(authorizationHeader);
+    Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
     Boolean isValid = jwtUtil.isValid(authorizationHeader);
-    if (isValid && email != null) {
+    if (isValid && id != null) {
       cartBookService.DeleteCartBook(requestCartBook.id());
     }
   }

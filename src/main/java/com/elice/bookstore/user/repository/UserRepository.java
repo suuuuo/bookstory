@@ -6,10 +6,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * user JpaRepository.
+ *
+ * findByUserIdAndIsExist for social login.
+ *
+ * findByEmailAndIsExist
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 
-  Boolean existsByUserIdAndIsExist(String userId, Boolean isExist);
+  Boolean existsByEmailAndIsExist(String email, Boolean isExist);
+
+  Optional<User> findByIdAndIsExist(Long id, Boolean isExist);
+
+  Optional<User> findByEmailAndIsExist(String email, Boolean isExist);
 
   Optional<User> findByUserIdAndIsExist(String userId, Boolean isExist);
 }
