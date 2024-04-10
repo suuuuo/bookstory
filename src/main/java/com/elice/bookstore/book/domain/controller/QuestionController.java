@@ -50,9 +50,17 @@ public class QuestionController {
         return ResponseEntity.ok(questions);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Question>> findQuestionsByBookId(@PathVariable Long id) {
+        List<Question> questions = questionService.findQuestionsByBookId(id);
+        return ResponseEntity.ok(questions);
+    }
+
     /**
      * Question : Delete;
      */
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id){
         questionService.deleteQuestion(id);
