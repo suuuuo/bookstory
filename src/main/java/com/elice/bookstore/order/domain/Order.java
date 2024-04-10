@@ -61,13 +61,8 @@ public class Order {
     private int totalPrice;
 
     @ColumnDefault("0")
-    private Boolean isExist;
+    @Builder.Default
+    private Boolean isExist = false;
 
-    public Order(User user, Cart cart, OrderStatus orderStatus, int totalPrice) {
-        this.user = user;
-        this.cart = cart;
-        this.orderStatus = orderStatus;
-        this.totalPrice = totalPrice;
-    }
 }
 

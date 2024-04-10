@@ -28,6 +28,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,6 +38,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -111,23 +114,23 @@ public class OrderControllerTest {
   @Test
   @DisplayName("회원 : 주문하기")
   void saveOrderTest() throws Exception {
-    Order order = new Order();
-    order.setUser(user);
-    order.setCart(cart);
     // Given
-    RequestOrder requestOrder = new RequestOrder(order.getUser(), order.getCart(), OrderStatus.NEW, 10000);
-    ResponseOrder responseOrder = new ResponseOrder(order.getUser(), order.getCart(), OrderStatus.NEW, 10000);
+    final Long userId = 123L;
+    final Long cartId = 777L;
+    final OrderStatus orderStatus = OrderStatus.NEW;
+    final int totalPrice = 10000;
 
-    // Mocking the behavior of the orderService.save() method
-    when(orderService.save(requestOrder)).thenReturn(responseOrder);
+    final RequestOrder requestOrder = new RequestOrder(userId, cartId, orderStatus, totalPrice);
 
     // When
-    ResponseEntity<String> responseEntity = orderController.saveOrder(requestOrder);
+    ResultActions result = mockMvc.perform(post("/api/v1/orders/order")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(requestOrder)));
 
     // Then
-    assertNotNull(responseEntity);
-    assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    assertEquals("Order saved.", responseEntity.getBody());
+    result.andExpect(status().isCreated())
+          .andExpect(content().string(containsString("NEW")));
+
   }
 
   @Test
@@ -211,5 +214,4 @@ public class OrderControllerTest {
     mockMvc.perform(delete("/api/v1/admin/orders/{id}", order.getId()))
             .andExpect(status().isOk());
   }
-
 }
