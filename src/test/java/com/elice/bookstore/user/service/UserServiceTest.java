@@ -56,7 +56,7 @@ class UserServiceTest {
         registerForm.phoneNumber(),
         registerForm.address(),
         0L, Role.USER, true);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(false);
     when(userRepository.save(any(User.class))).thenReturn(user);
 
     //when
@@ -71,7 +71,7 @@ class UserServiceTest {
   @Test
   void signup_failByExistUserId() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(true);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(true);
 
     //when
 
@@ -85,7 +85,7 @@ class UserServiceTest {
   @Test
   void signUp_failByEmptyPassword() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1","", "", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
@@ -99,7 +99,7 @@ class UserServiceTest {
   @Test
   void signup_failByNotMatchPassword() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1", "1234", "7890", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
@@ -113,7 +113,7 @@ class UserServiceTest {
   @Test
   void signup_failByAtLeast4Character() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
