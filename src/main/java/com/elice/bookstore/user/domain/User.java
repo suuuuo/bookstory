@@ -91,11 +91,11 @@ public class User extends BaseEntity {
   /**
    * for SecurityContextHolder.
 
-   * @param email .
+   * @param id .
    * @param role .
    */
-  public User(String email, Role role) {
-    this.email = email;
+  public User(String id, Role role) {
+    this.id = Long.parseLong(id);
     this.role = role;
   }
 }

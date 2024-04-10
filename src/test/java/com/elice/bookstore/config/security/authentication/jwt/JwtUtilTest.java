@@ -23,17 +23,17 @@ class JwtUtilTest {
   @Test
   void createToken() {
     //given
-    String jwt = jwtUtil.createJwt("access", "user1@gmail.com", "USER", 60 * 10 * 1000L);
+    String jwt = jwtUtil.createJwt("access", "30", "USER", 60 * 10 * 1000L);
 
     //when
     String type = jwtUtil.getType(jwt);
-    String email = jwtUtil.getEmail(jwt);
+    String id = jwtUtil.getId(jwt);
     String role = jwtUtil.getRole(jwt);
     Boolean isValid = jwtUtil.isValid(jwt);
 
     //then
     assertThat(type).isEqualTo("access");
-    assertThat(email).isEqualTo("user1@gmail.com");
+    assertThat(id).isEqualTo("30");
     assertThat(role).isEqualTo("USER");
     assertThat(isValid).isEqualTo(true);
   }
