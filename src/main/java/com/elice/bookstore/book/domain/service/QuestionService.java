@@ -45,6 +45,11 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
+    public List<Question> findQuestionsByBookId(Long bookId) {
+        // 책의 ID를 기반으로 질문 조회
+        return questionRepository.findByBookId(bookId);
+    }
+
     /**
      * Question 삭제하기
      */
