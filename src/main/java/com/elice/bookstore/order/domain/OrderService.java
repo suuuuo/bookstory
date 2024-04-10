@@ -21,22 +21,6 @@ public class OrderService {
     return orderMapper.orderToResponseOrder(savedOrder);
   }
 
-//  public ResponseOrder save(RequestOrder requestOrder) {
-//    Order order = new Order(
-//        requestOrder.userId(),
-//        requestOrder.cartId(),
-//        requestOrder.orderStatus(),
-//        requestOrder.totalPrice()
-//    );
-//    Order savedOrder = orderRepository.save(order);
-//    return new ResponseOrder(
-//        savedOrder.getUser().getId(),
-//        savedOrder.getCart().getId(),
-//        savedOrder.getOrderStatus(),
-//        savedOrder.getTotalPrice()
-//    );
-//  }
-
   public void updateOrderStatusById(Long id) {
     orderRepository.updateOrderStatusById(id);
   }
