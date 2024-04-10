@@ -13,7 +13,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,7 +60,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
       HttpServletResponse response
   ) throws AuthenticationException {
 
-    RequestLogin requestLogin = readByJson(request);
+    RequestLogin requestLogin = readByJson(request, response);
+
+    if (requestLogin == null) {
+      return null;
+    }
 
     UsernamePasswordAuthenticationToken authToken =
         new UsernamePasswordAuthenticationToken(requestLogin.email(), requestLogin.password());
@@ -66,15 +72,29 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     return authenticationManager.authenticate(authToken);
   }
 
-  private RequestLogin readByJson(HttpServletRequest request) {
+  private RequestLogin readByJson(HttpServletRequest request, HttpServletResponse response) {
 
     RequestLogin requestLogin;
+    PrintWriter writer;
 
     try {
       requestLogin = new ObjectMapper().readValue(request.getInputStream(), RequestLogin.class);
     } catch (IOException e) {
       log.error(e.getMessage());
       throw new RuntimeException(e);
+    }
+
+    if (Objects.isNull(requestLogin)
+        || requestLogin.email().isBlank() || requestLogin.password().isBlank()) {
+      try {
+        writer = response.getWriter();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+      writer.print("invalid input.");
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      log.error("input data nothing.");
+      return null;
     }
 
     return requestLogin;
