@@ -164,22 +164,23 @@ class QuestionServiceTest {
 
         verify(questionRepository, never()).deleteById(any());
     }
-//
-//    @Test
-//    public void testDeleteQuestionIfOwnedByUser_WhenQuestionDoesNotExist() {
-//        // Given
-//        Long questionId = 1L;
-//        Long userId = 1L;
-//
-//        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.empty());
-//
-//        // Then
-//        assertThrows(ResponseStatusException.class, () -> {
-//            // When
-//            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
-//        });
-//
-//        verify(questionRepository, never()).deleteById(any());
-//    }
+
+    @Test
+    @DisplayName("질문이 존재하지 않을 경우 예외처리 ")
+    public void testDeleteQuestionIfOwnedByUser_WhenQuestionDoesNotExist() {
+        // Given
+        Long questionId = 1L;
+        Long userId = 1L;
+
+        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(ResponseStatusException.class, () -> {
+            // When
+            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
+        });
+
+        verify(questionRepository, never()).deleteById(any());
+    }
 
 }
