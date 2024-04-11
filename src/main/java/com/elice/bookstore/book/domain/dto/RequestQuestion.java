@@ -18,13 +18,4 @@ public class RequestQuestion {
     private String content;
     private String createdBy;
 
-    // 테스트 코드를 위한
-    public Question toEntity(Book book) {
-        return Question.builder()
-                .book(book)
-                .content(content)
-                .createdBy(createdBy)
-                .status(QuestionStatus.ANSWER_PENDING)
-                .build();
-    }
 }

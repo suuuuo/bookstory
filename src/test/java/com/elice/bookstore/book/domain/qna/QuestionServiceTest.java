@@ -14,12 +14,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -82,8 +84,8 @@ class QuestionServiceTest {
         request2.setContent("Test question content2");
         request2.setCreatedBy("Test user2");
 
-        Question question = request.toEntity(book);
-        Question question2 = request2.toEntity(book);
+        Question question = QuestionMapper.toFindEntity(request,book);
+        Question question2 = QuestionMapper.toFindEntity(request2,book);
 
         // when
         when(questionRepository.findAll()).thenReturn(List.of(question, question2));
@@ -115,5 +117,68 @@ class QuestionServiceTest {
         // verify()를 사용하여 deleteById() 메서드가 정확히 한 번 호출되었는지 확인
         verify(questionRepository, times(1)).deleteById(questionId);
     }
+
+    @Test
+    @DisplayName("사용자가 자신의 질문을 삭제 성공")
+    public void testDeleteQuestionIfOwnedByUser() {
+        // Given
+        Long questionId = 1L;
+        Long questionCreatedBy = 1L;
+        String userName = "TestName";
+
+        Question question = new Question();
+        question.setId(questionId);
+        question.setCreatedBy(questionCreatedBy);
+
+        User user = new User();
+        user.setId(1L);
+        user.setUserName(userName);
+
+        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
+
+        // When
+        questionService.deleteQuestionIfOwnedByUser(questionId, user.getId());
+
+        // Then
+        verify(questionRepository, times(1)).deleteById(questionId);
+    }
+
+
+//    @Test
+//    public void testDeleteQuestionIfOwnedByUser_WhenQuestionExistsAndNotOwnedByUser() {
+//        // Given
+//        Long questionId = 1L;
+//        Long userId = 1L;
+//        Question question = new Question();
+//        question.setId(questionId);
+//        question.setCreatedBy(2L); // Different user
+//
+//        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
+//
+//        // Then
+//        assertThrows(ResponseStatusException.class, () -> {
+//            // When
+//            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
+//        });
+//
+//        verify(questionRepository, never()).deleteById(any());
+//    }
+//
+//    @Test
+//    public void testDeleteQuestionIfOwnedByUser_WhenQuestionDoesNotExist() {
+//        // Given
+//        Long questionId = 1L;
+//        Long userId = 1L;
+//
+//        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.empty());
+//
+//        // Then
+//        assertThrows(ResponseStatusException.class, () -> {
+//            // When
+//            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
+//        });
+//
+//        verify(questionRepository, never()).deleteById(any());
+//    }
 
 }

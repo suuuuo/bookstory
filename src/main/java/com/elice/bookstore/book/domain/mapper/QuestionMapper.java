@@ -16,7 +16,19 @@ public class QuestionMapper {
         return Question.builder()
                 .book(book)
                 .content(request.getContent())
-                .createdBy(user.getUserName())
+                .createdBy(user.getId())
+                .status(QuestionStatus.ANSWER_PENDING)
+                .build();
+    }
+
+    public static Question toFindEntity(RequestQuestion request, Book book){
+        if(request == null || book == null){
+            return null;
+        }
+        return Question.builder()
+                .book(book)
+                .content(request.getContent())
+                .createdBy(null)
                 .status(QuestionStatus.ANSWER_PENDING)
                 .build();
     }
