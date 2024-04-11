@@ -144,25 +144,26 @@ class QuestionServiceTest {
     }
 
 
-//    @Test
-//    public void testDeleteQuestionIfOwnedByUser_WhenQuestionExistsAndNotOwnedByUser() {
-//        // Given
-//        Long questionId = 1L;
-//        Long userId = 1L;
-//        Question question = new Question();
-//        question.setId(questionId);
-//        question.setCreatedBy(2L); // Different user
-//
-//        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
-//
-//        // Then
-//        assertThrows(ResponseStatusException.class, () -> {
-//            // When
-//            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
-//        });
-//
-//        verify(questionRepository, never()).deleteById(any());
-//    }
+    @Test
+    @DisplayName("다른 사용자가 삭제를 시도할때 예외처리 성공")
+    public void testDeleteQuestionIfOwnedByUser_WhenQuestionExistsAndNotOwnedByUser() {
+        // Given
+        Long questionId = 1L;
+        Long userId = 1L;
+        Question question = new Question();
+        question.setId(questionId);
+        question.setCreatedBy(2L);
+
+        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
+
+        // Then
+        assertThrows(ResponseStatusException.class, () -> {
+            // When
+            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
+        });
+
+        verify(questionRepository, never()).deleteById(any());
+    }
 //
 //    @Test
 //    public void testDeleteQuestionIfOwnedByUser_WhenQuestionDoesNotExist() {
