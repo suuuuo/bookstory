@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -79,15 +80,14 @@ public class CartController {
   /*
    *장바구니에서 상품 삭제
    */
-  @DeleteMapping("/v1/cart")
+  @DeleteMapping("/v1/cart/{cartBookId}")
   public void DeleteCartBook(
-      @RequestHeader("access") String authorizationHeader,
-      @RequestBody RequestCartBook requestCartBook) {
+      @RequestHeader("access") String authorizationHeader, @PathVariable long cartBookId) {
     // 프론트엔드에서 체크박스 상태 확인해서 체크된 것들만 요청
     Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
     Boolean isValid = jwtUtil.isValid(authorizationHeader);
     if (isValid && id != null) {
-      cartBookService.DeleteCartBook(requestCartBook.id());
+      cartBookService.DeleteCartBook(cartBookId);
     }
   }
 }
