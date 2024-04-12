@@ -3,14 +3,14 @@ package com.elice.bookstore.order.domain;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.delivery.domain.DeliveryService;
 import com.elice.bookstore.delivery.domain.dto.RequestDelivery;
+import com.elice.bookstore.order.domain.dto.OrderMapper;
 import com.elice.bookstore.order.domain.dto.RequestOrder;
+import com.elice.bookstore.order.domain.dto.RequestOrderStatusUpdate;
 import com.elice.bookstore.order.domain.dto.ResponseOrder;
 import com.elice.bookstore.orderbook.domain.OrderBook;
 import com.elice.bookstore.orderbook.domain.OrderBookService;
 import com.elice.bookstore.orderbook.domain.dto.OrderBookDTO;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +37,7 @@ public class OrderController {
   public final DeliveryService deliveryService;
   private final JwtUtil jwtUtil;
   private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+  private final OrderMapper orderMapper;
 
   /* **** 회원 CRUD *****/
   /* 회원 : 나의 주문 내역 조회 */
@@ -115,20 +116,48 @@ public class OrderController {
   /* **** 관리자 CRUD *****/
   /* 관리자 : 전체 주문 내역 조회 */
   @GetMapping("/v1/admin/orders")
-  public ResponseEntity<Page<OrderBook>> adminGetAllOrders(
+  public ResponseEntity<Page<OrderBookDTO>> adminGetAllOrders(
+      @RequestHeader("Authorization") String header,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "15") int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    Page<OrderBook> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
-    return ResponseEntity.ok().body(allOrders);
+    String role = jwtUtil.getRole(header);
+
+    try {
+      logger.info(">>>> role: {}", role);
+
+      if ("ADMIN".equalsIgnoreCase(role)) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<OrderBookDTO> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
+        return ResponseEntity.ok().body(allOrders);
+      } else {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      }
+    } catch (Exception e) {
+      logger.error(">>>> 에러 : {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
   }
 
   /* 관리자 : 주문 상태 변경 (결제 완료 / 배송 준비 등) */
-  @PutMapping("/v1/admin/orders/{id}/{orderStatus}")
-  public ResponseEntity<Order> adminUpdateOrderStatus(
-      @PathVariable Long id, @PathVariable("orderStatus") OrderStatus orderStatus) {
-    orderService.adminUpdateOrderStatueById(orderStatus, id);
-    return ResponseEntity.ok().build();
+  @PutMapping("/v1/admin/orders")
+  public ResponseEntity<String> adminUpdateOrderStatus(
+      @RequestHeader("Authorization") String header,
+      @RequestBody RequestOrderStatusUpdate orderUpdate) {
+    String role = jwtUtil.getRole(header);
+
+    try{
+      logger.info(">>>> role: {}", role);
+
+      if ("ADMIN".equalsIgnoreCase(role)) {
+        orderService.adminUpdateOrderStatueById(orderUpdate);
+        return ResponseEntity.ok().body("");
+      } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
+      }
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("서버 에러가 발생했습니다." + e.getMessage());
+    }
   }
 
   /* 관리자 : 주문 내역 삭제 (delete로 구현함) */

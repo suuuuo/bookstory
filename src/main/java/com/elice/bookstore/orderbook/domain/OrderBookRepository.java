@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 public interface OrderBookRepository extends JpaRepository<OrderBook, Long> {
 
   /* **** 회원 CRUD *****/
-  /* 나의 주문 내역 조회 */
+  /* 나의 주문 내역 조회 - 복합적인 데이터를 반환하기 때문에 DTO 사용 */
   @Query(
       "SELECT new com.elice.bookstore.orderbook.domain.dto.OrderBookDTO "
           + "(O.orderDate as orderDate, O.orderStatus as orderStatus, B.itemName as itemName )"
