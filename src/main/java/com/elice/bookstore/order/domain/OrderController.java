@@ -45,15 +45,9 @@ public class OrderController {
       @RequestParam(value = "size", defaultValue = "15") int size) {
     Long id = Long.valueOf(jwtUtil.getId(access));
 
-    try {
-      Page<OrderBookDTO> allMyOrders =
-          orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
-      logger.info(">>> id: {}, {}", id, allMyOrders.getContent());
-      return ResponseEntity.ok().body(allMyOrders);
-    } catch (Exception e) {
-      logger.error(">>> 에러 : {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-    }
+    Page<OrderBookDTO> allMyOrders = orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
+    logger.info(">>> id: {}, {}", id, allMyOrders.getContent());
+    return ResponseEntity.ok().body(allMyOrders);
   }
 
   /* 회원 : 주문하기 (장바구니에 담은것 가져와서 주문) */
@@ -62,49 +56,34 @@ public class OrderController {
       @RequestHeader("Authorization") String access, @RequestBody RequestOrder requestOrder) {
     String id = jwtUtil.getId(access);
     String role = jwtUtil.getRole(access);
-
     logger.info(">>> id: {} , role: {}", id, role);
-    try {
-      ResponseOrder savedOrder = orderService.save(requestOrder);
-      return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + savedOrder);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("실패 : " + e.getMessage());
-    }
+
+    ResponseOrder savedOrder = orderService.save(requestOrder);
+    return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + savedOrder);
   }
 
   /* 회원 : 배송 전, 주문 정보 수정 */
   @PutMapping("/v1/orders/update/{id}")
   public ResponseEntity<String> updateOrder(
-      @RequestHeader("Authorization") String access,
       @PathVariable Long id,
+      @RequestHeader("Authorization") String access,
       @RequestBody RequestDelivery requestDelivery) {
     String role = jwtUtil.getRole(access);
-    logger.info(">>> role: {}", role);
+    logger.info(">>> orderId : {}, role: {}, body : {}", id, role, requestDelivery);
 
-    try {
-      logger.info(">>> orderId : {}, params : {}", id, requestDelivery);
-      deliveryService.updateDeliveryDetailsById(id, requestDelivery);
-      return ResponseEntity.ok("배송 정보가 변경되었습니다.");
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("서버 에러가 발생했습니다." + e.getMessage());
-    }
+    deliveryService.updateDeliveryDetailsById(id, requestDelivery);
+    return ResponseEntity.ok("배송 정보가 변경되었습니다.");
   }
 
   /* 회원 : 배송 전 주문취소 */
   @PutMapping("/v1/orders/cancel/{id}")
-  public ResponseEntity<String> cancelOrder(
-      @PathVariable Long id, @RequestHeader("Authorization") String access) {
+  public ResponseEntity<String> cancelOrder(@PathVariable Long id,
+      @RequestHeader("Authorization") String access) {
     String role = jwtUtil.getRole(access);
+    logger.info(">>> role: {}", role);
 
-    try {
-      logger.info(">>> role: {}", role);
-      orderService.updateOrderStatusById(id);
-      return ResponseEntity.ok("order cancel 성공.");
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("서버 에러가 발생했습니다." + e.getMessage());
-    }
+    orderService.updateOrderStatusById(id);
+    return ResponseEntity.ok("order cancel 성공.");
   }
 
   /* **** 관리자 CRUD *****/
@@ -115,16 +94,11 @@ public class OrderController {
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "15") int size) {
     String role = jwtUtil.getRole(access);
+    logger.info(">>>> role: {}", role);
 
-    try {
-      logger.info(">>>> role: {}", role);
-      Pageable pageable = PageRequest.of(page, size);
-      Page<OrderBookDTO> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
-      return ResponseEntity.ok().body(allOrders);
-    } catch (Exception e) {
-      logger.error(">>>> 에러 : {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-    }
+    Pageable pageable = PageRequest.of(page, size);
+    Page<OrderBookDTO> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
+    return ResponseEntity.ok().body(allOrders);
   }
 
   /* 관리자 : 주문 상태 변경 (결제 완료 / 배송 준비 등) */
@@ -133,15 +107,10 @@ public class OrderController {
       @RequestHeader("Authorization") String access,
       @RequestBody RequestOrderStatusUpdate orderUpdate) {
     String role = jwtUtil.getRole(access);
+    logger.info(">>>> role: {}", role);
 
-    try {
-      logger.info(">>>> role: {}", role);
-      orderService.adminUpdateOrderStatueById(orderUpdate);
-      return ResponseEntity.ok().body("");
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("서버 에러가 발생했습니다." + e.getMessage());
-    }
+    orderService.adminUpdateOrderStatueById(orderUpdate);
+    return ResponseEntity.ok().body("");
   }
 
   /* 관리자 : 주문 내역 삭제 (delete로 구현함) */
@@ -149,13 +118,9 @@ public class OrderController {
   public ResponseEntity<String> adminDeleteOrder(
       @PathVariable Long id, @RequestHeader("Authorization") String access) {
     String role = jwtUtil.getRole(access);
-    try {
-      logger.info(">>>> role: {}", role);
-      orderService.deleteById(id);
-      return ResponseEntity.ok().build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("서버 에러가 발생했습니다." + e.getMessage());
-    }
+    logger.info(">>>> role: {}", role);
+
+    orderService.deleteById(id);
+    return ResponseEntity.ok().build();
   }
 }
