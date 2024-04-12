@@ -46,7 +46,8 @@ public class OrderController {
     Long id = Long.valueOf(jwtUtil.getId(header));
 
     try {
-      Page<OrderBookDTO> allMyOrders = orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
+      Page<OrderBookDTO> allMyOrders =
+          orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
       logger.info(">>> id: {}, {}", id, allMyOrders.getContent());
       return ResponseEntity.ok().body(allMyOrders);
     } catch (Exception e) {
@@ -58,8 +59,7 @@ public class OrderController {
   /* 회원 : 주문하기 (장바구니에 담은것 가져와서 주문) */
   @PostMapping("/v1/orders/order")
   public ResponseEntity<String> saveOrder(
-      @RequestHeader("Authorization") String header,
-      @RequestBody RequestOrder requestOrder) {
+      @RequestHeader("Authorization") String header, @RequestBody RequestOrder requestOrder) {
     String id = jwtUtil.getId(header);
     String role = jwtUtil.getRole(header);
 
@@ -78,9 +78,8 @@ public class OrderController {
       @RequestHeader("Authorization") String header,
       @PathVariable Long id,
       @RequestBody RequestDelivery requestDelivery) {
-    String userId = jwtUtil.getId(header);
     String role = jwtUtil.getRole(header);
-    logger.info(">>> id: {} , role: {}", userId, role);
+    logger.info(">>> role: {}", role);
 
     try {
       logger.info(">>> orderId : {}, params : {}", id, requestDelivery);
@@ -93,14 +92,14 @@ public class OrderController {
   }
 
   /* 회원 : 배송 전 주문취소 */
-  @PutMapping("/v1/orders/cancel")
+  @PutMapping("/v1/orders/cancel/{id}")
   public ResponseEntity<String> cancelOrder(
-      @RequestHeader("Authorization") String header) {
-    Long userId = Long.valueOf(jwtUtil.getId(header));
+      @PathVariable Long id, @RequestHeader("Authorization") String header) {
+    String role = jwtUtil.getRole(header);
 
     try {
-      logger.info(">>> id : {}", userId);
-      orderService.updateOrderStatusById(userId);
+      logger.info(">>> role: {}", role);
+      orderService.updateOrderStatusById(id);
       return ResponseEntity.ok("order cancel 성공.");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -129,7 +128,7 @@ public class OrderController {
   }
 
   /* 관리자 : 주문 상태 변경 (결제 완료 / 배송 준비 등) */
-  @PutMapping("/v1/admin/orders")
+  @PutMapping("/v1/admin/orders/{id}")
   public ResponseEntity<String> adminUpdateOrderStatus(
       @RequestHeader("Authorization") String header,
       @RequestBody RequestOrderStatusUpdate orderUpdate) {
@@ -159,6 +158,4 @@ public class OrderController {
           .body("서버 에러가 발생했습니다." + e.getMessage());
     }
   }
-
-
 }
