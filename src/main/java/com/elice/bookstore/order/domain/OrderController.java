@@ -40,10 +40,10 @@ public class OrderController {
   /* 회원 : 나의 주문 내역 조회 */
   @GetMapping("v1/orders")
   public ResponseEntity<Page<OrderBookDTO>> getAllMyOrders(
-      @RequestHeader("Authorization") String token,
+      @RequestHeader("Authorization") String access,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "15") int size) {
-    Long id = Long.valueOf(jwtUtil.getId(token));
+    Long id = Long.valueOf(jwtUtil.getId(access));
 
     try {
       Page<OrderBookDTO> allMyOrders =
@@ -59,9 +59,9 @@ public class OrderController {
   /* 회원 : 주문하기 (장바구니에 담은것 가져와서 주문) */
   @PostMapping("/v1/orders/order")
   public ResponseEntity<String> saveOrder(
-      @RequestHeader("Authorization") String token, @RequestBody RequestOrder requestOrder) {
-    String id = jwtUtil.getId(token);
-    String role = jwtUtil.getRole(token);
+      @RequestHeader("Authorization") String access, @RequestBody RequestOrder requestOrder) {
+    String id = jwtUtil.getId(access);
+    String role = jwtUtil.getRole(access);
 
     logger.info(">>> id: {} , role: {}", id, role);
     try {
@@ -75,10 +75,10 @@ public class OrderController {
   /* 회원 : 배송 전, 주문 정보 수정 */
   @PutMapping("/v1/orders/update/{id}")
   public ResponseEntity<String> updateOrder(
-      @RequestHeader("Authorization") String token,
+      @RequestHeader("Authorization") String access,
       @PathVariable Long id,
       @RequestBody RequestDelivery requestDelivery) {
-    String role = jwtUtil.getRole(token);
+    String role = jwtUtil.getRole(access);
     logger.info(">>> role: {}", role);
 
     try {
@@ -94,8 +94,8 @@ public class OrderController {
   /* 회원 : 배송 전 주문취소 */
   @PutMapping("/v1/orders/cancel/{id}")
   public ResponseEntity<String> cancelOrder(
-      @PathVariable Long id, @RequestHeader("Authorization") String token) {
-    String role = jwtUtil.getRole(token);
+      @PathVariable Long id, @RequestHeader("Authorization") String access) {
+    String role = jwtUtil.getRole(access);
 
     try {
       logger.info(">>> role: {}", role);
@@ -111,10 +111,10 @@ public class OrderController {
   /* 관리자 : 전체 주문 내역 조회 */
   @GetMapping("/v1/admin/orders")
   public ResponseEntity<Page<OrderBookDTO>> adminGetAllOrders(
-      @RequestHeader("Authorization") String token,
+      @RequestHeader("Authorization") String access,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "15") int size) {
-    String role = jwtUtil.getRole(token);
+    String role = jwtUtil.getRole(access);
 
     try {
       logger.info(">>>> role: {}", role);
@@ -130,9 +130,9 @@ public class OrderController {
   /* 관리자 : 주문 상태 변경 (결제 완료 / 배송 준비 등) */
   @PutMapping("/v1/admin/orders/{id}")
   public ResponseEntity<String> adminUpdateOrderStatus(
-      @RequestHeader("Authorization") String token,
+      @RequestHeader("Authorization") String access,
       @RequestBody RequestOrderStatusUpdate orderUpdate) {
-    String role = jwtUtil.getRole(token);
+    String role = jwtUtil.getRole(access);
 
     try {
       logger.info(">>>> role: {}", role);
@@ -147,8 +147,8 @@ public class OrderController {
   /* 관리자 : 주문 내역 삭제 (delete로 구현함) */
   @DeleteMapping("/v1/admin/orders/{id}")
   public ResponseEntity<String> adminDeleteOrder(
-      @PathVariable Long id, @RequestHeader("Authorization") String token) {
-    String role = jwtUtil.getRole(token);
+      @PathVariable Long id, @RequestHeader("Authorization") String access) {
+    String role = jwtUtil.getRole(access);
     try {
       logger.info(">>>> role: {}", role);
       orderService.deleteById(id);
