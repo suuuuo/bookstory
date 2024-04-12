@@ -15,7 +15,7 @@ public class DeliveryService {
   private final DeliveryRepository deliveryRepository;
 
   public void updateDeliveryDetailsById(Long orderId, RequestDelivery requestDelivery) {
-    Optional<Delivery> optionalDelivery = deliveryRepository.findById(orderId);
+    Optional<Delivery> optionalDelivery = deliveryRepository.findByOrderId(orderId);
     if (optionalDelivery.isPresent()) {
       Delivery delivery = optionalDelivery.get();
       // 매개변수로 전달된 값으로 엔티티 수정

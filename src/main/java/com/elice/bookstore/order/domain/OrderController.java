@@ -3,11 +3,9 @@ package com.elice.bookstore.order.domain;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.delivery.domain.DeliveryService;
 import com.elice.bookstore.delivery.domain.dto.RequestDelivery;
-import com.elice.bookstore.order.domain.dto.OrderMapper;
 import com.elice.bookstore.order.domain.dto.RequestOrder;
 import com.elice.bookstore.order.domain.dto.RequestOrderStatusUpdate;
 import com.elice.bookstore.order.domain.dto.ResponseOrder;
-import com.elice.bookstore.orderbook.domain.OrderBook;
 import com.elice.bookstore.orderbook.domain.OrderBookService;
 import com.elice.bookstore.orderbook.domain.dto.OrderBookDTO;
 import lombok.RequiredArgsConstructor;
@@ -37,20 +35,18 @@ public class OrderController {
   public final DeliveryService deliveryService;
   private final JwtUtil jwtUtil;
   private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
-  private final OrderMapper orderMapper;
 
   /* **** 회원 CRUD *****/
   /* 회원 : 나의 주문 내역 조회 */
   @GetMapping("v1/orders")
   public ResponseEntity<Page<OrderBookDTO>> getAllMyOrders(
-      @RequestHeader("Authorization") String authorizationHeader,
+      @RequestHeader("Authorization") String header,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "15") int size) {
-    Long id = Long.valueOf(jwtUtil.getId(authorizationHeader));
+    Long id = Long.valueOf(jwtUtil.getId(header));
 
     try {
-      Page<OrderBookDTO> allMyOrders =
-          orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
+      Page<OrderBookDTO> allMyOrders = orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
       logger.info(">>> id: {}, {}", id, allMyOrders.getContent());
       return ResponseEntity.ok().body(allMyOrders);
     } catch (Exception e) {
@@ -62,34 +58,33 @@ public class OrderController {
   /* 회원 : 주문하기 (장바구니에 담은것 가져와서 주문) */
   @PostMapping("/v1/orders/order")
   public ResponseEntity<String> saveOrder(
-      @RequestHeader("Authorization") String authorizationHeader,
+      @RequestHeader("Authorization") String header,
       @RequestBody RequestOrder requestOrder) {
-    String id = jwtUtil.getId(authorizationHeader);
-    String role = jwtUtil.getRole(authorizationHeader);
+    String id = jwtUtil.getId(header);
+    String role = jwtUtil.getRole(header);
 
     logger.info(">>> id: {} , role: {}", id, role);
     try {
-      if (id != null && "USER".equalsIgnoreCase(role)) {
-        ResponseOrder savedOrder = orderService.save(requestOrder);
-        return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + savedOrder);
-      } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("잘못된 접근입니다.");
-      }
+      ResponseOrder savedOrder = orderService.save(requestOrder);
+      return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + savedOrder);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("실패 : " + e.getMessage());
     }
   }
 
   /* 회원 : 배송 전, 주문 정보 수정 */
-  @PutMapping("/v1/orders/update")
+  @PutMapping("/v1/orders/update/{id}")
   public ResponseEntity<String> updateOrder(
-      @RequestHeader("Authorization") String authorizationHeader,
+      @RequestHeader("Authorization") String header,
+      @PathVariable Long id,
       @RequestBody RequestDelivery requestDelivery) {
-    Long orderId = Long.valueOf(jwtUtil.getId(authorizationHeader));
+    String userId = jwtUtil.getId(header);
+    String role = jwtUtil.getRole(header);
+    logger.info(">>> id: {} , role: {}", userId, role);
 
     try {
-      logger.info(">>> id : {}, params : {}", orderId, requestDelivery);
-      deliveryService.updateDeliveryDetailsById(orderId, requestDelivery);
+      logger.info(">>> orderId : {}, params : {}", id, requestDelivery);
+      deliveryService.updateDeliveryDetailsById(id, requestDelivery);
       return ResponseEntity.ok("배송 정보가 변경되었습니다.");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -100,8 +95,8 @@ public class OrderController {
   /* 회원 : 배송 전 주문취소 */
   @PutMapping("/v1/orders/cancel")
   public ResponseEntity<String> cancelOrder(
-      @RequestHeader("Authorization") String authorizationHeader) {
-    Long userId = Long.valueOf(jwtUtil.getId(authorizationHeader));
+      @RequestHeader("Authorization") String header) {
+    Long userId = Long.valueOf(jwtUtil.getId(header));
 
     try {
       logger.info(">>> id : {}", userId);
@@ -124,14 +119,9 @@ public class OrderController {
 
     try {
       logger.info(">>>> role: {}", role);
-
-      if ("ADMIN".equalsIgnoreCase(role)) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<OrderBookDTO> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
-        return ResponseEntity.ok().body(allOrders);
-      } else {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-      }
+      Pageable pageable = PageRequest.of(page, size);
+      Page<OrderBookDTO> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
+      return ResponseEntity.ok().body(allOrders);
     } catch (Exception e) {
       logger.error(">>>> 에러 : {}", e.getMessage());
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -145,15 +135,10 @@ public class OrderController {
       @RequestBody RequestOrderStatusUpdate orderUpdate) {
     String role = jwtUtil.getRole(header);
 
-    try{
+    try {
       logger.info(">>>> role: {}", role);
-
-      if ("ADMIN".equalsIgnoreCase(role)) {
-        orderService.adminUpdateOrderStatueById(orderUpdate);
-        return ResponseEntity.ok().body("");
-      } else {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한이 없습니다.");
-      }
+      orderService.adminUpdateOrderStatueById(orderUpdate);
+      return ResponseEntity.ok().body("");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
           .body("서버 에러가 발생했습니다." + e.getMessage());
@@ -162,8 +147,18 @@ public class OrderController {
 
   /* 관리자 : 주문 내역 삭제 (delete로 구현함) */
   @DeleteMapping("/v1/admin/orders/{id}")
-  public ResponseEntity<Void> adminDeleteOrder(@PathVariable Long id) {
-    orderService.deleteById(id);
-    return ResponseEntity.ok().build();
+  public ResponseEntity<String> adminDeleteOrder(
+      @PathVariable Long id, @RequestHeader("Authorization") String header) {
+    String role = jwtUtil.getRole(header);
+    try {
+      logger.info(">>>> role: {}", role);
+      orderService.deleteById(id);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("서버 에러가 발생했습니다." + e.getMessage());
+    }
   }
+
+
 }

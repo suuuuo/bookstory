@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
 
   /* 회원 : 배송 전, 주문 정보 수정 */
-  Optional<Delivery> findById(Long orderId);
+  Optional<Delivery> findByOrderId(Long orderId);
   Delivery save(Delivery delivery);
 }
