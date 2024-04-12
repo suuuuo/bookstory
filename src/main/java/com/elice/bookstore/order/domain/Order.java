@@ -27,7 +27,6 @@ import org.hibernate.annotations.CreationTimestamp;
  */
 @Entity
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -61,13 +60,40 @@ public class Order {
     private int totalPrice;
 
     @ColumnDefault("0")
-    private Boolean isExist;
+    @Builder.Default
+    private Boolean isExist = false;
 
-    public Order(User user, Cart cart, OrderStatus orderStatus, int totalPrice) {
+    // Setter 메서드 추가
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public void setIsExist(Boolean isExist) {
+        this.isExist = isExist;
     }
 }
 
