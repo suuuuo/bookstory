@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +31,7 @@ public class CartController {
   /** 장바구니 화면 : 담긴 상품들 조회 -> user id? loadUserByUsername */
   @GetMapping("/v1/cart")
   public ResponseEntity<List<ResponseCartBook>> CartPageTest(
-      @RequestHeader("Authorization") String authorizationHeader /*토큰으로 조회.. 추후 수정*/) {
+      @RequestHeader("access") String authorizationHeader /*토큰으로 조회.. 추후 수정*/) {
 
     Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
     Boolean isValid = jwtUtil.isValid(authorizationHeader);
@@ -45,7 +46,7 @@ public class CartController {
   /** 장바구니에 책 담기 ; 장바구니 담기 버튼;처음 담는 상품 추가, 이미 있는 상품은 count만 증가 */
   @PostMapping("/v1/cart")
   public ResponseEntity<ResponseCartBook> CartAddTest(
-      @RequestHeader("Authorization") String authorizationHeader,
+      @RequestHeader("access") String authorizationHeader,
       @RequestBody RequestCartBook requestCartBook) {
 
     Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
@@ -62,7 +63,7 @@ public class CartController {
   /** 장바구니에 책 담기 ; 웹에서 조작한 상품 개수 반영 */
   @PutMapping("/v1/cart")
   public ResponseEntity<ResponseCartBook> CartPatch(
-      @RequestHeader("Authorization") String authorizationHeader,
+      @RequestHeader("access") String authorizationHeader,
       @RequestBody RequestCartBook requestCartBook) {
 
     Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
@@ -79,15 +80,14 @@ public class CartController {
   /*
    *장바구니에서 상품 삭제
    */
-  @DeleteMapping("/v1/cart")
+  @DeleteMapping("/v1/cart/{cartBookId}")
   public void DeleteCartBook(
-      @RequestHeader("Authorization") String authorizationHeader,
-      @RequestBody RequestCartBook requestCartBook) {
+      @RequestHeader("access") String authorizationHeader, @PathVariable long cartBookId) {
     // 프론트엔드에서 체크박스 상태 확인해서 체크된 것들만 요청
     Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
     Boolean isValid = jwtUtil.isValid(authorizationHeader);
     if (isValid && id != null) {
-      cartBookService.DeleteCartBook(requestCartBook.id());
+      cartBookService.DeleteCartBook(cartBookId);
     }
   }
 }
