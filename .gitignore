@@ -201,4 +201,6 @@ gradle-app.setting
 *.hprof
 
 .idea
+
+/resources/application.yml
 # End of https://www.toptal.com/developers/gitignore/api/macos,intellij,java,gradle

@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +23,9 @@ import org.hibernate.annotations.CreationTimestamp;
  */
 @Entity
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Delivery extends BaseTimeEntity {
 
   @Id
@@ -50,9 +52,25 @@ public class Delivery extends BaseTimeEntity {
   private String request;
 
   @Column
-//  @CreationTimestamp
+  @CreationTimestamp
   private LocalDate deliveredDate;
 
   @ColumnDefault("0")
   private Boolean isExist;
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public void setReceiverName(String receiverName) {
+    this.receiverName = receiverName;
+  }
+
+  public void setReceiverPhoneNumber(String receiverPhoneNumber) {
+    this.receiverPhoneNumber = receiverPhoneNumber;
+  }
+
+  public void setRequest(String request) {
+    this.request = request;
+  }
 }

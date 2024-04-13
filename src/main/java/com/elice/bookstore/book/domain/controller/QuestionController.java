@@ -5,57 +5,71 @@ import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.book.domain.dto.RequestQuestion;
 
 import com.elice.bookstore.book.domain.service.QuestionService;
+import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
 import com.elice.bookstore.user.domain.User;
+import com.elice.bookstore.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/questions")
+@RequestMapping("/api")
 public class QuestionController {
     private final QuestionService questionService;
-
+    private final UserRepository userRepository;
     /**
      * Question : Post;
      */
 
-    @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question){
+    @PostMapping("/v1/question")
 
-        // 현재 인증된 사용자의 정보를 가져옵니다.
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //String currentUserName = authentication.getName();
+    public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // 현재 사용자 객체를 얻기 위한 서비스 호출 (가정)
-        //User currentUser = userService.findByUsername(currentUserName);
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        long id = Long.parseLong(customUserDetails.getId());
 
-        // Question 생성 서비스를 호출하면서 현재 사용자 정보도 함께 전달합니다.
-        //Question newQuestion = questionService.createQuestion(question, currentUser);
+        Optional<User> currentUser = userRepository.findByIdAndIsExist(id, true);
 
-        Question newQuestion = questionService.createQuestion(question, new User());
+        if (currentUser.isEmpty()) {
+            throw new SecurityException("사용자 인증 정보가 없습니다.");
+        }
+        Question newQuestion = questionService.createQuestion(question, currentUser.get());
         return ResponseEntity.ok(newQuestion);
     }
+
 
 
     /**
      * Question : Get;
      */
-    @GetMapping
-    public ResponseEntity<List<Question>> findALlQuestion(){
+    @GetMapping("/v1/question")
+    public ResponseEntity<List<Question>> findALlQuestion() {
         List<Question> questions = questionService.findAllQuestion();
 
+        return ResponseEntity.ok(questions);
+    }
+
+    @GetMapping("/v1/question/{id}")
+    public ResponseEntity<List<Question>> findQuestionsByBookId(@PathVariable Long id) {
+        List<Question> questions = questionService.findQuestionsByBookId(id);
         return ResponseEntity.ok(questions);
     }
 
     /**
      * Question : Delete;
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id){
-        questionService.deleteQuestion(id);
+
+    @DeleteMapping("/v1/question/{id}")
+    public ResponseEntity<?> deleteQuestion(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
+        questionService.deleteQuestionIfOwnedByUser(id, currentUser.getId());
 
         return ResponseEntity.ok().build();
     }
