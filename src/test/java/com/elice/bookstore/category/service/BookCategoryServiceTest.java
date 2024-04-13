@@ -3,6 +3,8 @@ package com.elice.bookstore.category.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.elice.bookstore.book.domain.Book;
+import com.elice.bookstore.book.domain.dto.RequestBook;
+import com.elice.bookstore.book.domain.service.BookService;
 import com.elice.bookstore.category.domain.BookCategory;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.category.repository.BookCategoryRepository;
@@ -24,7 +26,8 @@ class BookCategoryServiceTest {
   BookCategoryRepository bookCategoryRepository;
   @Autowired
   BookCategoryService bookCategoryService;
-
+  @Autowired
+  BookService bookService;
   @Autowired
   CategoryService categoryService;
 
@@ -36,16 +39,12 @@ class BookCategoryServiceTest {
     Category category = new Category();
     category.setName("소설");
     Category category2 = new Category();
-    category.setBookCategory(bookCategory);
-    category2.setBookCategory(bookCategory);
     category.setName("문학");
     //when
     Category categoryA = categoryService.create(category);
     Category categoryB = categoryService.create(category2);
     BookCategory bookCategory1 = bookCategoryService.create(bookCategory);
     //then
-    Assertions.assertThat(categoryA.getBookCategory()).isEqualTo(bookCategory1);
-    Assertions.assertThat(categoryB.getBookCategory()).isEqualTo(bookCategory1);
   }
 
   @Test
@@ -58,6 +57,26 @@ class BookCategoryServiceTest {
     bookCategoryService.delete(bookCategory1);
     //then
     Assertions.assertThat(bookCategoryService.read(id)).isEmpty();
+  }
+
+  @Test
+  public void 찾기() {
+    //given
+    RequestBook book = new RequestBook();
+    bookService.save(book);
+
+    Category category = new Category();
+    category.setId(1L);
+    BookCategory bookCategory = new BookCategory();
+    bookCategory.setId(3L);
+    bookCategory.setCategory(category);
+    bookCategoryService.create(bookCategory);
+
+    //When
+    Optional<BookCategory> bookCategoryById = bookCategoryService.findByBookAndCategory(1L, 1L);
+
+     //then
+    Assertions.assertThat(bookCategoryById.get().getId()).isEqualTo(3L);
   }
 
 
