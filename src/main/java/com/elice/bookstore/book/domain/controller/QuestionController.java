@@ -29,6 +29,7 @@ public class QuestionController {
      */
 
     @PostMapping("/v1/question")
+
     public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -67,14 +68,9 @@ public class QuestionController {
      */
 
     @DeleteMapping("/v1/question/{id}")
-<<<<<<< HEAD
     public ResponseEntity<?> deleteQuestion(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
         questionService.deleteQuestionIfOwnedByUser(id, currentUser.getId());
-=======
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
-        questionService.deleteQuestion(id);
 
->>>>>>> 09d7729 (fix : merge conflicts)
         return ResponseEntity.ok().build();
     }
 

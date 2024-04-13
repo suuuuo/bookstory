@@ -64,6 +64,7 @@ class QuestionServiceTest {
 
         // 생성된 Question 객체에서 createdBy 필드 검증
         assertThat(result.getCreatedBy()).isEqualTo(user.getId());
+
     }
 
     @DisplayName("질문 전체 찾기 성공")
