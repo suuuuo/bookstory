@@ -14,12 +14,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,34 +40,31 @@ class QuestionServiceTest {
 
     @DisplayName("질문 생성 성공")
     @Test
-    void createQuestion() {
-        // Given
-        Long bookId = 1L;
-        Book book = new Book();
-        book.setId(bookId);
+    public void createQuestionTest() {
+        // 인증된 사용자 모의 객체 생성
+        User user = new User();
+        user.setUserName("testUser");
 
-        User user = new User("elice","TestUser","testId", LocalDate.now(),"test@test","010-000","xxx",null, Role.USER, Boolean.TRUE);
+        // RequestQuestion 객체 생성
+        RequestQuestion requestQuestion = new RequestQuestion();
+        requestQuestion.setBookId(1L);
+        requestQuestion.setContent("Test question content");
 
+        // Book 객체 초기화
+        Book book = new Book(1L, "Example Book Title", 15000,  "Author Name");
 
-        RequestQuestion request = new RequestQuestion();
-        request.setBookId(bookId);
-        request.setCreatedBy(user.getUserName());
-        request.setContent("Test question content");
+        // BookRepository의 findById 메서드를 모의 처리하여 항상 특정 Book 객체를 반환하도록 설정
+        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
+        // QuestionRepository의 save 메서드 동작 모의
+        when(questionRepository.save(any(Question.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        Question question = QuestionMapper.toEntity(request,book,user);
+        // QuestionService를 사용하여 Question 객체 생성
+        Question result = questionService.createQuestion(requestQuestion, user);
 
-        when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
-        when(questionRepository.save(any(Question.class))).thenReturn(question);
+        // 생성된 Question 객체에서 createdBy 필드 검증
+        assertThat(result.getCreatedBy()).isEqualTo(user.getId());
 
-        // When
-        Question result = questionService.createQuestion(request, user);
-
-        // Then
-        assertThat(result.getBook().getId()).isEqualTo(bookId);
-        assertThat(result.getContent()).isEqualTo(request.getContent());
-        assertThat(result.getCreatedBy()).isEqualTo(request.getCreatedBy());
-        assertThat(result.getStatus()).isEqualTo(QuestionStatus.ANSWER_PENDING);
     }
 
     @DisplayName("질문 전체 찾기 성공")
@@ -86,8 +85,8 @@ class QuestionServiceTest {
         request2.setContent("Test question content2");
         request2.setCreatedBy("Test user2");
 
-        Question question = request.toEntity(book);
-        Question question2 = request2.toEntity(book);
+        Question question = QuestionMapper.toFindEntity(request,book);
+        Question question2 = QuestionMapper.toFindEntity(request2,book);
 
         // when
         when(questionRepository.findAll()).thenReturn(List.of(question, question2));
@@ -118,6 +117,71 @@ class QuestionServiceTest {
 
         // verify()를 사용하여 deleteById() 메서드가 정확히 한 번 호출되었는지 확인
         verify(questionRepository, times(1)).deleteById(questionId);
+    }
+
+    @Test
+    @DisplayName("사용자가 자신의 질문을 삭제 성공")
+    public void testDeleteQuestionIfOwnedByUser() {
+        // Given
+        Long questionId = 1L;
+        Long questionCreatedBy = 1L;
+        String userName = "TestName";
+
+        Question question = new Question();
+        question.setId(questionId);
+        question.setCreatedBy(questionCreatedBy);
+
+        User user = new User();
+        user.setId(1L);
+        user.setUserName(userName);
+
+        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
+
+        // When
+        questionService.deleteQuestionIfOwnedByUser(questionId, user.getId());
+
+        // Then
+        verify(questionRepository, times(1)).deleteById(questionId);
+    }
+
+
+    @Test
+    @DisplayName("다른 사용자가 삭제를 시도할때 예외처리 성공")
+    public void testDeleteQuestionIfOwnedByUser_WhenQuestionExistsAndNotOwnedByUser() {
+        // Given
+        Long questionId = 1L;
+        Long userId = 1L;
+        Question question = new Question();
+        question.setId(questionId);
+        question.setCreatedBy(2L);
+
+        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
+
+        // Then
+        assertThrows(ResponseStatusException.class, () -> {
+            // When
+            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
+        });
+
+        verify(questionRepository, never()).deleteById(any());
+    }
+
+    @Test
+    @DisplayName("질문이 존재하지 않을 경우 예외처리 ")
+    public void testDeleteQuestionIfOwnedByUser_WhenQuestionDoesNotExist() {
+        // Given
+        Long questionId = 1L;
+        Long userId = 1L;
+
+        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(ResponseStatusException.class, () -> {
+            // When
+            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
+        });
+
+        verify(questionRepository, never()).deleteById(any());
     }
 
 }

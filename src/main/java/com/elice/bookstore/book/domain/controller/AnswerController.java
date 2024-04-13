@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/answers")
+@RequestMapping("/api")
 public class AnswerController {
     private final AnswerService answerService;
 
-    @PostMapping
+
+    @PostMapping("/v1/answer")
     public ResponseEntity<Answer> addAnswer(@RequestBody Answer answer) {
         Answer savedAnswer = answerService.saveAnswer(answer);
         return ResponseEntity.ok(savedAnswer);

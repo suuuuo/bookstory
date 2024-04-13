@@ -15,13 +15,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class BookController {
     private final BookService bookService;
 
     /**
      * Post
      */
-    @PostMapping("/api/books")
+    @PostMapping("/v1/books")
     public ResponseEntity<ResponseBook> addBook(@RequestBody RequestBook requestBook) {
         Book saveBook = bookService.save(requestBook);
         ResponseBook responseBook = new ResponseBook(saveBook);
@@ -31,7 +32,7 @@ public class BookController {
     /**
      * Get
      */
-    @GetMapping("/api/books")
+    @GetMapping("/v1/books")
     public ResponseEntity<List<ResponseBook>> findAllBooks() {
         List<ResponseBook> books = bookService.findAll()
                 .stream()
@@ -42,8 +43,7 @@ public class BookController {
                 .body(books);
 
     }
-    @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("/api/books/{id}")
+    @GetMapping("/v1/books/{id}")
     public ResponseEntity<ResponseBook> findByIdBooks(@PathVariable Long id) {
         Book book = bookService.findById(id);
 
@@ -53,7 +53,7 @@ public class BookController {
     /**
      * Put
      */
-    @PutMapping("/api/books/{id}")
+    @PutMapping("/v1/books/{id}")
     public ResponseEntity<ResponseBook> updateBook(@PathVariable Long id, @RequestBody RequestUpdateBook requestUpdateBook) {
         Book updatedBook = bookService.update(id, requestUpdateBook);
         ResponseBook responseBook = new ResponseBook(updatedBook);
@@ -65,7 +65,7 @@ public class BookController {
     /**
      * Delete
      */
-    @DeleteMapping("/api/books/{id}")
+    @DeleteMapping("/v1/books/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
 
