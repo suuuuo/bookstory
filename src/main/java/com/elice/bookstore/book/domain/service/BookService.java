@@ -1,6 +1,7 @@
 package com.elice.bookstore.book.domain.service;
 
 import com.elice.bookstore.book.domain.Book;
+import com.elice.bookstore.book.domain.BookSellStatus;
 import com.elice.bookstore.book.domain.dto.ApiResponse;
 import com.elice.bookstore.book.domain.dto.BookDetailResponse;
 import com.elice.bookstore.book.domain.repository.BookRepository;
@@ -9,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class BookService {
@@ -23,11 +25,11 @@ public class BookService {
 
     public Flux<BookDetailResponse> fetchBestSellers() {
         return webClient.get()
-                .uri("/api/gw/pub/pdt/best-seller/total?page=1&per=20&period=002&bsslBksClstCode=A")
+                .uri("/api/gw/pub/pdt/best-seller/total?page=1&per=70&period=002&bsslBksClstCode=A")
                 .retrieve()
                 .bodyToMono(ApiResponse.class)
                 .flatMapMany(response -> Flux.fromIterable(response.getData().getBestSeller()))
-                .map(detail -> new BookDetailResponse(detail.getCmdtName(), detail.getChrcName(), detail.getPbcmName(),detail.getPrice(),detail.getInbukCntt()))
+                .map(detail -> new BookDetailResponse(detail.getCmdtCode(),detail.getCmdtName(), detail.getChrcName(), detail.getPbcmName(),detail.getPrice(),detail.getInbukCntt()))
                 .onErrorResume(e -> Flux.empty()); // 에러 발생 시 빈 Flux 반환
     }
 
@@ -35,15 +37,23 @@ public class BookService {
         return fetchBestSellers()
                 .map(bookDetailResponse -> {
                     Book book = Book.builder()
+                            .isbn(bookDetailResponse.getIsbn())
                             .itemName(bookDetailResponse.getItemName())
                             .author(bookDetailResponse.getAuthor())
                             .publisher(bookDetailResponse.getPublisher())
                             .price(new BigDecimal(bookDetailResponse.getPrice()))
                             .description(bookDetailResponse.getDescription())
+                            .stock(100)
+                            .sellCount(0)
+                            .sellStatus(BookSellStatus.AVAILABLE)
                             .build();
 
                     return bookRepository.save(book);
                 });
+    }
+
+    public List<Book> findAll(){
+        return bookRepository.findAll();
     }
 
 

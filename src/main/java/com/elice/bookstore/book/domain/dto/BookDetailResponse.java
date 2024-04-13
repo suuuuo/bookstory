@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookDetailResponse {
+
+    private String isbn;
     private String itemName;
     private String author;
     private String publisher;

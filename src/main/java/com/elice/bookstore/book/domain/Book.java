@@ -56,8 +56,7 @@ public class Book extends BaseEntity {
   @Column
   private String publisher;
 
-  @Column
-  @Lob
+  @Column(columnDefinition = "LONGTEXT")
   private String description;
 
 

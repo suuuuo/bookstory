@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/books")
@@ -30,5 +32,12 @@ public class BookController {
     public Flux<Book> fetchAndSave(){
         return bookService.fetchAndSaveBestSellers();
     }
+
+    @GetMapping("/")
+    public List<Book> findAllBook(){
+        return bookService.findAll();
+    }
+
+
 
 }

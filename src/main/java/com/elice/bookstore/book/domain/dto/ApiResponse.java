@@ -19,6 +19,7 @@ public class ApiResponse {
     @Getter
     @NoArgsConstructor
     public static class BookDetail {
+        private String cmdtCode; // isbn
         private String cmdtName; // 책 제목
         private String chrcName; // 저자 이름
         private String pbcmName; // 출판사
