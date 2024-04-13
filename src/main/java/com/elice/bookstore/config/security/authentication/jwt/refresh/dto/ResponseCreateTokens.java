@@ -1,4 +1,4 @@
-package com.elice.bookstore.config.security.authentication.refresh.dto;
+package com.elice.bookstore.config.security.authentication.jwt.refresh.dto;
 
 import jakarta.validation.constraints.NotNull;
 

@@ -4,7 +4,6 @@ import com.elice.bookstore.config.exception.domain.user.UserDuplicatedUserIdExce
 import com.elice.bookstore.config.exception.domain.user.UserEmptyPasswordException;
 import com.elice.bookstore.config.exception.domain.user.UserNotMatchPasswordException;
 import com.elice.bookstore.config.exception.domain.user.UserShortPasswordException;
-import com.elice.bookstore.config.exception.global.ErrorCode;
 import com.elice.bookstore.user.domain.Role;
 import com.elice.bookstore.user.domain.User;
 import com.elice.bookstore.user.dto.RequestRegisterUser;
@@ -47,7 +46,7 @@ public class UserService {
    */
   public ResponseRegisterUser signUp(RequestRegisterUser requestRegisterUser) {
 
-    if (userRepository.existsByUserIdAndIsExist(requestRegisterUser.email(), true)) {
+    if (userRepository.existsByEmailAndIsExist(requestRegisterUser.email(), true)) {
       throw new UserDuplicatedUserIdException();
     }
 

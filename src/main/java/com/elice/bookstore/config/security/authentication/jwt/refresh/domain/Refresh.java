@@ -1,4 +1,4 @@
-package com.elice.bookstore.config.security.authentication.refresh.domain;
+package com.elice.bookstore.config.security.authentication.jwt.refresh.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,19 +21,19 @@ public class Refresh {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String email;
+  private String userId;
   private String refresh;
   private String expiration;
 
   /**
    * refresh constructor.
    *
-   * @param email if a user is issued multiple tokens, this is required to retrieve all tokens.
+   * @param userId if a user is issued multiple tokens, this is required to retrieve all tokens.
    * @param refresh .
    * @param expiration need to remove expired tokens.
    */
-  public Refresh(String email, String refresh, String expiration) {
-    this.email = email;
+  public Refresh(String userId, String refresh, String expiration) {
+    this.userId = userId;
     this.refresh = refresh;
     this.expiration = expiration;
   }

@@ -1,6 +1,6 @@
-package com.elice.bookstore.config.security.authentication.refresh.repository;
+package com.elice.bookstore.config.security.authentication.jwt.refresh.repository;
 
-import com.elice.bookstore.config.security.authentication.refresh.domain.Refresh;
+import com.elice.bookstore.config.security.authentication.jwt.refresh.domain.Refresh;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

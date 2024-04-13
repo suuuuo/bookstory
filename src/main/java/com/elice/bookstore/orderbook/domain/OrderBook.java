@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,8 +24,9 @@ import lombok.Setter;
  */
 @Entity
 @Getter
-@Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class OrderBook extends BaseTimeEntity {
 
     @Id
@@ -45,8 +48,27 @@ public class OrderBook extends BaseTimeEntity {
     @Column
     private int count;
 
-
 //    @Column
 //    private int price;
 
+    // ㅠ .. setter..
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

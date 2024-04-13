@@ -56,7 +56,7 @@ class UserServiceTest {
         registerForm.phoneNumber(),
         registerForm.address(),
         0L, Role.USER, true);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(false);
     when(userRepository.save(any(User.class))).thenReturn(user);
 
     //when
@@ -71,55 +71,55 @@ class UserServiceTest {
   @Test
   void signup_failByExistUserId() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(true);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(true);
 
     //when
 
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(DuplicatedException.class)
-        .hasMessageContaining("The user's id is duplicated. Please check your request.");
+        .hasMessageContaining("The user's id is duplicated.");
   }
 
   @DisplayName("[실패] 유저 생성 시 비밀번호 공백은 안된다.")
   @Test
   void signUp_failByEmptyPassword() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1","", "", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(InvalidFormatException.class)
-        .hasMessageContaining("The password is empty. Please check your request.");
+        .hasMessageContaining("The password is empty.");
   }
 
   @DisplayName("[실패] 유저 생성 시 패스워드는 일치해야 한다.")
   @Test
   void signup_failByNotMatchPassword() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1", "1234", "7890", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(InvalidFormatException.class)
-        .hasMessageContaining("The password is not match. Please check your request.");
+        .hasMessageContaining("The password is not match.");
   }
 
   @DisplayName("[실패] 유저 생성 시 패스워드는 최소 4글자 이상이어야 한다.")
   @Test
   void signup_failByAtLeast4Character() {
     RequestRegisterUser registerForm = new RequestRegisterUser("user1", "123", "123", LocalDate.of(2000, 1, 1), "user1@gmail.com", "010-1111-1111", null);
-    when(userRepository.existsByUserIdAndIsExist(registerForm.email(), true)).thenReturn(false);
+    when(userRepository.existsByEmailAndIsExist(registerForm.email(), true)).thenReturn(false);
 
     //when
 
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(InvalidFormatException.class)
-        .hasMessageContaining("The password must be at least 4 characters. Please check your request.");
+        .hasMessageContaining("The password must be at least 4 characters.");
   }
 }
