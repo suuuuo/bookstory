@@ -30,9 +30,8 @@ public class Category extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "book_category_id")
-  private BookCategory bookCategory;
+  @OneToMany(mappedBy = "category")
+  public List<BookCategory> books = new ArrayList<>();
 
   @Column
   private String name;

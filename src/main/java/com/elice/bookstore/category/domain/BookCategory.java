@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +27,14 @@ public class BookCategory {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @OneToMany(mappedBy = "bookCategory")
-  List<Category> categoryList = new ArrayList<>();
+  @ManyToOne
+  @JoinColumn(name = "category_id")
+  Category category;
 
 
-  @OneToMany(mappedBy = "bookCategory")
-  List<Book> books = new ArrayList<>();
+  @ManyToOne
+  @JoinColumn(name = "book_id")
+  Book book;
 
 }
 
