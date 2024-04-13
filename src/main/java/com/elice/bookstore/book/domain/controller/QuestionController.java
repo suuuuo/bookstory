@@ -25,9 +25,13 @@ public class QuestionController {
 
     @PostMapping("/v1/question")
     public ResponseEntity<Question> createQuestion(@RequestBody RequestQuestion question, @AuthenticationPrincipal User currentUser) {
+        if (currentUser == null) {
+            throw new SecurityException("사용자 인증 정보가 없습니다.");
+        }
         Question newQuestion = questionService.createQuestion(question, currentUser);
         return ResponseEntity.ok(newQuestion);
     }
+
 
 
     /**
