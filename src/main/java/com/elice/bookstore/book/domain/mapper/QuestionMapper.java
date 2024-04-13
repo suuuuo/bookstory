@@ -16,7 +16,7 @@ public class QuestionMapper {
         return Question.builder()
                 .book(book)
                 .content(request.getContent())
-                .createdBy(user.getId())
+                .createdBy(user.getUserName())
                 .status(QuestionStatus.ANSWER_PENDING)
                 .build();
     }

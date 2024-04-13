@@ -29,12 +29,12 @@ public class Question {
 
     private QuestionStatus status;
     private String content;
-    private Long createdBy;
+    private String createdBy;
     private LocalDateTime createdAt;
 
 
     @Builder
-    public Question(Book book, QuestionStatus status, String content, Long createdBy) {
+    public Question(Book book, QuestionStatus status, String content, String createdBy) {
         this.book = book;
         this.status = status;
         this.content = content;
