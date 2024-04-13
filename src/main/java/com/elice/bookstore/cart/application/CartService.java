@@ -18,7 +18,7 @@ public class CartService {
   /** 장바구니 조회 */
   @Transactional
   public Cart findCart(Long id) { // 유저 정보로 장바구니 가져오기
-    Cart cart = cartRepository.findById(id);
+    Cart cart = cartRepository.findByUserId(id);
 
     if (cart == null) { // 유저에게 장바구니가 없으면 유저 정보 가져와서 장바구니 생성
       Optional<User> user =

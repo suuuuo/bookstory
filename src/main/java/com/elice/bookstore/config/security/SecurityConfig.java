@@ -108,8 +108,8 @@ public class SecurityConfig {
 
     http
         .authorizeHttpRequests((auth) -> auth
-            .requestMatchers("/oauth2/**", "/login/**", "/",
-                "/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
+            .requestMatchers("/oauth2/**", "/login/**", "/"
+                , "/v1/bringCategory","/v1/bookCategory/**" ,"/v1/bringBookCategory/**","/v1/bringBookFromCategory/**" ,"/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
                 .requestMatchers("/api/v1/question/**").permitAll()
 //                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
