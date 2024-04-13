@@ -3,6 +3,8 @@ package com.elice.bookstore.category.service;
 import com.elice.bookstore.category.domain.BookCategory;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.category.repository.BookCategoryRepository;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -35,10 +37,16 @@ public class BookCategoryService {
     return bookCategory;
   }
 
+  public Optional<BookCategory> findByBookAndCategory(Long bookId,Long categoryId){
+    Optional<BookCategory> bookCategory = bookCategoryRepository.findByBookIdAndCategoryId(bookId,categoryId);
+    return bookCategory;
+  }
+
 
   public void delete(BookCategory bookCategory){
     bookCategoryRepository.delete(bookCategory);
   }
+
 
 
 }
