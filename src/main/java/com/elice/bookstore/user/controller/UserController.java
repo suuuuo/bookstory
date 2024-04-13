@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +37,7 @@ public class UserController {
    *
    * @return responseRegisterUser.
    */
+
   @PostMapping("/api/v1/signup")
   public ResponseEntity<ResponseRegisterUser> signup(
       @RequestBody RequestRegisterUser requestRegisterUser) {

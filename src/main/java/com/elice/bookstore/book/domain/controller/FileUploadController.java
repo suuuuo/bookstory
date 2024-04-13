@@ -16,7 +16,7 @@ public class FileUploadController {
     @Autowired
     private FileUploadService fileUploadService;
 
-    @PostMapping("/upload")
+    @PostMapping("/api/v1/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             return fileUploadService.uploadFile(file);

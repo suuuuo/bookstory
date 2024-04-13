@@ -27,7 +27,7 @@ public class FileUploadServiceTest {
     @BeforeEach
     void setUp() {
         // 임시 업로드 디렉토리 설정
-        fileUploadService.setUploadDir(sharedTempDir.toString());
+//        fileUploadService.setUploadDir(sharedTempDir.toString());
     }
 
     @Test

@@ -12,6 +12,7 @@ import com.elice.bookstore.config.security.filter.LoginFilter;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -97,6 +98,9 @@ public class SecurityConfig {
               return config;
             }));
 
+
+
+
     http
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
@@ -106,7 +110,11 @@ public class SecurityConfig {
         .authorizeHttpRequests((auth) -> auth
             .requestMatchers("/oauth2/**", "/login/**", "/"
                 , "/v1/bringCategory","/v1/bookCategory/**" ,"/v1/bringBookCategory/**","/v1/bringBookFromCategory/**" ,"/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
+                .requestMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
+                .requestMatchers("/api/v1/question/**").permitAll()
+//                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
             .requestMatchers("/api/v1/admin").hasRole("ADMIN")
+
             .anyRequest().authenticated());
 
     http
