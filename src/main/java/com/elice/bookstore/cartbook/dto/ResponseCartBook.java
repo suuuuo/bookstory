@@ -1,10 +1,4 @@
 package com.elice.bookstore.cartbook.dto;
 
-public record ResponseCartBook (
-    long id,
-    long cartId,
-    String itemName,
-    int price,
-    String imgPath,
-    int count
-){}
+public record ResponseCartBook(
+    long id, long cartId, long bookId, String itemName, int price, String imgPath, int count) {}
