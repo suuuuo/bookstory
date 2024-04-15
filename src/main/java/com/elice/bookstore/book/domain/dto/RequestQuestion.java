@@ -16,6 +16,7 @@ public class RequestQuestion {
 
     private Long bookId;
     private String content;
+    private String title;
     private String createdBy;
 
 
@@ -23,6 +24,7 @@ public class RequestQuestion {
     public Question toEntity(Book book) {
         return Question.builder()
                 .book(book)
+                .title(title)
                 .content(content)
                 .createdBy(createdBy)
                 .status(QuestionStatus.ANSWER_PENDING)

@@ -29,6 +29,7 @@ public class Question {
 
 
     private QuestionStatus status;
+    private String title;
     private String content;
     private String createdBy;
     private LocalDateTime createdAt;
@@ -38,9 +39,10 @@ public class Question {
     private User user;
 
     @Builder
-    public Question(Book book, User user, QuestionStatus status, String content, String createdBy) {
+    public Question(Book book, User user, String title, QuestionStatus status, String content, String createdBy) {
         this.book = book;
         this.user = user;
+        this.title = title;
         this.status = status;
         this.content = content;
         this.createdBy = createdBy;
