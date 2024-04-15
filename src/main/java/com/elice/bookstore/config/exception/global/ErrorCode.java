@@ -15,7 +15,7 @@ public enum ErrorCode {
   METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "E4", "Unsupported HTTP method."),
   INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E5", "Internal server error occurred."),
 
-  USER_DUPLICATED_USER_ID(HttpStatus.BAD_REQUEST, "U1", "The user's id is duplicated."),
+  USER_DUPLICATED_EMAIL(HttpStatus.BAD_REQUEST, "U1", "The user's email is duplicated."),
   USER_NOT_MATCH_PASSWORD(HttpStatus.BAD_REQUEST, "U2", "The password is not match."),
   USER_EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, "U3", "The password is empty."),
   USER_SHORT_PASSWORD(HttpStatus.BAD_REQUEST, "U4", "The password must be at least 4 characters."),

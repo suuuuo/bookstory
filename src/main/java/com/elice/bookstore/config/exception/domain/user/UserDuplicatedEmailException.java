@@ -13,6 +13,6 @@ public class UserDuplicatedEmailException extends DuplicatedException {
   }
 
   public UserDuplicatedEmailException() {
-    super(ErrorCode.USER_DUPLICATED_USER_ID);
+    super(ErrorCode.USER_DUPLICATED_EMAIL);
   }
 }

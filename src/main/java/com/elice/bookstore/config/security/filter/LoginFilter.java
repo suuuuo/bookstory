@@ -145,6 +145,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
       AuthenticationException failed
   ) throws IOException, ServletException {
 
-    response.setStatus(401);
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    response.getWriter().write(failed.getMessage());
   }
 }
