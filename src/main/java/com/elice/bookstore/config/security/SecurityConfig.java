@@ -113,7 +113,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
                 .requestMatchers("/api/v1/question/**").permitAll()
 //                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
-            .requestMatchers("/api/v1/admin").hasRole("ADMIN")
+            .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 
             .anyRequest().authenticated());
 

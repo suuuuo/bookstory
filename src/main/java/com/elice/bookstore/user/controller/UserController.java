@@ -42,33 +42,35 @@ public class UserController {
     return new ResponseEntity<>(responseRegisterUser, HttpStatus.OK);
   }
 
-  @GetMapping("/api/v1/users/me")
-  public ResponseEntity<ResponseLookupUser> lookup() {
+  @GetMapping("/api/v1/users/{id}")
+  public ResponseEntity<ResponseLookupUser> lookup(
+      @PathVariable String id) {
 
-    ResponseLookupUser responseLookupUser = userService.lookup();
+    ResponseLookupUser responseLookupUser = userService.lookup(id);
 
     return new ResponseEntity<>(responseLookupUser, HttpStatus.OK);
   }
 
-  @PutMapping("/api/v1/users/me")
+  @PutMapping("/api/v1/users/{id}")
   public ResponseEntity<ResponseLookupUser> modify(
+      @PathVariable String id,
       @RequestBody RequestModifyUser requestModifyUser) {
 
-    ResponseLookupUser responseLookupUser = userService.modify(requestModifyUser);
+    ResponseLookupUser responseLookupUser = userService.modify(id, requestModifyUser);
 
     return new ResponseEntity<>(responseLookupUser, HttpStatus.OK);
   }
 
   @DeleteMapping("/api/v1/users/me")
   public ResponseEntity<Void> delete(
+      @PathVariable String id,
       @RequestBody RequestDeleteUser requestDeleteUser
   ) {
 
-    userService.delete(requestDeleteUser);
+    userService.delete(id, requestDeleteUser);
 
     return new ResponseEntity<>(HttpStatus.OK);
   }
-
   /**
    * cors test controller.
 
@@ -81,8 +83,6 @@ public class UserController {
 
     CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
     String id = customUserDetails.getId();
-
-
 
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
     Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
