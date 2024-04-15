@@ -129,7 +129,7 @@ class QuestionServiceTest {
 
         Question question = new Question();
         question.setId(questionId);
-        question.setCreatedBy(questionCreatedBy);
+
 
         User user = new User();
         user.setId(1L);
@@ -153,7 +153,7 @@ class QuestionServiceTest {
         Long userId = 1L;
         Question question = new Question();
         question.setId(questionId);
-        question.setCreatedBy(2L);
+
 
         when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
 
