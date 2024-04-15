@@ -1,6 +1,7 @@
 package com.elice.bookstore.user.domain;
 
 import com.elice.bookstore.config.audit.BaseEntity;
+import com.elice.bookstore.user.dto.RequestModifyUser;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -97,5 +98,22 @@ public class User extends BaseEntity {
   public User(String id, Role role) {
     this.id = Long.parseLong(id);
     this.role = role;
+  }
+
+  /**
+   * modify user info.
+   *
+   * @param requestModifyUser .
+   */
+  public void modifyUser(RequestModifyUser requestModifyUser) {
+    this.userName = requestModifyUser.userName();
+    this.dateOfBirth = requestModifyUser.dateOfBirth();
+    this.email = requestModifyUser.email();
+    this.phoneNumber = requestModifyUser.phoneNumber();
+    this.address = requestModifyUser.address();
+  }
+
+  public void deleteUser() {
+    this.isExist = false;
   }
 }

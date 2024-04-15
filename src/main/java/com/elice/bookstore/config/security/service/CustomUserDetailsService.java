@@ -1,5 +1,6 @@
 package com.elice.bookstore.config.security.service;
 
+import com.elice.bookstore.config.exception.domain.user.UserNotExistException;
 import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
 import com.elice.bookstore.user.domain.User;
 import com.elice.bookstore.user.repository.UserRepository;
@@ -26,8 +27,10 @@ public class CustomUserDetailsService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
     log.info("loadUserByUsername, email:{}", email);
-    Optional<User> user = userRepository.findByEmailAndIsExist(email, true);
+    User user = userRepository.findByEmailAndIsExist(email, true).orElseThrow(
+        UserNotExistException::new
+    );
 
-    return user.map(CustomUserDetails::new).orElse(null);
+    return new CustomUserDetails(user);
   }
 }
