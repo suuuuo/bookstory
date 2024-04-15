@@ -1,8 +1,7 @@
 package com.elice.bookstore.user.controller;
 
 import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
-import com.elice.bookstore.user.dto.RequestRegisterUser;
-import com.elice.bookstore.user.dto.ResponseRegisterUser;
+import com.elice.bookstore.user.dto.*;
 import com.elice.bookstore.user.service.UserService;
 import java.util.Collection;
 import java.util.Iterator;
@@ -12,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * UserController.
@@ -46,6 +42,35 @@ public class UserController {
     return new ResponseEntity<>(responseRegisterUser, HttpStatus.OK);
   }
 
+  @GetMapping("/api/v1/users/{id}")
+  public ResponseEntity<ResponseLookupUser> lookup(
+      @PathVariable String id) {
+
+    ResponseLookupUser responseLookupUser = userService.lookup(id);
+
+    return new ResponseEntity<>(responseLookupUser, HttpStatus.OK);
+  }
+
+  @PutMapping("/api/v1/users/{id}")
+  public ResponseEntity<ResponseLookupUser> modify(
+      @PathVariable String id,
+      @RequestBody RequestModifyUser requestModifyUser) {
+
+    ResponseLookupUser responseLookupUser = userService.modify(id, requestModifyUser);
+
+    return new ResponseEntity<>(responseLookupUser, HttpStatus.OK);
+  }
+
+  @DeleteMapping("/api/v1/users/me")
+  public ResponseEntity<Void> delete(
+      @PathVariable String id,
+      @RequestBody RequestDeleteUser requestDeleteUser
+  ) {
+
+    userService.delete(id, requestDeleteUser);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
   /**
    * cors test controller.
 
@@ -63,8 +88,11 @@ public class UserController {
     Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
     GrantedAuthority auth = iterator.next();
 
+    GrantedAuthority auth2 = customUserDetails.getAuthorities().iterator().next();
+
     log.info("id: {}", id);
     log.info("auth.getAuthority: {}", auth.getAuthority());
+    log.info("auth: ", auth2);
 
     return "test!!!!!!!!!";
   }

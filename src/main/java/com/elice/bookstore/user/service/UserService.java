@@ -1,17 +1,21 @@
 package com.elice.bookstore.user.service;
 
-import com.elice.bookstore.config.exception.domain.user.UserDuplicatedUserIdException;
-import com.elice.bookstore.config.exception.domain.user.UserEmptyPasswordException;
-import com.elice.bookstore.config.exception.domain.user.UserNotMatchPasswordException;
-import com.elice.bookstore.config.exception.domain.user.UserShortPasswordException;
+import com.elice.bookstore.config.exception.domain.user.*;
+import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
 import com.elice.bookstore.user.domain.Role;
 import com.elice.bookstore.user.domain.User;
-import com.elice.bookstore.user.dto.RequestRegisterUser;
-import com.elice.bookstore.user.dto.ResponseRegisterUser;
+import com.elice.bookstore.user.dto.*;
 import com.elice.bookstore.user.mapper.UserMapper;
 import com.elice.bookstore.user.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * userService [signup].
@@ -47,7 +51,7 @@ public class UserService {
   public ResponseRegisterUser signUp(RequestRegisterUser requestRegisterUser) {
 
     if (userRepository.existsByEmailAndIsExist(requestRegisterUser.email(), true)) {
-      throw new UserDuplicatedUserIdException();
+      throw new UserDuplicatedEmailException();
     }
 
     if (!requestRegisterUser.password().equals(requestRegisterUser.passwordCheck())) {
@@ -74,5 +78,96 @@ public class UserService {
     User savedUser = userRepository.save(user);
 
     return userMapper.UserToResponseRegisterUser(savedUser);
+  }
+
+  public ResponseLookupUser lookup(String separator) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+    String auth = iterator.next().getAuthority();
+
+    User user = null;
+    if (auth.equals("USER")) {
+      if (!separator.equals("me")) {
+        throw new UserNotAuthorizedException();
+      }
+      long id = Long.parseLong(customUserDetails.getId());
+      user = userRepository.findByIdAndIsExist(id, true).orElseThrow(
+          UserNotExistException::new
+      );
+    } else if (auth.equals("ADMIN")) {
+      Long id = Long.parseLong(separator);
+      user = userRepository.findByIdAndIsExist(id, true).orElseThrow(
+          UserNotExistException::new
+      );
+    }
+
+    return userMapper.UserToResponseLookupUser(user);
+  }
+
+  @Transactional
+  public ResponseLookupUser modify(String separator, RequestModifyUser requestModifyUser) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+    String auth = iterator.next().getAuthority();
+
+    User user = null;
+    if (auth.equals("USER")) {
+      if (!separator.equals("me")) {
+        throw new UserNotAuthorizedException();
+      }
+      long id = Long.parseLong(customUserDetails.getId());
+      user = userRepository.findByIdAndIsExist(id, true).orElseThrow(
+          UserNotExistException::new
+      );
+    } else if (auth.equals("ADMIN")) {
+      Long id = Long.parseLong(separator);
+      user = userRepository.findByIdAndIsExist(id, true).orElseThrow(
+          UserNotExistException::new
+      );
+    }
+
+    user.modifyUser(requestModifyUser);
+
+    return userMapper.UserToResponseLookupUser(user);
+  }
+
+  @Transactional
+  public void delete(String separator, RequestDeleteUser requestDeleteUser) {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+    String auth = iterator.next().getAuthority();
+
+    User user = null;
+    if (auth.equals("USER")) {
+      if (!separator.equals("me")) {
+        throw new UserNotAuthorizedException();
+      }
+      long id = Long.parseLong(customUserDetails.getId());
+      user = userRepository.findByIdAndIsExist(id, true).orElseThrow(
+          UserNotExistException::new
+      );
+    } else if (auth.equals("ADMIN")) {
+      Long id = Long.parseLong(separator);
+      user = userRepository.findByIdAndIsExist(id, true).orElseThrow(
+          UserNotExistException::new
+      );
+    }
+
+    user.deleteUser();
   }
 }
