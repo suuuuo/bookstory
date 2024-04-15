@@ -19,6 +19,7 @@ public enum ErrorCode {
   USER_NOT_MATCH_PASSWORD(HttpStatus.BAD_REQUEST, "U2", "The password is not match."),
   USER_EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, "U3", "The password is empty."),
   USER_SHORT_PASSWORD(HttpStatus.BAD_REQUEST, "U4", "The password must be at least 4 characters."),
+  USER_NOT_EXIST(HttpStatus.UNAUTHORIZED, "U5", "The user doesn't exist."),
 
   REFRESH_NOT_FOUND_COOKIE(HttpStatus.BAD_REQUEST, "RE1", "The refresh token not found."),
   REFRESH_NOT_VALID(HttpStatus.BAD_REQUEST, "RE2", "The refresh token is not valid."),
