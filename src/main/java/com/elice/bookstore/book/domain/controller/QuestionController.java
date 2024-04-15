@@ -45,8 +45,6 @@ public class QuestionController {
         return ResponseEntity.ok(newQuestion);
     }
 
-
-
     /**
      * Question : Get;
      */
@@ -67,11 +65,43 @@ public class QuestionController {
      * Question : Delete;
      */
 
-    @DeleteMapping("/v1/question/{id}")
-    public ResponseEntity<?> deleteQuestion(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
-        questionService.deleteQuestionIfOwnedByUser(id, currentUser.getId());
+    @DeleteMapping("/v1/question/{questionId}")
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long questionId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        long id = Long.parseLong(customUserDetails.getId());
+
+        Optional<User> currentUser = userRepository.findByIdAndIsExist(id, true);
+
+        if (currentUser.isEmpty()) {
+            throw new SecurityException("사용자 인증 정보가 없습니다.");
+        }
+
+        questionService.deleteQuestion(questionId,currentUser.get());
 
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/v1/question/{questionId}")
+    public ResponseEntity<Question> updateQuestion(@PathVariable Long questionId, @RequestBody RequestQuestion question){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        long id = Long.parseLong(customUserDetails.getId());
+
+        Optional<User> currentUser = userRepository.findByIdAndIsExist(id, true);
+
+        if (currentUser.isEmpty()) {
+            throw new SecurityException("사용자 인증 정보가 없습니다.");
+        }
+
+        questionService.updateQuestion(question, questionId, currentUser.get());
+
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }

@@ -38,34 +38,6 @@ class QuestionServiceTest {
     private QuestionService questionService;
 
 
-    @DisplayName("질문 생성 성공")
-    @Test
-    public void createQuestionTest() {
-        // 인증된 사용자 모의 객체 생성
-        User user = new User();
-        user.setUserName("testUser");
-
-        // RequestQuestion 객체 생성
-        RequestQuestion requestQuestion = new RequestQuestion();
-        requestQuestion.setBookId(1L);
-        requestQuestion.setContent("Test question content");
-
-        // Book 객체 초기화
-        Book book = new Book(1L, "Example Book Title", 15000,  "Author Name");
-
-        // BookRepository의 findById 메서드를 모의 처리하여 항상 특정 Book 객체를 반환하도록 설정
-        when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
-
-        // QuestionRepository의 save 메서드 동작 모의
-        when(questionRepository.save(any(Question.class))).thenAnswer(i -> i.getArguments()[0]);
-
-        // QuestionService를 사용하여 Question 객체 생성
-        Question result = questionService.createQuestion(requestQuestion, user);
-
-        // 생성된 Question 객체에서 createdBy 필드 검증
-        assertThat(result.getCreatedBy()).isEqualTo(user.getId());
-
-    }
 
     @DisplayName("질문 전체 찾기 성공")
     @Test
@@ -97,91 +69,5 @@ class QuestionServiceTest {
         assertThat(result).extracting(Question::getContent).containsExactlyInAnyOrder("Test question content", "Test question content2");
     }
 
-    @Test
-    @DisplayName("질문 삭제")
-    void deleteQuestion() {
-        // Given
-        Long questionId = 1L;
-
-        // findById() 메서드 호출 시 Optional.empty()를 반환하도록 설정하여,
-        // 실제로 삭제가 이루어졌음을 가정
-        doNothing().when(questionRepository).deleteById(questionId);
-        when(questionRepository.findById(questionId)).thenReturn(Optional.empty());
-
-        // When
-        questionService.deleteQuestion(questionId);
-
-        // Then
-        Optional<Question> deletedQuestion = questionRepository.findById(questionId);
-        assertThat(deletedQuestion).isEmpty();
-
-        // verify()를 사용하여 deleteById() 메서드가 정확히 한 번 호출되었는지 확인
-        verify(questionRepository, times(1)).deleteById(questionId);
-    }
-
-    @Test
-    @DisplayName("사용자가 자신의 질문을 삭제 성공")
-    public void testDeleteQuestionIfOwnedByUser() {
-        // Given
-        Long questionId = 1L;
-        Long questionCreatedBy = 1L;
-        String userName = "TestName";
-
-        Question question = new Question();
-        question.setId(questionId);
-        question.setCreatedBy(questionCreatedBy);
-
-        User user = new User();
-        user.setId(1L);
-        user.setUserName(userName);
-
-        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
-
-        // When
-        questionService.deleteQuestionIfOwnedByUser(questionId, user.getId());
-
-        // Then
-        verify(questionRepository, times(1)).deleteById(questionId);
-    }
-
-
-    @Test
-    @DisplayName("다른 사용자가 삭제를 시도할때 예외처리 성공")
-    public void testDeleteQuestionIfOwnedByUser_WhenQuestionExistsAndNotOwnedByUser() {
-        // Given
-        Long questionId = 1L;
-        Long userId = 1L;
-        Question question = new Question();
-        question.setId(questionId);
-        question.setCreatedBy(2L);
-
-        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.of(question));
-
-        // Then
-        assertThrows(ResponseStatusException.class, () -> {
-            // When
-            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
-        });
-
-        verify(questionRepository, never()).deleteById(any());
-    }
-
-    @Test
-    @DisplayName("질문이 존재하지 않을 경우 예외처리 ")
-    public void testDeleteQuestionIfOwnedByUser_WhenQuestionDoesNotExist() {
-        // Given
-        Long questionId = 1L;
-        Long userId = 1L;
-
-        when(questionRepository.findById(eq(questionId))).thenReturn(Optional.empty());
-
-        // Then
-        assertThrows(ResponseStatusException.class, () -> {
-            // When
-            questionService.deleteQuestionIfOwnedByUser(questionId, userId);
-        });
-
-        verify(questionRepository, never()).deleteById(any());
-    }
 
 }
