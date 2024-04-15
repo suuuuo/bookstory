@@ -10,6 +10,7 @@ public class ResponseBook {
     private final String author;
     private final String publisher;
     private final String description;
+  private final Integer stock;
 
     public ResponseBook(Book book){
         this.itemName = book.getItemName();
@@ -17,6 +18,7 @@ public class ResponseBook {
         this.author = book.getAuthor();
         this.publisher = book.getPublisher();
         this.description = book.getDescription();
+    this.stock = book.getStock();
     }
 
 }
