@@ -4,6 +4,8 @@ import com.elice.bookstore.cart.domain.Cart;
 import com.elice.bookstore.order.domain.Order;
 import com.elice.bookstore.order.domain.OrderStatus;
 import com.elice.bookstore.user.domain.User;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
@@ -12,6 +14,7 @@ public record ResponseOrder(
     Long userId,
     Long cartId,
     OrderStatus orderStatus,
+    @Min(value = 1)
     int totalPrice,
     LocalDate orderDate,
     LocalDate paymentDate
@@ -25,12 +28,5 @@ public record ResponseOrder(
                 .orderDate(orderDate)
                 .paymentDate(paymentDate)
                 .build();
-  }
-
-  public ResponseOrder {
-    Objects.requireNonNull(userId);
-    Objects.requireNonNull(cartId);
-    Objects.requireNonNull(orderStatus);
-    Objects.requireNonNull(totalPrice);
   }
 }

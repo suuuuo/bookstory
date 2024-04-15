@@ -3,7 +3,6 @@ package com.elice.bookstore.order.domain.dto;
 import com.elice.bookstore.order.domain.OrderStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import java.util.Objects;
 
 public record RequestOrder(
     @NotNull
