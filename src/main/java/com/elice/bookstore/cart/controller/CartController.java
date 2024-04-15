@@ -6,9 +6,13 @@ import com.elice.bookstore.cartbook.application.CartBookService;
 import com.elice.bookstore.cartbook.dto.RequestCartBook;
 import com.elice.bookstore.cartbook.dto.ResponseCartBook;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,19 +49,29 @@ public class CartController {
 
   /** 장바구니에 책 담기 ; 장바구니 담기 버튼;처음 담는 상품 추가, 이미 있는 상품은 count만 증가 */
   @PostMapping("/v1/cart")
-  public ResponseEntity<ResponseCartBook> CartAddTest(
+  public ResponseEntity<?> CartAddTest(
       @RequestHeader("access") String authorizationHeader,
       @RequestBody RequestCartBook requestCartBook) {
 
     Long id = Long.parseLong(jwtUtil.getId(authorizationHeader));
     Boolean isValid = jwtUtil.isValid(authorizationHeader);
-
-    if (isValid && id != null) {
     Book book = bookService.findById(requestCartBook.bookId()); // 책 아이디로 책 받아옴
-      ResponseCartBook c = cartBookService.AddCartBook(id, book, requestCartBook.count());
-    return ResponseEntity.ok(c);
+    if (isValid && id != null) {
+      try {
+        ResponseCartBook c = cartBookService.AddCartBook(id, book, requestCartBook.count());
+        return ResponseEntity.ok(c);
+      } catch (IllegalArgumentException e) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "재고가 부족합니다.");
+        response.put("stock", book.getStock()); // 특정 int 값 추가
+        return ResponseEntity.badRequest().body(response);
+      }
+    } else {
+      Map<String, Object> response = new HashMap<>();
+      response.put("message", "인증 실패입니다.");
+      response.put("stock", book.getStock()); // 특정 int 값 추가
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
-    return null;
   }
 
   /** 장바구니에 책 담기 ; 웹에서 조작한 상품 개수 반영 */
