@@ -98,9 +98,6 @@ public class SecurityConfig {
               return config;
             }));
 
-
-
-
     http
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
@@ -108,12 +105,14 @@ public class SecurityConfig {
 
     http
         .authorizeHttpRequests((auth) -> auth
-            .requestMatchers("/oauth2/**", "/login/**", "/"
-                , "/v1/bringCategory","/v1/bookCategory/**" ,"/v1/bringBookCategory/**","/v1/bringBookFromCategory/**" ,"/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
-                .requestMatchers("/api/v1/question/**").permitAll()
+            .requestMatchers("/api/v1/signup", "/api/v1/tokens/reissue",
+                "/oauth2/**", "/login/**", "/").permitAll()
+            .requestMatchers("/v1/bringCategory", "/v1/bookCategory/**", "/v1/bringBookCategory/**",
+                "/v1/bringBookFromCategory/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
+            .requestMatchers("/api/v1/question/**").permitAll()
 //                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
-            .requestMatchers("/api/v1/admin").hasRole("ADMIN")
+            .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 
             .anyRequest().authenticated());
 
