@@ -43,14 +43,18 @@ public class CartBookService {
     Cart cart = cartService.findCart(id);
     CartBook cartBook = cartBookRepository.findByCartIdAndBookId(cart.getId(), book.getId());
 
-    if(cartBook == null){ //장바구니에 담긴 적 없는 상품이면 생성
-      cartBook = new CartBook(book, cart, count);
-      cartBookRepository.save(cartBook);
+    int stock = book.getStock();
+    if (stock < count) {
+      throw new IllegalArgumentException("재고가 부족합니다!");
+    } else {
+      if (cartBook == null) { // 장바구니에 담긴 적 없는 상품이면 생성
+        cartBook = new CartBook(book, cart, count);
+        cartBookRepository.save(cartBook);
+      } else {
+        cartBook.setCount(cartBook.getCount() + count);
+      }
+      return cartBookMapper.CartBookToResponseCartBook(cartBook);
     }
-    else{
-      cartBook.setCount(cartBook.getCount() + count);
-    }
-    return cartBookMapper.CartBookToResponseCartBook(cartBook);
   }
 
   @Transactional
