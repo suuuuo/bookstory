@@ -7,6 +7,7 @@ import com.elice.bookstore.book.domain.repository.BookRepository;
 import com.elice.bookstore.book.domain.dto.RequestQuestion;
 import com.elice.bookstore.book.domain.repository.QuestionRepository;
 import com.elice.bookstore.user.domain.User;
+import com.elice.bookstore.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
 
     /**
      * Question 저장
@@ -56,19 +58,14 @@ public class QuestionService {
      * Question 삭제하기
      */
 
-    public void deleteQuestionIfOwnedByUser(Long questionId, Long userId) {
-        Question question = questionRepository.findById(questionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not found"));
+    public void deleteQuestion(Long id, User user) {
 
-        if (!question.getCreatedBy().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own questions");
+        Question question = questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 질문이 없습니다."));
+
+        if(!question.getUser().equals(user)){
+            throw new IllegalArgumentException("유저가 같지 않습니다.");
         }
 
-        deleteQuestion(questionId);
-    }
-
-
-    public void deleteQuestion(Long id) {
         questionRepository.deleteById(id);
     }
 

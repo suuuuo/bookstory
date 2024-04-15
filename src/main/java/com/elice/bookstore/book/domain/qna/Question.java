@@ -3,6 +3,7 @@ package com.elice.bookstore.book.domain.qna;
 
 import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.config.audit.BaseEntity;
+import com.elice.bookstore.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,10 +33,14 @@ public class Question {
     private String createdBy;
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
     @Builder
-    public Question(Book book, QuestionStatus status, String content, String createdBy) {
+    public Question(Book book, User user, QuestionStatus status, String content, String createdBy) {
         this.book = book;
+        this.user = user;
         this.status = status;
         this.content = content;
         this.createdBy = createdBy;
