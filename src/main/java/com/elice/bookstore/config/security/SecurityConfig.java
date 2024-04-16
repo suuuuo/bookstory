@@ -105,7 +105,7 @@ public class SecurityConfig {
     http
         .authorizeHttpRequests((auth) -> auth
             .requestMatchers("/oauth2/**", "/login/**", "/"
-                , "/v1/bringCategory","/v1/bookCategory/**" ,"/v1/bringBookCategory/**","/v1/bringBookFromCategory/**" ,"/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
+                ,"/api/books/**", "/v1/bookCategory/**" ,"/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
             .requestMatchers("/api/v1/admin").hasRole("ADMIN")
             .anyRequest().authenticated());
 
