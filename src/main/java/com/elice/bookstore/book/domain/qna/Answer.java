@@ -5,8 +5,6 @@ import com.elice.bookstore.config.audit.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,10 +38,6 @@ public class Answer extends BaseEntity {
   @Column
   private String createdBy;
 
-
-  @Enumerated(EnumType.STRING)
-  @Column
-  private QuestionStatus status;
 
   @Column(nullable = false)
   private String content;

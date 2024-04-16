@@ -34,4 +34,10 @@ public class AnswerService {
 
     return answerRepository.save(answer);
   }
+
+  public Answer redadAnswer(Long id) {
+    return answerRepository.findById(id).orElse(null);
+  }
+
+
 }

@@ -111,6 +111,7 @@ public class SecurityConfig {
                 "/v1/bringBookFromCategory/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
             .requestMatchers("/api/v1/question/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/answer/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/v1/answer/**").authenticated()
             .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 

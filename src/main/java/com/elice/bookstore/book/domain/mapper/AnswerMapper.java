@@ -19,11 +19,12 @@ public class AnswerMapper {
       return null;
     }
 
+    question.setStatus(QuestionStatus.ANSWERED);
+
     return Answer.builder()
         .question(question)
         .createdBy("관리자")
         .content(request.getContent())
-        .status(QuestionStatus.ANSWERED)
         .build();
 
 
