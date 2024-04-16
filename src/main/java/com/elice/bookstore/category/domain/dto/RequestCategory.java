@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class RequestCategory {
 
+  private Long id;
+
   private String name;
 
   private Integer level;

@@ -63,20 +63,22 @@ class BookCategoryServiceTest {
   public void 찾기() {
     //given
     RequestBook book = new RequestBook();
-    bookService.save(book);
+    Book saveBook = bookService.save(book);
 
     Category category = new Category();
-    category.setId(1L);
+    category.setName("카테고리");
+    Category saveCategory = categoryService.create(category);
     BookCategory bookCategory = new BookCategory();
-    bookCategory.setId(3L);
-    bookCategory.setCategory(category);
-    bookCategoryService.create(bookCategory);
+    bookCategory.setCategory(saveCategory);
+    bookCategory.setBook(saveBook);
+    BookCategory saveBookCategory = bookCategoryService.create(bookCategory);
+
 
     //When
-    Optional<BookCategory> bookCategoryById = bookCategoryService.findByBookAndCategory(1L, 1L);
+    Optional<BookCategory> bookCategoryById = bookCategoryService.findByBookAndCategory(saveBook.getId(), saveCategory.getId());
 
      //then
-    Assertions.assertThat(bookCategoryById.get().getId()).isEqualTo(3L);
+    Assertions.assertThat(bookCategoryById.get().getId()).isEqualTo(saveBookCategory.getId());
   }
 
 

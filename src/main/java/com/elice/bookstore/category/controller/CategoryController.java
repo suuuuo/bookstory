@@ -6,9 +6,11 @@ import com.elice.bookstore.book.domain.service.BookService;
 import com.elice.bookstore.category.domain.BookCategory;
 import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.category.domain.dto.RequestBookCategory;
+import com.elice.bookstore.category.domain.dto.RequestBookList;
 import com.elice.bookstore.category.domain.dto.RequestCategory;
 import com.elice.bookstore.category.service.BookCategoryService;
 import com.elice.bookstore.category.service.CategoryService;
+import java.sql.Array;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,37 +40,50 @@ public class CategoryController {
   /**
    * 요청하는 레벨의 카테고리 가져오기
    **/
-  @GetMapping("/v1/bringCategory")
+  @GetMapping("/v1/bookCategory")
   public List<RequestCategory> categories() {
     List<Category> findCategoriesByLevel = categoryService.findByLevelAll(1);
-    return findCategoriesByLevel.stream()
-        .map(m -> new RequestCategory(m.getName(), 1))
+
+      return findCategoriesByLevel.stream()
+          .map(m -> new RequestCategory(m.getId(), m.getName(), 1))
+          .toList();
+  }
+  /**
+   * 요청하는 레벨의 카테고리 가져오기
+   **/
+  @GetMapping("/v1/bookCategory/lowRank/{id}")
+  public List<RequestCategory> categories(@PathVariable Long id) {
+
+    List<Category> findLowRankCategories = categoryService.bringLowRankCategoryALl(categoryService.read(id).get());
+
+    return findLowRankCategories.stream()
+        .map(m -> new RequestCategory(m.getId(), m.getName(),m.getLevel()))
         .toList();
   }
 
   /**
    * 책에 해당하는 카테고리 가져오기
    **/
-  @GetMapping("/v1/bringBookCategory/{id}")
+  @GetMapping("/v1/bookCategory/{id}")
   public List<RequestCategory> requestBookCategory(@PathVariable Long id) {
     Book book = bookService.findById(id);
     List<BookCategory> categoryList = book.getCategoryList();
     return categoryList.stream()
-        .map(m -> new RequestCategory(m.getCategory().getName(), m.getCategory().getLevel()))
+        .map(m -> new RequestCategory(m.getCategory().getId(), m.getCategory().getName(), m.getCategory().getLevel()))
         .toList();
-
   }
 
   /**
    * 카테고리에 해당하는 책 가져오기
    **/
-  @GetMapping("/v1/bringBookFromCategory/{id}")
-  public List<RequestBook> requestBookFromCategory(@PathVariable Long id) {
+  @GetMapping("/v1/bookCategory/bring/{id}")
+  public List<RequestBookList> requestBookFromCategory(@PathVariable Long id) {
     Category category = categoryService.read(id).get();
+    List<String> categoryAll = categoryService.bringHighRankCategoryAll(category);
     List<BookCategory> bookList = category.getBooks();
     return bookList.stream()
-        .map(m -> new RequestBook(m.getBook().getItemName(), m.getBook().getPrice(),
-            m.getBook().getAuthor(), m.getBook().getDescription(), m.getBook().getPublisher()))
+        .map(m -> new RequestBookList(m.getBook().getId(), m.getBook().getItemName(), m.getBook().getPrice(),
+            m.getBook().getAuthor(), m.getBook().getDescription(), m.getBook().getPublisher(), categoryAll))
         .toList();
   }
 
