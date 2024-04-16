@@ -6,12 +6,16 @@ import com.elice.bookstore.book.domain.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * AnswerService.
+ */
 @Service
 @RequiredArgsConstructor
 public class AnswerService {
-    private final AnswerRepository answerRepository;
 
-    public Answer saveAnswer(Answer answer) {
-        return answerRepository.save(answer);
-    }
+  private final AnswerRepository answerRepository;
+
+  public Answer saveAnswer(Answer answer) {
+    return answerRepository.save(answer);
+  }
 }

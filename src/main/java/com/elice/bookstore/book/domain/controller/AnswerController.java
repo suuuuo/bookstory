@@ -1,20 +1,28 @@
 package com.elice.bookstore.book.domain.controller;
+
 import com.elice.bookstore.book.domain.qna.Answer;
 import com.elice.bookstore.book.domain.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * AnswerController.
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class AnswerController {
-    private final AnswerService answerService;
+
+  private final AnswerService answerService;
 
 
-    @PostMapping("/v1/answer")
-    public ResponseEntity<Answer> addAnswer(@RequestBody Answer answer) {
-        Answer savedAnswer = answerService.saveAnswer(answer);
-        return ResponseEntity.ok(savedAnswer);
-    }
+  @PostMapping("/v1/answer")
+  public ResponseEntity<Answer> addAnswer(@RequestBody Answer answer) {
+    Answer savedAnswer = answerService.saveAnswer(answer);
+    return ResponseEntity.ok(savedAnswer);
+  }
 }
