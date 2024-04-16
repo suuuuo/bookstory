@@ -61,10 +61,11 @@ public class Book extends BaseEntity {
   @Column
   private Integer sellCount;
 
+
   @Column
   private String publisher;
 
-  @Column
+  @Column(columnDefinition = "LONGTEXT")
   private String description;
 
   /**

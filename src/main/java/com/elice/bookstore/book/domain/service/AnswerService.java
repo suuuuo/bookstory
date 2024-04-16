@@ -30,13 +30,13 @@ public class AnswerService {
         .orElseThrow(
             () -> new IllegalArgumentException("Question not found: " + request.getQuestionId()));
 
-    Answer answer = AnswerMapper.toEntity(request, question);
+    Answer answer = AnswerMapper.toEntity(request, question, user);
 
     return answerRepository.save(answer);
   }
 
   public Answer redadAnswer(Long id) {
-    return answerRepository.findById(id).orElse(null);
+    return answerRepository.findByQuestionId(id);
   }
 
 

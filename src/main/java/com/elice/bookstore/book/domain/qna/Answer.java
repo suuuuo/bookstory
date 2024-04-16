@@ -2,9 +2,12 @@ package com.elice.bookstore.book.domain.qna;
 
 
 import com.elice.bookstore.config.audit.BaseEntity;
+import com.elice.bookstore.user.domain.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,6 +41,9 @@ public class Answer extends BaseEntity {
   @Column
   private String createdBy;
 
+  @Enumerated(EnumType.STRING)
+  @Column
+  private Role userRole;
 
   @Column(nullable = false)
   private String content;
