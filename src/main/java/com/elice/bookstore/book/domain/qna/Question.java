@@ -3,7 +3,11 @@ package com.elice.bookstore.book.domain.qna;
 
 import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.user.domain.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,10 +39,11 @@ public class Question {
   @JoinColumn(name = "book_id")
   private Book book;
 
-  @OneToMany(mappedBy = "question")
+  @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private List<Answer> answers = new ArrayList<>();
 
-
+  @Enumerated(EnumType.STRING)
   private QuestionStatus status;
   private String title;
   private String content;

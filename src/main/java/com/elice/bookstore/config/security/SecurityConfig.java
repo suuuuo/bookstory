@@ -58,10 +58,10 @@ public class SecurityConfig {
    * @param cookieUtil                   .
    */
   public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,
-                        JwtUtil jwtUtil, RefreshRepository refreshRepository,
-                        CustomOauth2UserService customOauth2UserService,
-                        CustomClientRegistrationRepository clientRegistrationRepository,
-                        CustomSuccessHandler customSuccessHandler, CookieUtil cookieUtil) {
+      JwtUtil jwtUtil, RefreshRepository refreshRepository,
+      CustomOauth2UserService customOauth2UserService,
+      CustomClientRegistrationRepository clientRegistrationRepository,
+      CustomSuccessHandler customSuccessHandler, CookieUtil cookieUtil) {
     this.authenticationConfiguration = authenticationConfiguration;
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
@@ -73,7 +73,7 @@ public class SecurityConfig {
 
   /**
    * security filter chain.
-
+   *
    * @param http .
    * @return .
    * @throws Exception .
@@ -111,7 +111,7 @@ public class SecurityConfig {
                 "/v1/bringBookFromCategory/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
             .requestMatchers("/api/v1/question/**").permitAll()
-//                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
+            .requestMatchers(HttpMethod.POST, "/api/v1/answer/**").authenticated()
             .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 
             .anyRequest().authenticated());
