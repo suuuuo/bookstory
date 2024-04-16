@@ -73,6 +73,8 @@ public class CategoryService {
     return categoryRepository.findAllByLevel(level);
   }
 
-
+  public List<Category> bringLowRankCategoryALl(Category category){
+    return category.getChild();
+  }
 
 }
