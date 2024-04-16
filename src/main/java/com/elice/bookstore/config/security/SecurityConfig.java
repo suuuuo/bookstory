@@ -12,6 +12,7 @@ import com.elice.bookstore.config.security.filter.LoginFilter;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -102,14 +103,19 @@ public class SecurityConfig {
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable);
 
-    http
-        .authorizeHttpRequests((auth) -> auth
-            .requestMatchers("/oauth2/**", "/login/**", "/"
-                ,"/api/books/**", "/v1/bookCategory/**" ,"/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
-            .requestMatchers("/api/v1/admin").hasRole("ADMIN")
-            .anyRequest().authenticated());
 
     http
+        .authorizeHttpRequests((auth) -> auth
+                .requestMatchers("/api/v1/signup", "/api/v1/tokens/reissue",
+                    "/oauth2/**", "/login/**", "/").permitAll()
+                .requestMatchers("/v1/bookCategory/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
+                .requestMatchers("/api/v1/question/**").permitAll()
+//                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
+                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN");
+
+
+            http
         .oauth2Login((oauth2) -> oauth2
             .clientRegistrationRepository(
                 clientRegistrationRepository.clientRegistrationRepository())
