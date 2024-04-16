@@ -1,11 +1,14 @@
 package com.elice.bookstore.book.domain.repository;
 
 import com.elice.bookstore.book.domain.qna.Question;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
+/**
+ * QuestionRepository.
+ */
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    List<Question> findByBookId(Long bookId);
+
+  List<Question> findByBookId(Long bookId);
 }

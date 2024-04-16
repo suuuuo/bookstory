@@ -12,11 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestBook {
-    private String itemName;
-    private Integer price;
-    private String author;
-    private String description;
-    private String publisher;
+
+  private String itemName;
+  private Integer price;
+  private String author;
+  private String description;
+  private String publisher;
 
 
 }
