@@ -16,12 +16,15 @@ public class RequestQuestion {
 
     private Long bookId;
     private String content;
+    private String title;
     private String createdBy;
 
 
+    // 테스트 코드를 위한
     public Question toEntity(Book book) {
         return Question.builder()
                 .book(book)
+                .title(title)
                 .content(content)
                 .createdBy(createdBy)
                 .status(QuestionStatus.ANSWER_PENDING)

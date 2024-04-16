@@ -103,7 +103,6 @@ public class SecurityConfig {
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable);
 
-
     http
         .authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/api/v1/signup", "/api/v1/tokens/reissue",
@@ -112,10 +111,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
                 .requestMatchers("/api/v1/question/**").permitAll()
 //                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
-                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN");
+                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN"));
 
 
-            http
+    http
         .oauth2Login((oauth2) -> oauth2
             .clientRegistrationRepository(
                 clientRegistrationRepository.clientRegistrationRepository())

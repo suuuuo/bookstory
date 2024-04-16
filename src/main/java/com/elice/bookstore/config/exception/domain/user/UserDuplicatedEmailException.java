@@ -6,13 +6,13 @@ import com.elice.bookstore.config.exception.hierarchy.common.DuplicatedException
 /**
  * check dup userId.
  */
-public class UserDuplicatedUserIdException extends DuplicatedException {
+public class UserDuplicatedEmailException extends DuplicatedException {
 
-  public UserDuplicatedUserIdException(ErrorCode errorCode) {
+  public UserDuplicatedEmailException(ErrorCode errorCode) {
     super(errorCode);
   }
 
-  public UserDuplicatedUserIdException() {
-    super(ErrorCode.USER_DUPLICATED_USER_ID);
+  public UserDuplicatedEmailException() {
+    super(ErrorCode.USER_DUPLICATED_EMAIL);
   }
 }
