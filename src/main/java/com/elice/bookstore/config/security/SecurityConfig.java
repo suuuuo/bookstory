@@ -112,7 +112,8 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
             .requestMatchers("/api/v1/question/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/answer/**").permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/v1/answer/**").authenticated()
+            .requestMatchers(HttpMethod.POST, "/api/v1/answer/**", "/api/v1/books/save")
+            .hasAuthority("ADMIN")
             .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
             .anyRequest().authenticated());
 
