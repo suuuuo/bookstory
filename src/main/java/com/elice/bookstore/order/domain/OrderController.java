@@ -3,6 +3,7 @@ package com.elice.bookstore.order.domain;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.delivery.domain.DeliveryService;
 import com.elice.bookstore.delivery.domain.dto.RequestDelivery;
+import com.elice.bookstore.delivery.domain.dto.ResponseDelivery;
 import com.elice.bookstore.order.domain.dto.RequestOrder;
 import com.elice.bookstore.order.domain.dto.RequestOrderStatusUpdate;
 import com.elice.bookstore.order.domain.dto.ResponseOrder;
@@ -21,13 +22,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RestController("/api")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class OrderController {
 
   public final OrderService orderService;
@@ -38,124 +41,103 @@ public class OrderController {
 
   /* **** 회원 CRUD *****/
   /* 회원 : 나의 주문 내역 조회 */
-  @GetMapping("v1/orders")
+  @GetMapping("/v1/orders")
   public ResponseEntity<Page<OrderBookDTO>> getAllMyOrders(
-      @RequestHeader("Authorization") String header,
+      @RequestHeader("Authorization") String access,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "15") int size) {
-    Long id = Long.valueOf(jwtUtil.getId(header));
+    Long id = Long.valueOf(jwtUtil.getId(access));
 
-    try {
-      Page<OrderBookDTO> allMyOrders =
-          orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
-      logger.info(">>> id: {}, {}", id, allMyOrders.getContent());
-      return ResponseEntity.ok().body(allMyOrders);
-    } catch (Exception e) {
-      logger.error(">>> 에러 : {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-    }
+    Page<OrderBookDTO> allMyOrders =
+        orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
+    logger.info(">>> id: {}, {}", id, allMyOrders.getContent());
+    return ResponseEntity.ok().body(allMyOrders);
   }
 
   /* 회원 : 주문하기 (장바구니에 담은것 가져와서 주문) */
   @PostMapping("/v1/orders/order")
   public ResponseEntity<String> saveOrder(
-      @RequestHeader("Authorization") String header, @RequestBody RequestOrder requestOrder) {
-    String id = jwtUtil.getId(header);
-    String role = jwtUtil.getRole(header);
-
+      @RequestHeader("Authorization") String access, @RequestBody RequestOrder requestOrder) {
+    String id = jwtUtil.getId(access);
+    String role = jwtUtil.getRole(access);
     logger.info(">>> id: {} , role: {}", id, role);
-    try {
-      ResponseOrder savedOrder = orderService.save(requestOrder);
-      return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + savedOrder);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("실패 : " + e.getMessage());
-    }
+
+    ResponseOrder savedOrder = orderService.save(requestOrder, access);
+    return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + savedOrder);
+  }
+
+  /* 회원 : 주문 상세정보 저장 */
+  @PostMapping("/v1/orders/order/{id}")
+  public ResponseEntity<String> saveOrderDetails(
+      @PathVariable Long id,
+      @RequestHeader("Authorization") String access,
+      @RequestBody RequestDelivery requestDelivery) {
+    String role = jwtUtil.getRole(access);
+    logger.info(">>> orderId : {}, role: {}, body : {}", id, role, requestDelivery);
+
+    ResponseDelivery saveOrderDetails = deliveryService.saveOrderDetails(requestDelivery);
+    return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + saveOrderDetails);
   }
 
   /* 회원 : 배송 전, 주문 정보 수정 */
   @PutMapping("/v1/orders/update/{id}")
   public ResponseEntity<String> updateOrder(
-      @RequestHeader("Authorization") String header,
       @PathVariable Long id,
+      @RequestHeader("Authorization") String access,
       @RequestBody RequestDelivery requestDelivery) {
-    String role = jwtUtil.getRole(header);
-    logger.info(">>> role: {}", role);
+    String role = jwtUtil.getRole(access);
+    logger.info(">>> orderId : {}, role: {}, body : {}", id, role, requestDelivery);
 
-    try {
-      logger.info(">>> orderId : {}, params : {}", id, requestDelivery);
-      deliveryService.updateDeliveryDetailsById(id, requestDelivery);
-      return ResponseEntity.ok("배송 정보가 변경되었습니다.");
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("서버 에러가 발생했습니다." + e.getMessage());
-    }
+    deliveryService.updateDeliveryDetailsById(id, requestDelivery);
+    return ResponseEntity.ok("배송 정보가 변경되었습니다.");
   }
 
   /* 회원 : 배송 전 주문취소 */
   @PutMapping("/v1/orders/cancel/{id}")
   public ResponseEntity<String> cancelOrder(
-      @PathVariable Long id, @RequestHeader("Authorization") String header) {
-    String role = jwtUtil.getRole(header);
+      @PathVariable Long id, @RequestHeader("Authorization") String access) {
+    String role = jwtUtil.getRole(access);
+    logger.info(">>> role: {}", role);
 
-    try {
-      logger.info(">>> role: {}", role);
-      orderService.updateOrderStatusById(id);
-      return ResponseEntity.ok("order cancel 성공.");
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("서버 에러가 발생했습니다." + e.getMessage());
-    }
+    orderService.updateOrderStatusById(id);
+    return ResponseEntity.ok("order cancel 성공.");
   }
 
   /* **** 관리자 CRUD *****/
   /* 관리자 : 전체 주문 내역 조회 */
   @GetMapping("/v1/admin/orders")
   public ResponseEntity<Page<OrderBookDTO>> adminGetAllOrders(
-      @RequestHeader("Authorization") String header,
+      @RequestHeader("Authorization") String access,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "15") int size) {
-    String role = jwtUtil.getRole(header);
+    String role = jwtUtil.getRole(access);
+    logger.info(">>>> role: {}", role);
 
-    try {
-      logger.info(">>>> role: {}", role);
-      Pageable pageable = PageRequest.of(page, size);
-      Page<OrderBookDTO> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
-      return ResponseEntity.ok().body(allOrders);
-    } catch (Exception e) {
-      logger.error(">>>> 에러 : {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-    }
+    Pageable pageable = PageRequest.of(page, size);
+    Page<OrderBookDTO> allOrders = orderBookService.findAllByOrderByCreatedAtDesc(pageable);
+    return ResponseEntity.ok().body(allOrders);
   }
 
   /* 관리자 : 주문 상태 변경 (결제 완료 / 배송 준비 등) */
   @PutMapping("/v1/admin/orders/{id}")
   public ResponseEntity<String> adminUpdateOrderStatus(
-      @RequestHeader("Authorization") String header,
+      @RequestHeader("Authorization") String access,
       @RequestBody RequestOrderStatusUpdate orderUpdate) {
-    String role = jwtUtil.getRole(header);
+    String role = jwtUtil.getRole(access);
+    logger.info(">>>> role: {}", role);
 
-    try {
-      logger.info(">>>> role: {}", role);
-      orderService.adminUpdateOrderStatueById(orderUpdate);
-      return ResponseEntity.ok().body("");
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("서버 에러가 발생했습니다." + e.getMessage());
-    }
+    orderService.adminUpdateOrderStatueById(orderUpdate);
+    return ResponseEntity.ok().body("");
   }
 
   /* 관리자 : 주문 내역 삭제 (delete로 구현함) */
   @DeleteMapping("/v1/admin/orders/{id}")
   public ResponseEntity<String> adminDeleteOrder(
-      @PathVariable Long id, @RequestHeader("Authorization") String header) {
-    String role = jwtUtil.getRole(header);
-    try {
-      logger.info(">>>> role: {}", role);
-      orderService.deleteById(id);
-      return ResponseEntity.ok().build();
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("서버 에러가 발생했습니다." + e.getMessage());
-    }
+      @PathVariable Long id, @RequestHeader("Authorization") String access) {
+    String role = jwtUtil.getRole(access);
+    logger.info(">>>> role: {}", role);
+
+    orderService.deleteById(id);
+    return ResponseEntity.ok().build();
   }
 }
