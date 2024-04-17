@@ -103,14 +103,30 @@ public class User extends BaseEntity {
   /**
    * modify user info.
    *
-   * @param requestModifyUser .
+   * @param req .
    */
-  public void modifyUser(RequestModifyUser requestModifyUser) {
-    this.userName = requestModifyUser.userName();
-    this.dateOfBirth = requestModifyUser.dateOfBirth();
-    this.email = requestModifyUser.email();
-    this.phoneNumber = requestModifyUser.phoneNumber();
-    this.address = requestModifyUser.address();
+  public void modifyUser(RequestModifyUser req) {
+    if (req.userName() != null && !req.userName().isBlank()) {
+      this.userName = req.userName();
+    }
+    if (req.dateOfBirth() != null && !req.dateOfBirth().isBlank()) {
+      this.dateOfBirth = LocalDate.parse(req.dateOfBirth());
+    }
+    if (req.email() != null && !req.email().isBlank()) {
+      this.email = req.email();
+    }
+    if (req.phoneNumber() != null && !req.phoneNumber().isBlank()) {
+      this.phoneNumber = req.phoneNumber();
+    }
+    if (req.address() != null && !req.address().isBlank()) {
+      this.address = req.address();
+    }
+    if (req.point() != null) {
+      this.point = req.point();
+    }
+    if (req.role() != null && !req.role().isBlank()) {
+      this.role = Role.valueOf(req.role());
+    }
   }
 
   public void deleteUser() {
