@@ -1,6 +1,8 @@
 package com.elice.bookstore.delivery.domain;
 
+import com.elice.bookstore.delivery.domain.dto.DeliveryMapper;
 import com.elice.bookstore.delivery.domain.dto.RequestDelivery;
+import com.elice.bookstore.delivery.domain.dto.ResponseDelivery;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.util.Optional;
 public class DeliveryService {
 
   private final DeliveryRepository deliveryRepository;
+  private final DeliveryMapper deliveryMapper;
 
   public void updateDeliveryDetailsById(Long orderId, RequestDelivery requestDelivery) {
     Optional<Delivery> optionalDelivery = deliveryRepository.findByOrderId(orderId);
@@ -40,4 +43,9 @@ public class DeliveryService {
     deliveryRepository.save(delivery);
   }
 
+  public ResponseDelivery saveOrderDetails(RequestDelivery requestDelivery) {
+    Delivery delivery = deliveryMapper.requestDeliveryToDelivery(requestDelivery);
+    Delivery saveDelivery = deliveryRepository.save(delivery);
+    return deliveryMapper.toResponseDelivery(saveDelivery);
+  }
 }

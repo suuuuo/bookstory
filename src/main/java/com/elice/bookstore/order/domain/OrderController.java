@@ -3,6 +3,7 @@ package com.elice.bookstore.order.domain;
 import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.delivery.domain.DeliveryService;
 import com.elice.bookstore.delivery.domain.dto.RequestDelivery;
+import com.elice.bookstore.delivery.domain.dto.ResponseDelivery;
 import com.elice.bookstore.order.domain.dto.RequestOrder;
 import com.elice.bookstore.order.domain.dto.RequestOrderStatusUpdate;
 import com.elice.bookstore.order.domain.dto.ResponseOrder;
@@ -45,7 +46,8 @@ public class OrderController {
       @RequestParam(value = "size", defaultValue = "15") int size) {
     Long id = Long.valueOf(jwtUtil.getId(access));
 
-    Page<OrderBookDTO> allMyOrders = orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
+    Page<OrderBookDTO> allMyOrders =
+        orderBookService.getAllMyOrders(id, PageRequest.of(page, size));
     logger.info(">>> id: {}, {}", id, allMyOrders.getContent());
     return ResponseEntity.ok().body(allMyOrders);
   }
@@ -58,8 +60,21 @@ public class OrderController {
     String role = jwtUtil.getRole(access);
     logger.info(">>> id: {} , role: {}", id, role);
 
-    ResponseOrder savedOrder = orderService.save(requestOrder);
+    ResponseOrder savedOrder = orderService.save(requestOrder, access);
     return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + savedOrder);
+  }
+
+  /* 회원 : 주문 상세정보 저장 */
+  @PostMapping("/v1/orders/order/{id}")
+  public ResponseEntity<String> saveOrderDetails(
+      @PathVariable Long id,
+      @RequestHeader("Authorization") String access,
+      @RequestBody RequestDelivery requestDelivery) {
+    String role = jwtUtil.getRole(access);
+    logger.info(">>> orderId : {}, role: {}, body : {}", id, role, requestDelivery);
+
+    ResponseDelivery saveOrderDetails = deliveryService.saveOrderDetails(requestDelivery);
+    return ResponseEntity.status(HttpStatus.CREATED).body("성공 : " + saveOrderDetails);
   }
 
   /* 회원 : 배송 전, 주문 정보 수정 */
@@ -77,8 +92,8 @@ public class OrderController {
 
   /* 회원 : 배송 전 주문취소 */
   @PutMapping("/v1/orders/cancel/{id}")
-  public ResponseEntity<String> cancelOrder(@PathVariable Long id,
-      @RequestHeader("Authorization") String access) {
+  public ResponseEntity<String> cancelOrder(
+      @PathVariable Long id, @RequestHeader("Authorization") String access) {
     String role = jwtUtil.getRole(access);
     logger.info(">>> role: {}", role);
 
