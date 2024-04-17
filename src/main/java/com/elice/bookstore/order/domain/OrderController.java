@@ -22,13 +22,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RestController("/api")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class OrderController {
 
   public final OrderService orderService;
@@ -39,7 +41,7 @@ public class OrderController {
 
   /* **** 회원 CRUD *****/
   /* 회원 : 나의 주문 내역 조회 */
-  @GetMapping("v1/orders")
+  @GetMapping("/v1/orders")
   public ResponseEntity<Page<OrderBookDTO>> getAllMyOrders(
       @RequestHeader("Authorization") String access,
       @RequestParam(value = "page", defaultValue = "0") int page,
