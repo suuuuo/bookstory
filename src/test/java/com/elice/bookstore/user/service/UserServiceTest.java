@@ -78,7 +78,7 @@ class UserServiceTest {
     //then
     assertThatThrownBy(() -> userService.signUp(registerForm))
         .isInstanceOf(DuplicatedException.class)
-        .hasMessageContaining("The user's id is duplicated.");
+        .hasMessageContaining("The user's email is duplicated.");
   }
 
   @DisplayName("[실패] 유저 생성 시 비밀번호 공백은 안된다.")

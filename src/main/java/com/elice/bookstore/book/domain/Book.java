@@ -1,6 +1,5 @@
 package com.elice.bookstore.book.domain;
 
-import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.category.domain.BookCategory;
 import com.elice.bookstore.config.audit.BaseEntity;
 import jakarta.persistence.Column;
@@ -10,8 +9,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,9 +33,9 @@ public class Book extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
-  @JoinColumn(name = "book_category_id")
-  private BookCategory bookCategory;
+  @OneToMany(mappedBy = "book")
+  @Builder.Default
+  private List<BookCategory> categoryList = new ArrayList<>();
 
   @Column
   private String itemName;
@@ -61,14 +61,28 @@ public class Book extends BaseEntity {
   @Column
   private Integer sellCount;
 
+
   @Column
   private String publisher;
 
-  @Column
+  @Column(columnDefinition = "LONGTEXT")
   private String description;
 
+  /**
+   * Book 생성자.
+   */
+  public Book(Long id, String itemName, Integer price, String author) {
+    this.id = id;
+    this.itemName = itemName;
+    this.price = price;
+    this.author = author;
+  }
 
-  public void update(String itemName, Integer price, String author, String description, String publisher) {
+  /**
+   * Book Update 생성자.
+   */
+  public void update(String itemName, Integer price, String author, String description,
+      String publisher) {
     this.itemName = itemName;
     this.price = price;
     this.author = author;

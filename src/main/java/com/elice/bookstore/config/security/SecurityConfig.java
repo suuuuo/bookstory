@@ -12,6 +12,7 @@ import com.elice.bookstore.config.security.filter.LoginFilter;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -57,10 +58,10 @@ public class SecurityConfig {
    * @param cookieUtil                   .
    */
   public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,
-                        JwtUtil jwtUtil, RefreshRepository refreshRepository,
-                        CustomOauth2UserService customOauth2UserService,
-                        CustomClientRegistrationRepository clientRegistrationRepository,
-                        CustomSuccessHandler customSuccessHandler, CookieUtil cookieUtil) {
+      JwtUtil jwtUtil, RefreshRepository refreshRepository,
+      CustomOauth2UserService customOauth2UserService,
+      CustomClientRegistrationRepository clientRegistrationRepository,
+      CustomSuccessHandler customSuccessHandler, CookieUtil cookieUtil) {
     this.authenticationConfiguration = authenticationConfiguration;
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
@@ -72,7 +73,7 @@ public class SecurityConfig {
 
   /**
    * security filter chain.
-
+   *
    * @param http .
    * @return .
    * @throws Exception .
@@ -104,9 +105,15 @@ public class SecurityConfig {
 
     http
         .authorizeHttpRequests((auth) -> auth
-            .requestMatchers("/oauth2/**", "/login/**", "/",
-                "/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
-            .requestMatchers("/api/v1/admin").hasRole("ADMIN")
+            .requestMatchers("/api/v1/signup", "/api/v1/tokens/reissue",
+                "/oauth2/**", "/login/**", "/").permitAll()
+            .requestMatchers("/v1/bringCategory", "/v1/bookCategory/**", "/v1/bringBookCategory/**",
+                "/v1/bringBookFromCategory/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
+            .requestMatchers("/api/v1/question/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/answer/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/v1/answer/**").authenticated()
+            .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
             .anyRequest().authenticated());
 
     http

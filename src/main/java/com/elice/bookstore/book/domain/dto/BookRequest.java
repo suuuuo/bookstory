@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookRequest {
+
   private String itemName;
   private Integer price;
   private String author;
