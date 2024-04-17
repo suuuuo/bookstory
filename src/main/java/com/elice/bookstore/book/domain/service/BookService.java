@@ -42,6 +42,11 @@ public class BookService {
     return bookRepository.findById(id).orElse(null);
   }
 
+  public Book getBookInfo(String title) {
+    return bookRepository.findByItemName(title);
+  }
+
+
   /**
    * update.
    */

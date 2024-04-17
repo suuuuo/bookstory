@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -71,6 +72,16 @@ public class BookController {
 
     return ResponseEntity.ok()
         .body(new ResponseBook(book));
+  }
+
+  @GetMapping("v1/books/title")
+  public ResponseEntity<Book> getBookInfo(@RequestParam("title") String title) {
+    Book book = bookService.getBookInfo(title);
+    if (book != null) {
+      return ResponseEntity.ok(book);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   /**
