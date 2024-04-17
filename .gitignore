@@ -1,3 +1,6 @@
+# 서버 로그 파일 제외
+nohup.out
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,intellij,java,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,intellij,java,gradle
 
@@ -203,4 +206,5 @@ gradle-app.setting
 .idea
 
 /resources/application.yml
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,intellij,java,gradle
