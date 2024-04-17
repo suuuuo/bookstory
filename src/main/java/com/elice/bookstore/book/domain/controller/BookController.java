@@ -6,10 +6,16 @@ import com.elice.bookstore.book.domain.dto.RequestBook;
 import com.elice.bookstore.book.domain.dto.RequestUpdateBook;
 import com.elice.bookstore.book.domain.dto.ResponseBook;
 import com.elice.bookstore.book.domain.service.BookService;
+import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
+import com.elice.bookstore.user.domain.User;
+import com.elice.bookstore.user.repository.UserRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
 
   private final BookService bookService;
-
+  private final UserRepository userRepository;
 
   /**
    * Post book.
@@ -37,8 +43,19 @@ public class BookController {
    * @param requestBook .
    * @return ResponseBook .
    */
-  @PostMapping("/v1/books")
+  @PostMapping("/v1//books/save")
   public ResponseEntity<ResponseBook> addBook(@RequestBody RequestBook requestBook) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+    long id = Long.parseLong(customUserDetails.getId());
+
+    Optional<User> currentUser = userRepository.findByIdAndIsExist(id, true);
+
+    if (currentUser.isEmpty()) {
+      throw new SecurityException("사용자 인증 정보가 없습니다.");
+    }
+
     Book saveBook = bookService.save(requestBook);
     ResponseBook responseBook = new ResponseBook(saveBook);
 
