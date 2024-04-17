@@ -9,16 +9,13 @@ import com.elice.bookstore.config.exception.domain.user.UserShortPasswordExcepti
 import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
 import com.elice.bookstore.user.domain.Role;
 import com.elice.bookstore.user.domain.User;
-import com.elice.bookstore.user.dto.CustomSecurityContext;
-import com.elice.bookstore.user.dto.RequestDeleteUser;
-import com.elice.bookstore.user.dto.RequestModifyUser;
-import com.elice.bookstore.user.dto.RequestRegisterUser;
-import com.elice.bookstore.user.dto.ResponseLookupUser;
-import com.elice.bookstore.user.dto.ResponseRegisterUser;
+import com.elice.bookstore.user.dto.*;
 import com.elice.bookstore.user.mapper.UserMapper;
 import com.elice.bookstore.user.repository.UserRepository;
 import java.util.Collection;
 import java.util.Iterator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,6 +46,47 @@ public class UserService {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
     this.bcryptPasswordEncoder = bcryptPasswordEncoder;
+  }
+
+  public ResponseLookupUser lookup(String separator) {
+
+    CustomSecurityContext sc = getCustomSecurityContext();
+
+    User user = null;
+    if (sc.auth().equals("USER")) {
+      if (!separator.equals("me")) {
+        throw new UserNotAuthorizedException();
+      }
+      user = userRepository.findById(sc.id()).orElseThrow(
+          UserNotExistException::new
+      );
+    } else if (sc.auth().equals("ADMIN")) {
+      user = userRepository.findById(sc.id()).orElseThrow(
+          UserNotExistException::new
+      );
+    }
+
+    return userMapper.UserToResponseLookupUser(user);
+  }
+
+  private CustomSecurityContext getCustomSecurityContext() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+    String auth = iterator.next().getAuthority();
+
+    long id = Long.parseLong(customUserDetails.getId());
+
+    return new CustomSecurityContext(id, auth);
+  }
+
+  public Page<ResponseLookupUserByAdmin> findAllUsers(int page, int size) {
+    Page<User> users = userRepository.findAll(PageRequest.of(page, size));
+
+    return userMapper.UserToResponseLookupUserByAdmin(users);
   }
 
   /**
@@ -88,45 +126,6 @@ public class UserService {
 
     return userMapper.UserToResponseRegisterUser(savedUser);
   }
-
-  /**
-   * lookup user.
-   */
-  public ResponseLookupUser lookup(String separator) {
-
-    CustomSecurityContext sc = getCustomSecurityContext();
-
-    User user = null;
-    if (sc.auth().equals("USER")) {
-      if (!separator.equals("me")) {
-        throw new UserNotAuthorizedException();
-      }
-      user = userRepository.findByIdAndIsExist(sc.id(), true).orElseThrow(
-          UserNotExistException::new
-      );
-    } else if (sc.auth().equals("ADMIN")) {
-      user = userRepository.findByIdAndIsExist(sc.id(), true).orElseThrow(
-          UserNotExistException::new
-      );
-    }
-
-    return userMapper.UserToResponseLookupUser(user);
-  }
-
-  private CustomSecurityContext getCustomSecurityContext() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-
-    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-    Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-    String auth = iterator.next().getAuthority();
-
-    long id = Long.parseLong(customUserDetails.getId());
-
-    return new CustomSecurityContext(id, auth);
-  }
-
   /**
    * modify user.
 
@@ -148,7 +147,7 @@ public class UserService {
           UserNotExistException::new
       );
     } else if (sc.auth().equals("ADMIN")) {
-      user = userRepository.findByIdAndIsExist(sc.id(), true).orElseThrow(
+      user = userRepository.findByIdAndIsExist(Long.parseLong(separator), true).orElseThrow(
           UserNotExistException::new
       );
     }
@@ -170,6 +169,8 @@ public class UserService {
 
     CustomSecurityContext sc = getCustomSecurityContext();
 
+    System.out.println("requestDeleteUser = " + requestDeleteUser.toString());
+
     User user = null;
     if (sc.auth().equals("USER")) {
       if (!separator.equals("me")) {
@@ -179,14 +180,24 @@ public class UserService {
           UserNotExistException::new
       );
     } else if (sc.auth().equals("ADMIN")) {
-      user = userRepository.findByIdAndIsExist(sc.id(), true).orElseThrow(
+      user = userRepository.findByIdAndIsExist(Long.parseLong(separator), true).orElseThrow(
           UserNotExistException::new
       );
     }
 
     assert user != null;
-    if (!bcryptPasswordEncoder.matches(requestDeleteUser.password(), user.getPassword())) {
+
+    if (sc.auth().equals("USER") && !bcryptPasswordEncoder.matches(requestDeleteUser.password(), user.getPassword())) {
       throw new UserNotMatchPasswordException();
+    }
+
+    if (sc.auth().equals("ADMIN")) {
+      User admin = userRepository.findByIdAndIsExist(sc.id(), true).orElseThrow(
+          UserNotExistException::new
+      );
+      if (!bcryptPasswordEncoder.matches(requestDeleteUser.password(), admin.getPassword())){
+        throw new UserNotMatchPasswordException();
+      }
     }
 
     user.deleteUser();
