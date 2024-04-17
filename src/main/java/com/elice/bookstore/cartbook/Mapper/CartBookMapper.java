@@ -15,7 +15,8 @@ public interface CartBookMapper {
         cartBook.getBook().getPrice(),
         cartBook.getBook().getImgPath(),
         cartBook.getCount(),
-        cartBook.getBook().getStock());
+        cartBook.getBook().getStock(),
+        cartBook.getBook().getIsbn());
   }
 }
 
