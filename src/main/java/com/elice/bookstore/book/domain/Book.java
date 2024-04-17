@@ -26,7 +26,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Book extends BaseEntity {
 
   @Id
@@ -34,7 +33,7 @@ public class Book extends BaseEntity {
   private Long id;
 
   @OneToMany(mappedBy = "book")
-  @Builder.Default
+
   private List<BookCategory> categoryList = new ArrayList<>();
 
   @Column
@@ -71,11 +70,18 @@ public class Book extends BaseEntity {
   /**
    * Book 생성자.
    */
-  public Book(Long id, String itemName, Integer price, String author) {
-    this.id = id;
+  @Builder
+  public Book(String itemName, Integer price, String author, String description,
+      String publisher, Integer sellCount, Integer stock, BookSellStatus status) {
     this.itemName = itemName;
     this.price = price;
     this.author = author;
+    this.description = description;
+    this.publisher = publisher;
+    this.sellCount = sellCount;
+    this.stock = stock;
+    this.sellStatus = status;
+
   }
 
   /**

@@ -43,7 +43,7 @@ public class BookController {
    * @param requestBook .
    * @return ResponseBook .
    */
-  @PostMapping("/v1//books/save")
+  @PostMapping("/v1/books/save")
   public ResponseEntity<ResponseBook> addBook(@RequestBody RequestBook requestBook) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -56,7 +56,7 @@ public class BookController {
       throw new SecurityException("사용자 인증 정보가 없습니다.");
     }
 
-    Book saveBook = bookService.save(requestBook);
+    Book saveBook = bookService.save(requestBook, currentUser.get());
     ResponseBook responseBook = new ResponseBook(saveBook);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(responseBook);
