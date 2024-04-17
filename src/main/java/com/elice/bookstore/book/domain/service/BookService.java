@@ -6,6 +6,7 @@ import com.elice.bookstore.book.domain.dto.RequestBook;
 import com.elice.bookstore.book.domain.dto.RequestUpdateBook;
 import com.elice.bookstore.book.domain.mapper.BookMapper;
 import com.elice.bookstore.book.domain.repository.BookRepository;
+import com.elice.bookstore.user.domain.User;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,17 @@ import org.springframework.stereotype.Service;
 public class BookService {
 
   private final BookRepository bookRepository;
-  private final BookMapper bookMapper;
 
   /**
    * create.
    */
-  public Book save(RequestBook requestBook) {
+  public Book save(RequestBook requestBook, User user) {
 
-    Book book = bookMapper.toEntity(requestBook);
+    if (user == null || Boolean.FALSE.equals(user.getIsExist())) {
+      throw new IllegalArgumentException("유저가 없거나 생성되지 않았습니다.");
+    }
+
+    Book book = BookMapper.toEntity(requestBook, user);
     return bookRepository.save(book);
   }
 
@@ -41,6 +45,11 @@ public class BookService {
   public Book findById(Long id) {
     return bookRepository.findById(id).orElse(null);
   }
+
+  public Book getBookInfo(String title) {
+    return bookRepository.findByItemName(title);
+  }
+
 
   /**
    * update.
