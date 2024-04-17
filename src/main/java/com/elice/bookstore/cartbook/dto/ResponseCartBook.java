@@ -8,4 +8,5 @@ public record ResponseCartBook(
     int price,
     String imgPath,
     int count,
-    int stock) {}
+    int stock,
+    String isbn) {}
