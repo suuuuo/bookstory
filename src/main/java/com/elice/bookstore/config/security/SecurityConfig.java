@@ -113,7 +113,8 @@ public class SecurityConfig {
             .requestMatchers("/api/v1/question/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/answer/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/v1/answer/**").authenticated()
-            .requestMatchers("/api/v1/admin/**").hasRole("ADMIN"));
+            .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
+            .anyRequest().authenticated());
 
     http
         .oauth2Login((oauth2) -> oauth2
