@@ -1,18 +1,19 @@
 package com.elice.bookstore.user.dto;
 
-import jakarta.validation.constraints.NotNull;
-
-import java.time.LocalDate;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 
 public record RequestModifyUser(
-    @NotNull(message = "userName is required.")
+    Long id,
     String userName,
-    @NotNull(message = "dateOfBirth is required.")
-    LocalDate dateOfBirth,
-    @NotNull(message = "email is required.")
+    String dateOfBirth,
+    @Email(regexp = ".+@.+\\..+",
+        message = "Email address is not formatted correctly. (ex: user@gmail.com)")
     String email,
-    @NotNull(message = "poneNumber is required.")
+    @Pattern(regexp = "010-(\\d{3,4})-\\d{4}",
+        message = "Phone number is not formatted correctly. (ex: 010-1234-5678)")
     String phoneNumber,
-    @NotNull(message = "address is required.")
-    String address) {
+    String address,
+    Long point,
+    String role) {
 }
