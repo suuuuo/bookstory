@@ -1,5 +1,6 @@
 package com.elice.bookstore.order.domain;
 
+import com.elice.bookstore.config.security.authentication.jwt.JwtUtil;
 import com.elice.bookstore.order.domain.dto.OrderMapper;
 import com.elice.bookstore.order.domain.dto.RequestOrder;
 import com.elice.bookstore.order.domain.dto.RequestOrderStatusUpdate;
@@ -15,8 +16,11 @@ public class OrderService {
 
   private final OrderRepository orderRepository;
   private final OrderMapper orderMapper;
+  private final JwtUtil jwtUtil;
 
-  public ResponseOrder save(RequestOrder requestOrder) {
+  public ResponseOrder save(RequestOrder requestOrder, String access) {
+    Long userId = Long.parseLong(jwtUtil.getId(access));
+    requestOrder = requestOrder.withUserId(userId);
     Order order = orderMapper.requestOrderToOrder(requestOrder);
     Order savedOrder = orderRepository.save(order);
     return orderMapper.toResponseOrder(savedOrder);
