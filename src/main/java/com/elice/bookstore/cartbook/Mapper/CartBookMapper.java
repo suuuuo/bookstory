@@ -10,11 +10,13 @@ public interface CartBookMapper {
     return new ResponseCartBook(
         cartBook.getId(),
         cartBook.getCart().getId(),
+        cartBook.getBook().getId(),
         cartBook.getBook().getItemName(),
         cartBook.getBook().getPrice(),
         cartBook.getBook().getImgPath(),
-        cartBook.getCount()
-    );
+        cartBook.getCount(),
+        cartBook.getBook().getStock(),
+        cartBook.getBook().getIsbn());
   }
 }
 

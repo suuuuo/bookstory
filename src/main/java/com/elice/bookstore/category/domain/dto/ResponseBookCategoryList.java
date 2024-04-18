@@ -7,12 +7,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class RequestCategory {
+public class ResponseBookCategoryList {
 
-  private Long id;
-
-  private String name;
-
-  private Integer level;
+  private Long bookId;
+  private Long categoryLevel1;
+  private Long categoryLevel2;
+  private Long categoryLevel3;
 
 }

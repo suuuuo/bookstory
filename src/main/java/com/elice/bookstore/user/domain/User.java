@@ -1,6 +1,7 @@
 package com.elice.bookstore.user.domain;
 
 import com.elice.bookstore.config.audit.BaseEntity;
+import com.elice.bookstore.user.dto.RequestModifyUser;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -97,5 +98,38 @@ public class User extends BaseEntity {
   public User(String id, Role role) {
     this.id = Long.parseLong(id);
     this.role = role;
+  }
+
+  /**
+   * modify user info.
+   *
+   * @param req .
+   */
+  public void modifyUser(RequestModifyUser req) {
+    if (req.userName() != null && !req.userName().isBlank()) {
+      this.userName = req.userName();
+    }
+    if (req.dateOfBirth() != null && !req.dateOfBirth().isBlank()) {
+      this.dateOfBirth = LocalDate.parse(req.dateOfBirth());
+    }
+    if (req.email() != null && !req.email().isBlank()) {
+      this.email = req.email();
+    }
+    if (req.phoneNumber() != null && !req.phoneNumber().isBlank()) {
+      this.phoneNumber = req.phoneNumber();
+    }
+    if (req.address() != null && !req.address().isBlank()) {
+      this.address = req.address();
+    }
+    if (req.point() != null) {
+      this.point = req.point();
+    }
+    if (req.role() != null && !req.role().isBlank()) {
+      this.role = Role.valueOf(req.role());
+    }
+  }
+
+  public void deleteUser() {
+    this.isExist = false;
   }
 }

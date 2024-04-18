@@ -29,7 +29,7 @@ import org.springframework.web.cors.CorsConfiguration;
  * Global Security Config.
  */
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class SecurityConfig {
 
   private final AuthenticationConfiguration authenticationConfiguration;
@@ -58,10 +58,10 @@ public class SecurityConfig {
    * @param cookieUtil                   .
    */
   public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,
-                        JwtUtil jwtUtil, RefreshRepository refreshRepository,
-                        CustomOauth2UserService customOauth2UserService,
-                        CustomClientRegistrationRepository clientRegistrationRepository,
-                        CustomSuccessHandler customSuccessHandler, CookieUtil cookieUtil) {
+      JwtUtil jwtUtil, RefreshRepository refreshRepository,
+      CustomOauth2UserService customOauth2UserService,
+      CustomClientRegistrationRepository clientRegistrationRepository,
+      CustomSuccessHandler customSuccessHandler, CookieUtil cookieUtil) {
     this.authenticationConfiguration = authenticationConfiguration;
     this.jwtUtil = jwtUtil;
     this.refreshRepository = refreshRepository;
@@ -73,7 +73,7 @@ public class SecurityConfig {
 
   /**
    * security filter chain.
-
+   *
    * @param http .
    * @return .
    * @throws Exception .
@@ -87,7 +87,7 @@ public class SecurityConfig {
 
               CorsConfiguration config = new CorsConfiguration();
 
-              config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+              config.setAllowedOrigins(Collections.singletonList("http://34.22.73.96"));
               config.setAllowedMethods(Collections.singletonList("*"));
               config.setAllowCredentials(true);
               config.setAllowedHeaders(Collections.singletonList("*"));
@@ -98,9 +98,6 @@ public class SecurityConfig {
               return config;
             }));
 
-
-
-
     http
         .csrf(AbstractHttpConfigurer::disable)
         .formLogin(AbstractHttpConfigurer::disable)
@@ -108,13 +105,15 @@ public class SecurityConfig {
 
     http
         .authorizeHttpRequests((auth) -> auth
-            .requestMatchers("/oauth2/**", "/login/**", "/"
-                , "/v1/bringCategory","/v1/bookCategory/**" ,"/v1/bringBookCategory/**","/v1/bringBookFromCategory/**" ,"/api/v1/signup", "/api/v1/tokens/reissue").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/v1/books/**").permitAll()
-                .requestMatchers("/api/v1/question/**").permitAll()
-//                .requestMatchers(HttpMethod.POST,"/api/v1/question/**").authenticated()
-            .requestMatchers("/api/v1/admin").hasRole("ADMIN")
-
+            .requestMatchers("/api/v1/signup", "/api/v1/tokens/reissue",
+                "/oauth2/**", "/login/**", "/").permitAll()
+            .requestMatchers( "/v1/bookCategory/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/books/**").permitAll()
+            .requestMatchers("/api/v1/question/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/answer/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/v1/answer/**", "/api/v1/books/save")
+            .hasAuthority("ADMIN")
+            .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
             .anyRequest().authenticated());
 
     http
