@@ -105,7 +105,7 @@ public class SecurityConfig {
 
     http
         .authorizeHttpRequests((auth) -> auth
-            .requestMatchers("/api/v1/signup", "/api/v1/tokens/reissue",
+            .requestMatchers("/api/v1/logout", "/api/v1/signup", "/api/v1/tokens/reissue",
                 "/oauth2/**", "/login/**", "/").permitAll()
             .requestMatchers("/v1/bringCategory", "/v1/bookCategory/**", "/v1/bringBookCategory/**",
                 "/v1/bringBookFromCategory/**").permitAll()
