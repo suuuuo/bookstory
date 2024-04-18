@@ -16,4 +16,5 @@ public class RequestBookList {
   private String description;
   private String publisher;
   private List<String> category;
+  private String isbn;
 }

@@ -8,6 +8,7 @@ import com.elice.bookstore.category.domain.Category;
 import com.elice.bookstore.category.domain.dto.RequestBookCategory;
 import com.elice.bookstore.category.domain.dto.RequestBookList;
 import com.elice.bookstore.category.domain.dto.RequestCategory;
+import com.elice.bookstore.category.domain.dto.ResponseBookCategoryList;
 import com.elice.bookstore.category.service.BookCategoryService;
 import com.elice.bookstore.category.service.CategoryService;
 import java.sql.Array;
@@ -83,7 +84,7 @@ public class CategoryController {
     List<BookCategory> bookList = category.getBooks();
     return bookList.stream()
         .map(m -> new RequestBookList(m.getBook().getId(), m.getBook().getItemName(), m.getBook().getPrice(),
-            m.getBook().getAuthor(), m.getBook().getDescription(), m.getBook().getPublisher(), categoryAll))
+            m.getBook().getAuthor(), m.getBook().getDescription(), m.getBook().getPublisher(), categoryAll, m.getBook().getIsbn()))
         .toList();
   }
 
@@ -91,11 +92,19 @@ public class CategoryController {
    * 책에서 특정 카테고리 추가하기
    **/
   @PostMapping("/v1/bookCategory/add")
-  public void addCategory(@RequestBody RequestBookCategory requestBookCategory) {
-    BookCategory bookCategory = new BookCategory();
-    bookCategory.setCategory(requestBookCategory.getCategory());
-    bookCategory.setBook(requestBookCategory.getBook());
-    bookCategoryService.create(bookCategory);
+  public void addCategory(@RequestBody ResponseBookCategoryList responseBookCategoryList) {
+    BookCategory bookCategory1 = new BookCategory();
+    BookCategory bookCategory2 = new BookCategory();
+    BookCategory bookCategory3 = new BookCategory();
+    bookCategory1.setCategory(categoryService.read(responseBookCategoryList.getCategoryLevel1()).get());
+    bookCategory2.setCategory(categoryService.read(responseBookCategoryList.getCategoryLevel2()).get());
+    bookCategory3.setCategory(categoryService.read(responseBookCategoryList.getCategoryLevel3()).get());
+    bookCategory1.setBook(bookService.findById(responseBookCategoryList.getBookId()));
+    bookCategory2.setBook(bookService.findById(responseBookCategoryList.getBookId()));
+    bookCategory3.setBook(bookService.findById(responseBookCategoryList.getBookId()));
+    bookCategoryService.create(bookCategory1);
+    bookCategoryService.create(bookCategory2);
+    bookCategoryService.create(bookCategory3);
   }
 
 
