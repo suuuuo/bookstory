@@ -29,7 +29,7 @@ import org.springframework.web.cors.CorsConfiguration;
  * Global Security Config.
  */
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class SecurityConfig {
 
   private final AuthenticationConfiguration authenticationConfiguration;
