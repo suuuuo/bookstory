@@ -14,6 +14,8 @@ import com.elice.bookstore.user.mapper.UserMapper;
 import com.elice.bookstore.user.repository.UserRepository;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -164,13 +166,14 @@ public class UserService {
       }
     }
 
-    if (user.getEmail() != requestModifyUser.email()) {
+    assert user != null;
+
+    if (requestModifyUser.email() != null && !Objects.equals(user.getEmail(), requestModifyUser.email())) {
       userRepository.findByEmailAndIsExist(requestModifyUser.email(), true).orElseThrow(
           UserDuplicatedEmailException::new
       );
     }
 
-    assert user != null;
     user.modifyUser(requestModifyUser);
 
     return userMapper.UserToResponseLookupUser(user);
