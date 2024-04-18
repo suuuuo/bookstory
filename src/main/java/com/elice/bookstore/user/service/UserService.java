@@ -14,6 +14,8 @@ import com.elice.bookstore.user.mapper.UserMapper;
 import com.elice.bookstore.user.repository.UserRepository;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -61,9 +63,15 @@ public class UserService {
           UserNotExistException::new
       );
     } else if (sc.auth().equals("ADMIN")) {
-      user = userRepository.findById(sc.id()).orElseThrow(
-          UserNotExistException::new
-      );
+      if (!separator.equals("me")) {
+        user = userRepository.findById(Long.parseLong(separator)).orElseThrow(
+            UserNotExistException::new
+        );
+      } else {
+        user = userRepository.findById(sc.id()).orElseThrow(
+            UserNotExistException::new
+        );
+      }
     }
 
     return userMapper.UserToResponseLookupUser(user);
@@ -143,16 +151,29 @@ public class UserService {
       if (!separator.equals("me")) {
         throw new UserNotAuthorizedException();
       }
-      user = userRepository.findByIdAndIsExist(sc.id(), true).orElseThrow(
+      user = userRepository.findById(sc.id()).orElseThrow(
           UserNotExistException::new
       );
     } else if (sc.auth().equals("ADMIN")) {
-      user = userRepository.findByIdAndIsExist(Long.parseLong(separator), true).orElseThrow(
-          UserNotExistException::new
-      );
+      if (!separator.equals("me")) {
+        user = userRepository.findById(Long.parseLong(separator)).orElseThrow(
+            UserNotExistException::new
+        );
+      } else {
+        user = userRepository.findById(sc.id()).orElseThrow(
+            UserNotExistException::new
+        );
+      }
     }
 
     assert user != null;
+
+    if (requestModifyUser.email() != null && !Objects.equals(user.getEmail(), requestModifyUser.email())) {
+      userRepository.findByEmailAndIsExist(requestModifyUser.email(), true).orElseThrow(
+          UserDuplicatedEmailException::new
+      );
+    }
+
     user.modifyUser(requestModifyUser);
 
     return userMapper.UserToResponseLookupUser(user);
