@@ -1,9 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:5000/elice
-    username: elice
-    password: Elice2team!@
+    url: jdbc:mysql://localhost:3306/elice
+    username: root
   jpa:
     hibernate:
       ddl-auto: update
