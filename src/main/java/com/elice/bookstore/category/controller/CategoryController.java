@@ -1,7 +1,6 @@
 package com.elice.bookstore.category.controller;
 
 import com.elice.bookstore.book.domain.Book;
-import com.elice.bookstore.book.domain.dto.RequestBook;
 import com.elice.bookstore.book.domain.service.BookService;
 import com.elice.bookstore.category.domain.BookCategory;
 import com.elice.bookstore.category.domain.Category;
@@ -12,8 +11,6 @@ import com.elice.bookstore.category.domain.dto.ResponseBookCategory;
 import com.elice.bookstore.category.domain.dto.ResponseBookCategoryList;
 import com.elice.bookstore.category.service.BookCategoryService;
 import com.elice.bookstore.category.service.CategoryService;
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
