@@ -3,7 +3,6 @@ package com.elice.bookstore.book.domain.controller;
 
 import com.elice.bookstore.book.domain.dto.QuestionDTO;
 import com.elice.bookstore.book.domain.dto.RequestQuestion;
-import com.elice.bookstore.book.domain.dto.ResponseQuestion;
 import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.book.domain.service.QuestionService;
 import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
@@ -45,7 +44,7 @@ public class QuestionController {
    */
 
   @PostMapping("/v1/question")
-  public ResponseEntity<ResponseQuestion> createQuestion(@RequestBody RequestQuestion question) {
+  public ResponseEntity<QuestionDTO> createQuestion(@RequestBody RequestQuestion question) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -57,8 +56,13 @@ public class QuestionController {
       throw new SecurityException("사용자 인증 정보가 없습니다.");
     }
 
-    ResponseQuestion newQuestion = questionService.createQuestion(question, currentUser.get());
-    return ResponseEntity.ok(newQuestion);
+    Question newQuestion = questionService.createQuestion(question, currentUser.get());
+    QuestionDTO questionDTO = new QuestionDTO(newQuestion.getId(), newQuestion.getBook(),
+        newQuestion.getTitle(),
+        newQuestion.getContent(), newQuestion.getCreatedBy(), newQuestion.getCreatedAt(),
+        newQuestion.getStatus());
+
+    return ResponseEntity.ok(questionDTO);
   }
 
   /**
