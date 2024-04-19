@@ -81,7 +81,9 @@ public class QuestionController {
             question.getTitle(),
             question.getContent(),
             question.getCreatedBy(),
-            question.getCreatedAt()))
+            question.getCreatedAt(),
+            question.getStatus()
+        ))
         .collect(Collectors.toList());
     return ResponseEntity.ok(questionDTOs);
   }
