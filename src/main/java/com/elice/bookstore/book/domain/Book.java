@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 /**
  * book domain.
@@ -33,7 +34,6 @@ public class Book extends BaseEntity {
   private Long id;
 
   @OneToMany(mappedBy = "book")
-
   private List<BookCategory> categoryList = new ArrayList<>();
 
   @Column
