@@ -15,6 +15,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
 
     registry.addMapping("/**")
         .exposedHeaders("Set-Cookie")
+        .allowedOrigins("http://elicebookstory.duckdns.org")
         .allowedOrigins("http://34.22.73.96");
   }
 }

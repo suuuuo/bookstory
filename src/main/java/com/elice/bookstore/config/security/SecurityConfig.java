@@ -9,6 +9,7 @@ import com.elice.bookstore.config.security.authentication.oauth2.service.CustomO
 import com.elice.bookstore.config.security.filter.CustomLogoutFilter;
 import com.elice.bookstore.config.security.filter.JwtFilter;
 import com.elice.bookstore.config.security.filter.LoginFilter;
+import java.util.Arrays;
 import java.util.Collections;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -87,7 +88,11 @@ public class SecurityConfig {
 
               CorsConfiguration config = new CorsConfiguration();
 
-              config.setAllowedOrigins(Collections.singletonList("http://34.22.73.96"));
+              config.setAllowedOrigins(Arrays.asList(
+                  "http://34.22.73.96",
+                  "http://elicebookstory.duckdns.org"
+              ));
+
               config.setAllowedMethods(Collections.singletonList("*"));
               config.setAllowCredentials(true);
               config.setAllowedHeaders(Collections.singletonList("*"));
