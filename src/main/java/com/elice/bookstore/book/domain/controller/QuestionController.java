@@ -1,6 +1,7 @@
 package com.elice.bookstore.book.domain.controller;
 
 
+import com.elice.bookstore.book.domain.dto.QuestionDTO;
 import com.elice.bookstore.book.domain.dto.RequestQuestion;
 import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.book.domain.service.QuestionService;
@@ -9,6 +10,7 @@ import com.elice.bookstore.user.domain.User;
 import com.elice.bookstore.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -69,9 +71,18 @@ public class QuestionController {
   }
 
   @GetMapping("/v1/question/{id}")
-  public ResponseEntity<List<Question>> findQuestionsByBookId(@PathVariable Long id) {
+  public ResponseEntity<List<QuestionDTO>> findQuestionsByBookId(@PathVariable Long id) {
     List<Question> questions = questionService.findQuestionsByBookId(id);
-    return ResponseEntity.ok(questions);
+    List<QuestionDTO> questionDTOs = questions.stream()
+        .map(question -> new QuestionDTO(
+            question.getId(),
+            question.getBook(),
+            question.getTitle(),
+            question.getContent(),
+            question.getCreatedBy(),
+            question.getCreatedAt()))
+        .collect(Collectors.toList());
+    return ResponseEntity.ok(questionDTOs);
   }
 
   /**
