@@ -43,7 +43,8 @@ public class QuestionService {
     // Question 객체 저장 및 반환
     questionRepository.save(question);
 
-    return new ResponseQuestion(book);
+    return new ResponseQuestion(book, user, question.getTitle(), question.getStatus(),
+        question.getContent(), question.getCreatedBy());
   }
 
   /**

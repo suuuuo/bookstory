@@ -1,9 +1,10 @@
 package com.elice.bookstore.book.domain.dto;
 
 import com.elice.bookstore.book.domain.Book;
+import com.elice.bookstore.book.domain.qna.QuestionStatus;
+import com.elice.bookstore.user.domain.User;
+import java.time.LocalDateTime;
 import lombok.Getter;
-
-import java.time.format.DateTimeFormatter;
 
 /**
  * ResponseBook.
@@ -11,24 +12,23 @@ import java.time.format.DateTimeFormatter;
 @Getter
 public class ResponseQuestion {
 
-  private final String itemName;
-  private final Integer price;
-  private final String author;
-  private final String isbn;
-  private final String publisher;
-  private final String description;
-  private final Integer stock;
-  private final String createdAt;
+  private final Book book;
+  private final User user;
+  private final String title;
+  private final QuestionStatus status;
+  private final String content;
+  private final String createdBy;
+  private final LocalDateTime createdAt;
 
-  public ResponseQuestion(Book book) {
-    this.itemName = book.getItemName();
-    this.price = book.getPrice();
-    this.author = book.getAuthor();
-    this.isbn = book.getIsbn();
-    this.publisher = book.getPublisher();
-    this.description = book.getDescription();
-    this.stock = book.getStock();
-    this.createdAt = book.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+  public ResponseQuestion(Book book, User user, String title, QuestionStatus status, String content,
+      String createdBy) {
+    this.book = book;
+    this.user = user;
+    this.title = title;
+    this.status = status;
+    this.content = content;
+    this.createdBy = createdBy;
+    this.createdAt = LocalDateTime.now();
   }
 }
 
