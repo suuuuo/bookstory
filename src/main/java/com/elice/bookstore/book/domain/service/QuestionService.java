@@ -2,6 +2,7 @@ package com.elice.bookstore.book.domain.service;
 
 import com.elice.bookstore.book.domain.Book;
 import com.elice.bookstore.book.domain.dto.RequestQuestion;
+import com.elice.bookstore.book.domain.dto.ResponseQuestion;
 import com.elice.bookstore.book.domain.mapper.QuestionMapper;
 import com.elice.bookstore.book.domain.qna.Question;
 import com.elice.bookstore.book.domain.qna.QuestionStatus;
@@ -27,7 +28,7 @@ public class QuestionService {
   /**
    * Question 저장.
    */
-  public Question createQuestion(RequestQuestion request, User user) {
+  public ResponseQuestion createQuestion(RequestQuestion request, User user) {
 
     if (user == null || Boolean.FALSE.equals(user.getIsExist())) {
       throw new IllegalArgumentException("유저가 없거나 생성되지 않았습니다.");
@@ -40,7 +41,9 @@ public class QuestionService {
     Question question = QuestionMapper.toEntity(request, book, user);
 
     // Question 객체 저장 및 반환
-    return questionRepository.save(question);
+    questionRepository.save(question);
+
+    return new ResponseQuestion(book);
   }
 
   /**

@@ -3,6 +3,8 @@ package com.elice.bookstore.book.domain.dto;
 import com.elice.bookstore.book.domain.Book;
 import lombok.Getter;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * ResponseBook.
  */
@@ -16,6 +18,7 @@ public class ResponseQuestion {
   private final String publisher;
   private final String description;
   private final Integer stock;
+  private final String createdAt;
 
   public ResponseQuestion(Book book) {
     this.itemName = book.getItemName();
@@ -25,7 +28,7 @@ public class ResponseQuestion {
     this.publisher = book.getPublisher();
     this.description = book.getDescription();
     this.stock = book.getStock();
+    this.createdAt = book.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
   }
-
 }
 
