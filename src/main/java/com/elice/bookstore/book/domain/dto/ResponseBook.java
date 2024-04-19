@@ -8,7 +8,7 @@ import lombok.Getter;
  */
 @Getter
 public class ResponseBook {
-
+  private final Long id;
   private final String itemName;
   private final Integer price;
   private final String author;
@@ -18,6 +18,7 @@ public class ResponseBook {
   private final Integer stock;
 
   public ResponseBook(Book book) {
+    this.id = book.getId();
     this.itemName = book.getItemName();
     this.price = book.getPrice();
     this.author = book.getAuthor();

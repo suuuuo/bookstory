@@ -4,6 +4,7 @@ spring:
     url: jdbc:mysql://localhost:5000/elice
     username: elice
     password: Elice2team!@
+
   jpa:
     hibernate:
       ddl-auto: update
