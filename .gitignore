@@ -1,5 +1,6 @@
 # 서버 로그 파일 제외
 nohup.out
+keystore.p12
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,intellij,java,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,intellij,java,gradle
