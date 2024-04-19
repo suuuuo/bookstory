@@ -45,7 +45,6 @@ public class QuestionController {
    */
 
   @PostMapping("/v1/question")
-
   public ResponseEntity<ResponseQuestion> createQuestion(@RequestBody RequestQuestion question) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -57,6 +56,7 @@ public class QuestionController {
     if (currentUser.isEmpty()) {
       throw new SecurityException("사용자 인증 정보가 없습니다.");
     }
+
     ResponseQuestion newQuestion = questionService.createQuestion(question, currentUser.get());
     return ResponseEntity.ok(newQuestion);
   }

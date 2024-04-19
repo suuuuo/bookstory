@@ -29,7 +29,7 @@ public class QuestionDTO {
     this.content = content;
     this.createdBy = createdBy;
     this.createdAt = createdAt;
-    this.status = QuestionStatus.ANSWER_PENDING;
+    this.status = status;
   }
 
 
