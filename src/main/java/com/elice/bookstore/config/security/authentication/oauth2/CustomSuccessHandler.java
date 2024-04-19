@@ -58,7 +58,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     response.addCookie(
         cookieUtil.createCookie("refresh", refreshToken, CookieUtil.REFRESH_TOKEN_EXPIRATION_TIME));
-    response.sendRedirect("http://localhost:5173/social_login_handler?social_login=success");
+    response.sendRedirect("http://elicebookstory.duckdns.org/social_login_handler?social_login=success");
   }
 
   private String createRefreshToken(String id, String role) {
