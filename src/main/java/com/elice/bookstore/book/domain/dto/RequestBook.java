@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestBook {
-
+  private Long id;
   private String itemName;
   private Integer price;
   private String author;
