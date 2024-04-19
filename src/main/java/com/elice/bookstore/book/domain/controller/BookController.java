@@ -2,10 +2,12 @@ package com.elice.bookstore.book.domain.controller;
 
 
 import com.elice.bookstore.book.domain.Book;
+import com.elice.bookstore.book.domain.dto.BookResponse;
 import com.elice.bookstore.book.domain.dto.RequestBook;
 import com.elice.bookstore.book.domain.dto.RequestUpdateBook;
 import com.elice.bookstore.book.domain.dto.ResponseBook;
 import com.elice.bookstore.book.domain.service.BookService;
+import com.elice.bookstore.category.domain.dto.RequestBookList;
 import com.elice.bookstore.config.security.authentication.user.CustomUserDetails;
 import com.elice.bookstore.user.domain.User;
 import com.elice.bookstore.user.repository.UserRepository;
@@ -92,10 +94,11 @@ public class BookController {
   }
 
   @GetMapping("v1/books/title")
-  public ResponseEntity<Book> getBookInfo(@RequestParam("title") String title) {
+  public ResponseEntity<ResponseBook> getBookInfo(@RequestParam("title") String title) {
     Book book = bookService.getBookInfo(title);
-    if (book != null) {
-      return ResponseEntity.ok(book);
+   ResponseBook responseBook=new ResponseBook(book);
+    if (responseBook != null) {
+      return ResponseEntity.ok(responseBook);
     } else {
       return ResponseEntity.notFound().build();
     }
